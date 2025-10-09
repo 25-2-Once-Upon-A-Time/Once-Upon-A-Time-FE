@@ -1,6 +1,6 @@
 ---
-name: "[타입] #이슈넘버 {작업 내용}"
-about: Describe this issue template's purpose here.
+name: 'Issue: 이슈 생성 템플릿'
+about: "[타입] #이슈넘버 {작업 내용}"
 title: ''
 labels: ''
 assignees: ''
