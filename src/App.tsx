@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from '@/pages/Home';
-import ButtonTestPage from '@/pages/ButtonTestPage';
+import ButtonTestPage from '@/pages/test/ButtonTestPage';
 
 function App() {
   return (
