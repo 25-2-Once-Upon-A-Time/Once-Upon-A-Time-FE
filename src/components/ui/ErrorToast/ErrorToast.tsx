@@ -1,6 +1,7 @@
 import React from 'react';
 import type { ErrorToastProps } from './ErrorToast.types';
 import CautionIcon from '@/assets/icons/caution.svg?react';
+import { twMerge } from 'tailwind-merge';
 
 const ErrorToast: React.FC<ErrorToastProps> = ({
   isVisible,
@@ -12,7 +13,10 @@ const ErrorToast: React.FC<ErrorToastProps> = ({
 
   return (
     <div
-      className={`fixed top-[180px] left-1/2 -translate-x-1/2 w-[316px] h-[54px] rounded-[16px] bg-[#FFE2E4] p-[16px] flex items-center gap-[16px] ${className || ''}`}
+      className={twMerge(
+        'fixed top-[180px] left-1/2 -translate-x-1/2 w-[316px] h-[54px] rounded-[16px] bg-[#FFE2E4] p-[16px] flex items-center gap-[16px]',
+        className
+      )}
     >
       {/* 경고 아이콘 */}
       <div className="w-[24px] h-[24px] flex-shrink-0">

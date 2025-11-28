@@ -1,5 +1,6 @@
 import React from 'react';
 import type { DownloadToastProps } from './DownloadToast.types';
+import { twMerge } from 'tailwind-merge';
 
 const DownloadToast: React.FC<DownloadToastProps> = ({
   isVisible,
@@ -15,7 +16,10 @@ const DownloadToast: React.FC<DownloadToastProps> = ({
 
   return (
     <div
-      className={`fixed w-[317px] h-[160px] rounded-[15px] bg-[#EEF0FA] ${className || ''}`}
+      className={twMerge(
+        'fixed w-[317px] h-[160px] rounded-[15px] bg-[#EEF0FA]',
+        className
+      )}
     >
       {/* 닫기 버튼 */}
       <button
