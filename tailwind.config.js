@@ -6,6 +6,8 @@ export default {
       fontFamily: {
         sans: ['Montserrat', 'sans-serif'],
         montserrat: ['Montserrat', 'sans-serif'],
+        'nanum-square-round': ['NanumSquareRoundOTF', 'sans-serif'],
+        'nanum-gothic': ['NanumGothic', 'sans-serif'],
       },
     },
   },
