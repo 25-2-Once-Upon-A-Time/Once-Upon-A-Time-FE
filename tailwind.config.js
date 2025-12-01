@@ -4,23 +4,17 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        nanum: ["NanumSquareRound"],
-        inter: ['Inter', 'sans-serif'],
-      },
-      keyframes: {
-        'fade-in-down': {
-          '0%': {
-            opacity: '0',
-            transform: 'translate(-50%, -10px)',
-          },
-          '100%': {
-            opacity: '1',
-            transform: 'translate(-50%, 0)',
-          },
-        },
-      },
-      animation: {
-        'fade-in-down': 'fade-in-down 0.3s ease-out',
+        sans: ['Montserrat', 'sans-serif'],
+        montserrat: ['Montserrat', 'sans-serif'],
+        'nanum-square-round': ['NanumSquareRoundOTF', 'sans-serif'],
+        'nanum-gothic': ['NanumGothic', 'sans-serif'],
+        pretendard: [
+          'Pretendard',
+          '-apple-system',
+          'BlinkMacSystemFont',
+          'system-ui',
+          'sans-serif',
+        ],
       },
     },
   },

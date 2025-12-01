@@ -1,19 +1,10 @@
-import { useNavigate } from 'react-router-dom';
 import Button from '@/components/ui/Button';
+import { TopNav } from '@/components/TopNav';
 
 const ButtonTestPage = () => {
-  const navigate = useNavigate();
-
   return (
-    <div className='p-[24px] space-y-[32px]'>
-      {/* 뒤로가기 버튼 */}
-      <Button
-        variant='back'
-        onClick={() => navigate(-1)}
-        className='w-[40px] h-[40px] px-0 rounded-full text-[38px]'
-      >
-        {'<'}
-      </Button>
+    <div className='pt-[56px] p-[24px] space-y-[32px]'>
+      <TopNav title='버튼 테스트' showBack />
 
       <h1 className='text-[24px] font-bold'>Button 테스트</h1>
 
@@ -32,7 +23,7 @@ const ButtonTestPage = () => {
 
       {/* 2. 클릭 이벤트 */}
       <section>
-        <h2 className='text-[18px] font-semibold mb-[12px]'>3. 클릭 이벤트</h2>
+        <h2 className='text-[18px] font-semibold mb-[12px]'>2. 클릭 이벤트</h2>
         <div className='flex flex-wrap gap-[12px]'>
           <Button variant='primary' fullWidth onClick={() => alert('Primary 클릭!')}>
             클릭
