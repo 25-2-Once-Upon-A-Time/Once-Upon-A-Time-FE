@@ -8,6 +8,13 @@ export default {
         montserrat: ['Montserrat', 'sans-serif'],
         'nanum-square-round': ['NanumSquareRoundOTF', 'sans-serif'],
         'nanum-gothic': ['NanumGothic', 'sans-serif'],
+        pretendard: [
+          'Pretendard',
+          '-apple-system',
+          'BlinkMacSystemFont',
+          'system-ui',
+          'sans-serif',
+        ],
       },
     },
   },
