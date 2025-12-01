@@ -1,3 +1,325 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+@import './fonts.css';
+
+@theme {
+  /* Background */
+  --color-bg-purple-50: #eef0fa;
+  --color-bg-purple-100: #c0c9ee;
+  --color-bg-purple-300: #898ac4;
+  --color-bg-purple-500: #3c3c5e;
+  --color-bg-purple-600: #a7abc3;
+  --color-bg-purple-700: #23283e;
+  --color-bg-purple-800: #a2aadb;
+
+  /* Foreground */
+  --color-fg-primary: #081025;
+  --color-fg-purple-100: #c0c9ee;
+  --color-fg-purple-600: #a7abc3;
+  --color-fg-purple-800: #3c3c5e;
+  --color-fg-cream: #fff9f0;
+  --color-fg-error: #ff3b3b;
+  --color-fg-blue: #413bff;
+  --color-fg-gray: #717272;
+  --color-fg-disabled: #dbdbdb;
+
+  /* Border */
+  --color-border-purple: #898ac4;
+
+  /* Shadow */
+  --color-shadow-purple: #898ac4;
+}
+
+@layer base {
+  html,
+  body {
+    @apply w-full h-screen p-0 m-0;
+    font-family: 'NanumSquareRoundOTF', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fafbfc;
+  }
+
+  svg {
+    display: inline-block;
+  }
+
+  #root {
+    @apply w-[480px];
+  }
+}
+
+@layer utilities {
+  /* NanumSquareRoundOTF – ExtraBold */
+  .nsr-34-eb {
+    font-family: 'NanumSquareRoundOTF';
+    font-size: 34px;
+    font-weight: 800;
+    line-height: 108%;
+    letter-spacing: 0%;
+  }
+
+  .nsr-28-eb-uppercase {
+    font-family: 'NanumSquareRoundOTF';
+    font-size: 28px;
+    font-weight: 800;
+    line-height: 26px;
+    letter-spacing: 0.46px;
+    text-transform: uppercase;
+  }
+
+  .nsr-25-eb-center {
+    font-family: 'NanumSquareRoundOTF';
+    font-size: 25px;
+    font-weight: 800;
+    line-height: 43px;
+    letter-spacing: 0%;
+    text-align: center;
+  }
+
+  .nsr-24-eb {
+    font-family: 'NanumSquareRoundOTF';
+    font-size: 24px;
+    font-weight: 800;
+    line-height: 150%;
+    letter-spacing: 0.15px;
+  }
+
+  .nsr-20-eb {
+    font-family: 'NanumSquareRoundOTF';
+    font-size: 20px;
+    font-weight: 800;
+    line-height: 108%;
+    letter-spacing: 0%;
+  }
+
+  .nsr-16-eb {
+    font-family: 'NanumSquareRoundOTF';
+    font-size: 16px;
+    font-weight: 800;
+    line-height: 108%;
+    letter-spacing: 0%;
+  }
+
+  .nsr-15-eb-uppercase {
+    font-family: 'NanumSquareRoundOTF';
+    font-size: 15px;
+    font-weight: 800;
+    line-height: 26px;
+    letter-spacing: 0.46px;
+    text-transform: uppercase;
+  }
+
+  /* NanumGothic */
+  .ng-16-r {
+    font-family: 'NanumGothic';
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 100%;
+  }
+
+  /* NanumBarunpen */
+  .nbp-20-b-uppercase {
+    font-family: 'NanumBarunpenOTF';
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 26px;
+    letter-spacing: 0.46px;
+    text-transform: uppercase;
+  }
+
+  .nbp-16-b {
+    font-family: 'NanumBarunpenOTF';
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 145%;
+  }
+
+  /* Inter */
+  .inter-14-r {
+    font-family: 'Inter';
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+  }
+
+  .inter-12-r {
+    font-family: 'Inter';
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 16px;
+    letter-spacing: 1%;
+  }
+
+  .inter-12-sb {
+    font-family: 'Inter';
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 18px;
+  }
+
+  .inter-16-sb {
+    font-family: 'Inter';
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 100%;
+  }
+
+  /* Pretendard */
+  .pre-16-43-r {
+    font-family: 'Pretendard';
+    font-size: 16.43px;
+    font-weight: 400;
+    line-height: 25.81px;
+    letter-spacing: 5%;
+  }
+
+  .pre-15-r {
+    font-family: 'Pretendard';
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 25.81px;
+    letter-spacing: 5%;
+  }
+
+  .pre-14-m {
+    font-family: 'Pretendard';
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 108%;
+    text-transform: capitalize;
+  }
+
+  .pre-11-m {
+    font-family: 'Pretendard';
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 108%;
+    letter-spacing: 5%;
+  }
+
+  .pre-18-sb-uppercase {
+    font-family: 'Pretendard';
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 26px;
+    letter-spacing: 0.46px;
+    text-transform: uppercase;
+  }
+
+  .pre-18-77-b {
+    font-family: 'Pretendard';
+    font-size: 18.77px;
+    font-weight: 700;
+    line-height: 16.43px;
+    text-transform: capitalize;
+    text-align: center;
+  }
+
+  /* Background Colors */
+  .bg-purple-50 {
+    background-color: #eef0fa;
+  }
+
+  .bg-purple-100 {
+    background-color: #c0c9ee;
+  }
+
+  .bg-purple-300 {
+    background-color: #898ac4;
+  }
+
+  .bg-purple-500 {
+    background-color: #3c3c5e;
+  }
+
+  .bg-purple-600 {
+    background-color: #a7abc3;
+  }
+
+  .bg-purple-700 {
+    background-color: #23283e;
+  }
+
+  .bg-purple-800 {
+    background-color: #a2aadb;
+  }
+
+  /* Foreground Colors (icon, text) */
+  .fg-primary {
+    color: #081025;
+  }
+
+  .fg-purple-100 {
+    color: #c0c9ee;
+  }
+
+  .fg-purple-600 {
+    color: #a7abc3;
+  }
+
+  .fg-purple-800 {
+    color: #3c3c5e;
+  }
+
+  .fg-cream {
+    color: #fff9f0;
+  }
+
+  .fg-error {
+    color: #ff3b3b;
+  }
+
+  .fg-blue {
+    color: #413bff;
+  }
+
+  .fg-gray {
+    color: #717272;
+  }
+
+  .fg-disabled {
+    color: #dbdbdb;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Border */
+  .border-purple {
+    border-color: #898ac4;
+  }
+
+  /* Shadow */
+  .shadow-purple {
+    --tw-shadow-color: #898ac4;
+  }
+}
+
+@keyframes fade-in-down {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+.animate-fade-in-down {
+  animation: fade-in-down 0.3s ease-out;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
