@@ -14,12 +14,9 @@ export default function Home() {
           버튼 테스트 페이지로 이동
         </Button>
 
-        <p className='text-[16px]'>
-          <TextButton variant='link' onClick={() => navigate('/test/textbutton')}>
-            여기
-          </TextButton>
-          를 눌러 텍스트 버튼 테스트 페이지로 이동
-        </p>
+        <Button variant='primary' onClick={() => navigate('/test/form')}>
+          Form 테스트 페이지
+        </Button>
       </div>
     </div>
   );
