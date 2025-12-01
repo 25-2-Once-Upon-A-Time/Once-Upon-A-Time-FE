@@ -6,6 +6,7 @@ export default {
       fontFamily: {
         sans: ['Montserrat', 'sans-serif'],
         montserrat: ['Montserrat', 'sans-serif'],
+        'nanum-square-round': ['NanumSquareRoundOTF', 'sans-serif'],
         pretendard: [
           'Pretendard',
           '-apple-system',
