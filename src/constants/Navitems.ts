@@ -8,7 +8,7 @@ import communityIcon from '@/assets/Nav/icons/community.png';
 import communityActiveIcon from '@/assets/Nav/icons/community-active.png';
 import myPageIcon from '@/assets/Nav/icons/mypage.png';
 import myPageActiveIcon from '@/assets/Nav/icons/mypage-active.png';
-import type { NavItem } from '@/components/BottomNav/BottomNav.types';
+import type { NavItem } from '@/components/ui/BottomNav/BottomNav.types';
 
 export const NAV_ITEMS: NavItem[] = [
   { label: '홈', to: '/', icon: homeIcon, activeIcon: homeActiveIcon },
