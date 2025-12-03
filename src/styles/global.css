@@ -10,17 +10,21 @@
   --color-bg-purple-600: #a7abc3;
   --color-bg-purple-700: #23283e;
   --color-bg-purple-800: #a2aadb;
+  --color-bg-purple-900: #1d1d2d;
+  --color-bg-cream: #fdfdff;
 
   /* Foreground */
   --color-fg-primary: #081025;
   --color-fg-purple-100: #c0c9ee;
+  --color-fg-purple-500: #3c3c5e;
   --color-fg-purple-600: #a7abc3;
-  --color-fg-purple-800: #3c3c5e;
+  --color-fg-purple-800: #a2aadb;
   --color-fg-cream: #fff9f0;
   --color-fg-error: #ff3b3b;
   --color-fg-blue: #413bff;
   --color-fg-gray: #717272;
   --color-fg-disabled: #dbdbdb;
+  --color-fg-light: #eef0fa;
 
   /* Border */
   --color-border-purple: #898ac4;
@@ -37,7 +41,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #fafbfc;
+    background-color: #eef0fa;
   }
 
   svg {
@@ -45,7 +49,7 @@
   }
 
   #root {
-    @apply w-[480px];
+    @apply w-full max-w-[480px] h-full;
   }
 }
 
@@ -177,6 +181,13 @@
   .pre-15-r {
     font-family: 'Pretendard';
     font-size: 15px;
+    font-weight: 400;
+    line-height: 25.81px;
+    letter-spacing: 5%;
+  }
+  .pre-14-r {
+    font-family: 'Pretendard';
+    font-size: 14px;
     font-weight: 400;
     line-height: 25.81px;
     letter-spacing: 5%;
