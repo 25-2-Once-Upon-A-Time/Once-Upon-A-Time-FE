@@ -1,5 +1,5 @@
 import Button from '@/components/ui/Button';
-import { TopNav } from '@/components/TopNav';
+import { TopNav } from '@/components/ui/TopNav';
 
 const ButtonTestPage = () => {
   return (

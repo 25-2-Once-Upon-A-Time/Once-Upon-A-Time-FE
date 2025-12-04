@@ -3,7 +3,7 @@ import CharacterIcon from '@/assets/icons/character.svg?react';
 import AudiobookIcon from '@/assets/icons/audiobook.svg?react';
 import CommunityIcon from '@/assets/icons/community.svg?react';
 import UserIcon from '@/assets/icons/user.svg?react';
-import type { NavItem } from '@/components/BottomNav/BottomNav.types';
+import type { NavItem } from '@/components/ui/BottomNav/BottomNav.types';
 
 export const NAV_ITEMS: NavItem[] = [
   { label: '동화', to: '/story', icon: StoryIcon },
