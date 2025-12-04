@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ImageCard from '@/components/ui/ImageCard/ImageCard';
 import Button from '@/components/ui/Button/Button';
+import LoadingModal from '@/components/ui/LoadingModal';
 import backIcon from '@/assets/Nav/icons/back.png';
 
 // 테마 옵션
@@ -40,6 +41,7 @@ const StoryCreatePage: React.FC = () => {
   const [selectedMood, setSelectedMood] = useState<string | null>(null);
   const [storyPrompt, setStoryPrompt] = useState('');
   const [storyTitle, setStoryTitle] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const currentStep = STEP_CONFIG[step];
 
@@ -69,15 +71,15 @@ const StoryCreatePage: React.FC = () => {
     setStep(4);
   };
 
-  // 동화 생성
+  // 동화 생성 테스트 로딩
   const handleCreateStory = () => {
-    console.log({
-      theme: selectedTheme,
-      mood: selectedMood,
-      prompt: storyPrompt,
-      title: storyTitle,
-    });
-    navigate('/story');
+    setIsLoading(true);
+
+    // 테스트용 10초 후 완료
+    setTimeout(() => {
+      setIsLoading(false);
+      navigate('/story');
+    }, 10000);
   };
 
   return (
@@ -187,6 +189,14 @@ const StoryCreatePage: React.FC = () => {
           </div>
         )}
       </div>
+
+      {/* 로딩 모달 */}
+      <LoadingModal
+        isOpen={isLoading}
+        title='동화를 생성중입니다'
+        subtitle='잠시만 기다려주세요'
+        bottomText='특별한 이야기를 만들고 있어요'
+      />
     </div>
   );
 };
