@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { twMerge } from 'tailwind-merge';
-import chevronDown from '@/assets/icons/chevron_down.svg';
+import chevronDown from '@/assets/icons/chevron-down.svg';
 
 interface GenderSelectProps {
   value: string;
