@@ -38,7 +38,6 @@ const CharacterListPage: React.FC = () => {
       character.title.toLowerCase().includes(searchTerm.toLowerCase()),
     );
 
-    // 검색어가 있는데 결과가 없으면 에러 토스트 표시
     if (filtered.length === 0) {
       setShowError(true);
       setShowNotFound(false);
@@ -67,10 +66,8 @@ const CharacterListPage: React.FC = () => {
 
   return (
     <div className='w-full min-h-screen flex flex-col bg-bg-purple-50'>
-      {/* TopNav */}
       <TopNav title='캐릭터' className='bg-bg-purple-50' />
 
-      {/* Search Input */}
       <div className='w-full pt-[56px] px-4 py-4'>
         <SearchInput
           className='w-full'
@@ -80,7 +77,6 @@ const CharacterListPage: React.FC = () => {
         />
       </div>
 
-      {/* Error Toast */}
       {showError && (
         <div className='w-full px-4 mb-2'>
           <ErrorToast
@@ -92,16 +88,14 @@ const CharacterListPage: React.FC = () => {
         </div>
       )}
 
-      {/* 캐릭터 리스트 - 스크롤 가능 */}
+      {/* 캐릭터 리스트 */}
       <div className='flex-1 w-full px-4 pb-20 overflow-y-auto relative'>
         {showNotFound ? (
-          /* 검색 결과 없음 - 404 일러스트 */
           <div className='absolute left-1/2 -translate-x-1/2 top-[129px] flex flex-col items-center'>
             <img src={notFoundIllustration} alt='검색 결과 없음' className='w-[197px] h-[131px]' />
             <p className='pre-14-r text-fg-primary mt-4'>아무것도 찾지 못했습니다..</p>
           </div>
         ) : (
-          /* 캐릭터 그리드 */
           <div className='grid grid-cols-2 gap-4'>
             {filteredCharacters.map((character) => (
               <div
@@ -120,7 +114,6 @@ const CharacterListPage: React.FC = () => {
         )}
       </div>
 
-      {/* Bottom Navigation */}
       <BottomNav />
     </div>
   );

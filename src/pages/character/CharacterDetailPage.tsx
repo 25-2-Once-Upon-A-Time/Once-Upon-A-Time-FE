@@ -20,7 +20,6 @@ const CharacterDetailPage: React.FC = () => {
   const characterDetail = characterId ? characterDetails[characterId] : null;
   const imageSrc = characterId ? characterImageMap[characterId] : undefined;
 
-  // 페이지 진입 시 body 배경색 변경, 떠날 때 원래대로 복구
   useEffect(() => {
     const originalBgColor = document.body.style.backgroundColor;
     document.body.style.backgroundColor = '#1d1d2d';
@@ -49,7 +48,6 @@ const CharacterDetailPage: React.FC = () => {
 
   return (
     <div className='w-full min-h-screen bg-bg-purple-900 flex flex-col relative'>
-      {/* 이미지 영역 with 버튼들 - 화면 전체 너비 */}
       <div className='relative w-screen max-w-[480px]'>
         <Image src={imageSrc} alt={character?.title || '캐릭터'} className='w-full h-auto' />
 
@@ -89,19 +87,18 @@ const CharacterDetailPage: React.FC = () => {
           </>
         )}
 
-        {/* 음성 미리 듣기 - 고정 텍스트 */}
+        {/* 음성 미리 듣기 */}
         <p className='nsr-20-eb text-fg-cream absolute top-[530px] left-[48.08px] w-[120px] h-[22px]'>
           음성 미리 듣기
         </p>
 
         {/* 음성 재생 컴포넌트 */}
         {voicePreviews.map((voice, index) => {
-          const baseTop = 579.84; // 첫 번째 음성 재생 컴포넌트 위치
-          const itemHeight = 40; // 음성 재생 컴포넌트 높이
-          const dividerHeight = 3; // divider 높이
-          const gap = 20; // 간격
+          const baseTop = 579.84;
+          const itemHeight = 40;
+          const dividerHeight = 3;
+          const gap = 20;
 
-          // 각 항목의 top 위치
           const voiceTop = baseTop + (itemHeight + gap + dividerHeight + gap) * index;
           const dividerTop = voiceTop + itemHeight + gap;
 
@@ -117,7 +114,7 @@ const CharacterDetailPage: React.FC = () => {
                 style={{ top: `${voiceTop}px` }}
               />
 
-              {/* Divider (마지막 항목 제외) */}
+              {/* Divider */}
               {index < voicePreviews.length - 1 && (
                 <img
                   src={dividerIcon}
