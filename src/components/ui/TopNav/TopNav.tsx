@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
-import backIcon from '@/assets/Nav/icons/back.png';
+import backIcon from '@/assets/icons/chevron-left.svg';
 import type { TopNavProps } from './TopNav.types';
 
 const TopNav: React.FC<TopNavProps> = ({ title, showBack = false, className }) => {
