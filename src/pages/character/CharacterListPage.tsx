@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import TopNav from '@/components/TopNav/TopNav';
+import TopNav from '@/components/ui/TopNav/TopNav';
 import SearchInput from '@/components/ui/SearchInput/SearchInput';
 import ImageCard from '@/components/ui/ImageCard/ImageCard';
-import { BottomNav } from '@/components/BottomNav';
+import { BottomNav } from '@/components/ui/BottomNav';
 import ErrorToast from '@/components/ui/ErrorToast/ErrorToast';
 import { characters } from '@/constants/characters';
 import notFoundIllustration from '@/assets/images/404Illustration.svg';
