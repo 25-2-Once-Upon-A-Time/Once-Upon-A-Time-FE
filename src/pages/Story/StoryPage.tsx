@@ -1,4 +1,3 @@
-// pages/story/StoryPage.tsx
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BottomNav } from '@/components/BottomNav';

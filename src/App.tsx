@@ -1,8 +1,8 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from '@/pages/Home';
-import StoryPage from '@/pages/StoryPage';
-import StoryDetailPage from '@/pages/StoryDetailPage';
-import StoryCreatePage from '@/pages/StoryCreatePage';
+import StoryPage from '@/pages/Story/StoryPage';
+import StoryDetailPage from '@/pages/Story/StoryDetailPage';
+import StoryCreatePage from '@/pages/Story/StoryCreatePage';
 
 function App() {
   return (

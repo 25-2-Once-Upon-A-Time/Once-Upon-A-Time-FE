@@ -1,4 +1,3 @@
-// pages/story/StoryCreatePage.tsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ImageCard from '@/components/ui/ImageCard/ImageCard';
