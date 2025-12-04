@@ -22,18 +22,14 @@ const MyPage: React.FC = () => {
 
   const handleEdit = () => {
     if (isEditMode) {
-      // 완료 버튼 클릭 - 수정 모드 비활성화
       setIsEditMode(false);
       console.log('저장된 데이터:', userInfo);
     } else {
-      // 수정 버튼 클릭 - 수정 모드 활성화
       setIsEditMode(true);
     }
   };
 
-  const handleLogout = () => {
-    console.log('로그아웃 버튼 클릭');
-  };
+  // 추후에 로그아웃 로직 생성할 예정
 
   return (
     <div className='flex flex-col h-full bg-bg-purple-50'>
@@ -50,12 +46,7 @@ const MyPage: React.FC = () => {
           </Button>
         </div>
         <div className='mt-4 flex justify-end'>
-          <TextButton
-            variant='body'
-            color='gray'
-            onClick={handleLogout}
-            className='text-[14px] h-[26px]'
-          >
+          <TextButton variant='body' color='gray' className='text-[14px] h-[26px]'>
             로그아웃
           </TextButton>
         </div>
