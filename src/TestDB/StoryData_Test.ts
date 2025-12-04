@@ -11,6 +11,16 @@ export interface Story {
   mood: string;
   content: string;
 }
+// 동화 추가 함수(테스트용)
+export const addStory = (story: Omit<Story, 'id'>) => {
+  const newId = storyList.length > 0 ? Math.max(...storyList.map((s) => s.id)) + 1 : 1;
+  const newStory: Story = {
+    id: newId,
+    ...story,
+  };
+  storyList.push(newStory);
+  return newStory;
+};
 
 export const storyList: Story[] = [
   {

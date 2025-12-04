@@ -5,6 +5,7 @@ import ImageCard from '@/components/ui/ImageCard/ImageCard';
 import Button from '@/components/ui/Button/Button';
 import LoadingModal from '@/components/ui/LoadingModal';
 import backIcon from '@/assets/Nav/icons/back.png';
+import { addStory } from '@/TestDB/StoryData_Test'; //테스트용
 
 // 테마 옵션
 const THEME_OPTIONS = [
@@ -71,15 +72,38 @@ const StoryCreatePage: React.FC = () => {
     setStep(4);
   };
 
-  // 동화 생성 테스트 로딩
+  // 테마/분위기 라벨 가져오기
+  const getThemeLabel = (id: string) => {
+    const theme = THEME_OPTIONS.find((t) => t.id === id);
+    return theme?.label || '';
+  };
+
+  const getMoodLabel = (id: string) => {
+    const mood = MOOD_OPTIONS.find((m) => m.id === id);
+    return mood?.label || '';
+  };
+
+  // 동화 생성
   const handleCreateStory = () => {
     setIsLoading(true);
 
-    // 테스트용 10초 후 완료
+    // 더미 콘텐츠 생성
+    const dummyContent = `${'테스트로 만들어진 동화입니다'}`;
+
     setTimeout(() => {
+      // 더미 데이터 추가
+      addStory({
+        title: storyTitle,
+        imageSrc: undefined,
+        summary: storyPrompt,
+        theme: getThemeLabel(selectedTheme || ''),
+        mood: getMoodLabel(selectedMood || ''),
+        content: dummyContent,
+      });
+
       setIsLoading(false);
       navigate('/story');
-    }, 10000);
+    }, 3000);
   };
 
   return (

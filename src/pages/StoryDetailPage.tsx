@@ -56,7 +56,13 @@ const StoryDetailPage: React.FC = () => {
         </div>
 
         {/* 동화 내용 - 남은 공간 채우기 */}
-        <div className='flex-1 bg-white/10 rounded-[12px] p-4 overflow-y-auto mb-4'>
+        <div
+          className='flex-1 bg-white/10 rounded-[12px] p-4 overflow-y-auto mb-4'
+          style={{
+            msOverflowStyle: 'none',
+            scrollbarWidth: 'none',
+          }}
+        >
           <p className='nbp-16-b text-white'>{story.content}</p>
         </div>
       </div>
