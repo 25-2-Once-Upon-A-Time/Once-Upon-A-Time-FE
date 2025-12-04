@@ -65,85 +65,65 @@ const CharacterDetailPage: React.FC = () => {
   ];
 
   return (
-    <div className='w-full min-h-screen flex flex-col items-center relative'>
-      <div className='relative w-full max-w-[480px]'>
-        <Image src={imageSrc} alt={character?.title || '캐릭터'} className='w-full h-auto' />
+    <div className='w-full min-h-screen bg-bg-purple-900 flex flex-col items-center relative overflow-auto'>
+      <div className='relative w-full max-w-[480px] pb-12'>
+        <div className='relative'>
+          <Image src={imageSrc} alt={character?.title || '캐릭터'} className='w-full h-auto' />
 
-        {/* 뒤로가기 버튼 */}
-        <div className='absolute top-[18px] left-[20px]'>
-          <BackButton onClick={() => navigate('/character')} />
+          {/* 뒤로가기 버튼 */}
+          <div className='absolute top-[18px] left-[20px]'>
+            <BackButton onClick={() => navigate('/character')} />
+          </div>
+
+          {/* 좋아요 버튼 */}
+          <div className='absolute top-[18px] right-[20px]'>
+            <LikeButton isLiked={isLiked} onClick={handleLikeChange} />
+          </div>
         </div>
 
-        {/* 좋아요 버튼 */}
-        <div className='absolute top-[18px] right-[20px]'>
-          <LikeButton isLiked={isLiked} onClick={handleLikeChange} />
-        </div>
+        {/* 캐릭터 정보 섹션 */}
+        <div className='px-12 mt-8'>
+          {characterDetail && (
+            <>
+              {/* 캐릭터 제목 */}
+              <h1 className='nsr-34-eb text-fg-cream mb-4'>{characterDetail.title}</h1>
 
-        {/* 캐릭터 정보 */}
-        {characterDetail && (
-          <>
-            {/* 캐릭터 제목 */}
-            <h1 className='nsr-34-eb text-fg-cream absolute top-[308.41px] left-[48px]'>
-              {characterDetail.title}
-            </h1>
+              {/* 캐릭터 태그 */}
+              <p className='nbp-16-b text-fg-disabled mb-5'>{characterDetail.tags.join(' ')}</p>
 
-            {/* 캐릭터 태그 */}
-            <p className='nbp-16-b text-fg-disabled absolute top-[362px] left-[48px]'>
-              {characterDetail.tags.join(' ')}
-            </p>
+              {/* 캐릭터 설명 */}
+              <p className='nbp-16-b text-fg-cream mb-6'>{characterDetail.description}</p>
 
-            {/* 캐릭터 설명 */}
-            <p className='nbp-16-b text-fg-cream absolute top-[401.41px] left-[48px] right-[48px]'>
-              {characterDetail.description}
-            </p>
+              {/* 좋아요 카운트 */}
+              <div className='flex items-center gap-[9.94px] mb-10'>
+                <img src={heartIcon} alt='좋아요' className='w-[18.26px] h-[16.14px]' />
+                <span className='pre-14-m text-fg-disabled'>{likeCount}</span>
+              </div>
+            </>
+          )}
 
-            {/* 좋아요 카운트 */}
-            <div className='absolute top-[451px] left-[47px] flex items-center gap-[9.94px]'>
-              <img src={heartIcon} alt='좋아요' className='w-[18.26px] h-[16.14px]' />
-              <span className='pre-14-m text-fg-disabled'>{likeCount}</span>
-            </div>
-          </>
-        )}
+          {/* 음성 미리 듣기 */}
+          <h2 className='nsr-20-eb text-fg-cream mb-[30px]'>음성 미리 듣기</h2>
 
-        {/* 음성 미리 듣기 */}
-        <p className='nsr-20-eb text-fg-cream absolute top-[530px] left-[48.08px] w-[120px] h-[22px]'>
-          음성 미리 듣기
-        </p>
-
-        {/* 음성 재생 컴포넌트 */}
-        {voicePreviews.map((voice, index) => {
-          const baseTop = 579.84;
-          const itemHeight = 40;
-          const dividerHeight = 3;
-          const gap = 20;
-
-          const voiceTop = baseTop + (itemHeight + gap + dividerHeight + gap) * index;
-          const dividerTop = voiceTop + itemHeight + gap;
-
-          return (
-            <React.Fragment key={index}>
-              {/* 음성 재생 컴포넌트 */}
-              <VoicePreviewItem
-                title={voice.title}
-                duration={voice.duration}
-                isPlaying={playingIndex === index}
-                onPlayChange={handlePlayChange(index)}
-                className='absolute left-[48.08px]'
-                style={{ top: `${voiceTop}px` }}
-              />
-
-              {/* Divider */}
-              {index < voicePreviews.length - 1 && (
-                <img
-                  src={dividerIcon}
-                  alt='구분선'
-                  className='absolute left-[48px]'
-                  style={{ top: `${dividerTop}px` }}
+          {/* 음성 재생 컴포넌트 */}
+          <div className='flex flex-col'>
+            {voicePreviews.map((voice, index) => (
+              <React.Fragment key={index}>
+                <VoicePreviewItem
+                  title={voice.title}
+                  duration={voice.duration}
+                  isPlaying={playingIndex === index}
+                  onPlayChange={handlePlayChange(index)}
                 />
-              )}
-            </React.Fragment>
-          );
-        })}
+
+                {/* Divider */}
+                {index < voicePreviews.length - 1 && (
+                  <img src={dividerIcon} alt='구분선' className='w-full h-[3px] my-5' />
+                )}
+              </React.Fragment>
+            ))}
+          </div>
+        </div>
       </div>
 
       {/* 에러 토스트 */}
