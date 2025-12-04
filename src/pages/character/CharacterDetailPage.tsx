@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Image from '@/components/ui/Image/Image';
 import BackButton from '@/components/ui/BackButton/BackButton';
@@ -19,15 +19,6 @@ const CharacterDetailPage: React.FC = () => {
   const character = characters.find((c) => c.id === characterId);
   const characterDetail = characterId ? characterDetails[characterId] : null;
   const imageSrc = characterId ? characterImageMap[characterId] : undefined;
-
-  useEffect(() => {
-    const originalBgColor = document.body.style.backgroundColor;
-    document.body.style.backgroundColor = '#1d1d2d';
-
-    return () => {
-      document.body.style.backgroundColor = originalBgColor;
-    };
-  }, []);
 
   const handleLikeChange = (liked: boolean) => {
     setIsLiked(liked);
