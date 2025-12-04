@@ -1,4 +1,3 @@
-// pages/story/StoryDetailPage.tsx
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { storyList } from '@/TestDB/StoryData_Test';
@@ -22,9 +21,9 @@ const StoryDetailPage: React.FC = () => {
   };
 
   return (
-    <div className='max-w-[480px] min-w-[360px] min-h-screen mx-auto bg-[#23283E]'>
+    <div className='max-w-[480px] min-w-[360px] h-screen mx-auto bg-[#23283E] flex flex-col overflow-hidden'>
       {/* 동화 이미지 + 버튼들 */}
-      <div className='relative w-full'>
+      <div className='relative w-full flex-shrink-0'>
         <Image src={story.imageSrc} alt={story.title} className='w-full aspect-square' />
 
         {/* 뒤로가기 버튼 - 왼쪽 위 */}
@@ -39,15 +38,15 @@ const StoryDetailPage: React.FC = () => {
       </div>
 
       {/* 동화 정보 */}
-      <div className='px-6 py-4 space-y-4'>
+      <div className='flex-1 flex flex-col px-6 py-4 gap-4 overflow-hidden'>
         {/* 제목 */}
-        <h1 className='nsr-24-eb text-white'>{story.title}</h1>
+        <h1 className='nsr-24-eb text-white flex-shrink-0'>{story.title}</h1>
 
         {/* 한 줄 요약 */}
-        <p className='nbp-16-b text-gray-300'>{story.summary}</p>
+        <p className='nbp-16-b text-gray-300 flex-shrink-0'>{story.summary}</p>
 
         {/* 테마 & 분위기 태그 */}
-        <div className='flex gap-2'>
+        <div className='flex gap-2 flex-shrink-0'>
           <span className='px-3 py-1 bg-white/20 text-white text-[12px] rounded-full nbp-16-b'>
             {story.theme}
           </span>
@@ -56,9 +55,9 @@ const StoryDetailPage: React.FC = () => {
           </span>
         </div>
 
-        {/* 동화 내용 */}
-        <div className='bg-white/10 rounded-[12px] p-4 max-h-[300px] overflow-y-auto'>
-          <p className='nbp-16-b text-white leading-relaxed'>{story.content}</p>
+        {/* 동화 내용 - 남은 공간 채우기 */}
+        <div className='flex-1 bg-white/10 rounded-[12px] p-4 overflow-y-auto mb-4'>
+          <p className='nbp-16-b text-white'>{story.content}</p>
         </div>
       </div>
     </div>

@@ -113,7 +113,7 @@ const StoryPage: React.FC = () => {
       <div
         ref={mainRef}
         onScroll={handleScroll}
-        className='flex-1 w-full px-4 pb-20 overflow-y-scroll relative overscroll-y-auto'
+        className='flex-1 w-full px-[4%] pb-28 overflow-y-scroll relative overscroll-y-auto'
       >
         {showError ? null : showNotFound ? (
           <div className='absolute left-1/2 -translate-x-1/2 top-[129px] flex flex-col items-center'>
@@ -121,7 +121,7 @@ const StoryPage: React.FC = () => {
             <p className='pre-14-r text-fg-primary mt-4'>검색 결과가 없습니다.</p>
           </div>
         ) : (
-          <div className='grid grid-cols-2 gap-4 min-h-[calc(100%+100px)]'>
+          <div className='grid grid-cols-2 gap-[4%] gap-y-4 pb-4'>
             {filteredStories.map((story) => (
               <div
                 key={story.id}
