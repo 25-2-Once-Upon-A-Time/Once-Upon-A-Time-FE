@@ -18,6 +18,7 @@ const GenderSelect: React.FC<GenderSelectProps> = ({
   disabled = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [focusedIndex, setFocusedIndex] = useState<number>(-1);
   const selectRef = useRef<HTMLDivElement>(null);
 
   const options = ['여성', '남성'];
@@ -49,12 +50,59 @@ const GenderSelect: React.FC<GenderSelectProps> = ({
     }
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (disabled) return;
+
+    switch (e.key) {
+      case 'Enter':
+      case ' ':
+        e.preventDefault();
+        if (!isOpen) {
+          setIsOpen(true);
+          setFocusedIndex(0);
+        } else if (focusedIndex >= 0) {
+          handleSelect(options[focusedIndex]);
+        }
+        break;
+      case 'Escape':
+        e.preventDefault();
+        setIsOpen(false);
+        setFocusedIndex(-1);
+        break;
+      case 'ArrowDown':
+        e.preventDefault();
+        if (!isOpen) {
+          setIsOpen(true);
+          setFocusedIndex(0);
+        } else {
+          setFocusedIndex((prev) => (prev < options.length - 1 ? prev + 1 : prev));
+        }
+        break;
+      case 'ArrowUp':
+        e.preventDefault();
+        if (isOpen) {
+          setFocusedIndex((prev) => (prev > 0 ? prev - 1 : prev));
+        }
+        break;
+      case 'Tab':
+        if (isOpen) {
+          setIsOpen(false);
+          setFocusedIndex(-1);
+        }
+        break;
+    }
+  };
+
   return (
     <div ref={selectRef} className='relative w-full'>
       <button
         type='button'
         onClick={handleClick}
+        onKeyDown={handleKeyDown}
         disabled={disabled}
+        aria-haspopup='listbox'
+        aria-expanded={isOpen}
+        aria-labelledby='gender-select-label'
         className={twMerge(
           'w-full h-[48px] rounded-[17.6px] border-[1.17px] border-border-purple px-[19px] text-[15px] leading-[25.81px] tracking-[0.05em] font-pretendard font-normal focus:outline-none focus:border-border-purple flex items-center justify-between',
           isEditMode ? 'bg-bg-purple-300' : 'bg-bg-purple-600',
@@ -74,19 +122,25 @@ const GenderSelect: React.FC<GenderSelectProps> = ({
 
       {isOpen && (
         <div
+          role='listbox'
+          aria-labelledby='gender-select-label'
           className={twMerge(
             'absolute top-[52px] left-0 w-full border-[1.17px] border-border-purple rounded-[17.6px] overflow-hidden z-10 shadow-lg',
             isEditMode ? 'bg-bg-purple-300' : 'bg-bg-purple-600',
           )}
         >
-          {options.map((option) => (
+          {options.map((option, index) => (
             <button
               key={option}
               type='button'
+              role='option'
+              aria-selected={value === option}
               onClick={() => handleSelect(option)}
+              onMouseEnter={() => setFocusedIndex(index)}
               className={twMerge(
                 'w-full px-[19px] py-3 text-left text-[15px] font-pretendard hover:bg-bg-purple-300 transition-colors',
                 value === option ? 'text-fg-primary bg-bg-purple-300' : 'text-fg-primary',
+                focusedIndex === index && 'bg-bg-purple-300',
               )}
             >
               {option}
