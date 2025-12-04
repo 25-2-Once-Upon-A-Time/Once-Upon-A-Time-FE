@@ -18,6 +18,8 @@ const LikeButton: React.FC<LikeButtonProps> = ({ isLiked = false, onClick, class
     <button
       type='button'
       onClick={handleClick}
+      aria-label={isLiked ? '좋아요 취소' : '좋아요'}
+      aria-pressed={isLiked}
       className={twMerge(
         'w-[50px] h-[50px]',
         'bg-bg-purple-300',
@@ -36,11 +38,12 @@ const LikeButton: React.FC<LikeButtonProps> = ({ isLiked = false, onClick, class
       >
         <path
           d='M16.3187 2.35732C14.6117 0.547559 11.8487 0.547559 10.1417 2.35732L10.0067 2.50042C9.61766 2.91288 8.98249 2.91288 8.58551 2.50042C7.10079 0.917929 4.71889 0.513889 2.96423 1.75968C0.598209 3.4516 0.367958 6.87753 2.28142 8.90615L3.12302 9.7984L8.22028 15.2024C8.81576 15.8338 9.77646 15.8338 10.3719 15.2024L15.4692 9.7984L16.3108 8.90615C18.0258 7.09638 18.0258 4.16709 16.3187 2.35732Z'
-          fill={isLiked ? '#eef0fa' : '#898AC4'}
-          stroke='#EEF0FA'
+          className={isLiked ? 'fill-fg-light' : 'fill-bg-purple-300'}
+          stroke='currentColor'
           strokeWidth='2'
           strokeLinecap='round'
           strokeLinejoin='round'
+          style={{ color: 'var(--color-fg-light)' }}
         />
       </svg>
     </button>
