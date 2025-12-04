@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Image from '@/components/ui/Image/Image';
 import BackButton from '@/components/ui/BackButton/BackButton';
 import LikeButton from '@/components/ui/LikeButton/LikeButton';
 import VoicePreviewItem from '@/features/character/VoicePreviewItem';
+import ErrorToast from '@/components/ui/ErrorToast/ErrorToast';
+import { useToast } from '@/hooks/useToast';
 import { characterImageMap, characters, characterDetails } from '@/constants/characters';
 import heartIcon from '@/assets/icons/heart.svg';
 import dividerIcon from '@/assets/icons/divider.svg';
@@ -11,6 +13,7 @@ import dividerIcon from '@/assets/icons/divider.svg';
 const CharacterDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { isVisible, message, showToast, hideToast } = useToast();
   const [isLiked, setIsLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
   const [playingIndex, setPlayingIndex] = useState<number | null>(null);
@@ -19,6 +22,30 @@ const CharacterDetailPage: React.FC = () => {
   const character = characters.find((c) => c.id === characterId);
   const characterDetail = characterId ? characterDetails[characterId] : null;
   const imageSrc = characterId ? characterImageMap[characterId] : undefined;
+
+  // 페이지 배경색 설정
+  useEffect(() => {
+    document.body.style.backgroundColor = '#1d1d2d'; // bg-purple-900
+    return () => {
+      document.body.style.backgroundColor = '';
+    };
+  }, []);
+
+  // 존재하지 않는 캐릭터 ID인 경우 에러 토스트 표시 후 캐릭터 목록으로 리다이렉트
+  useEffect(() => {
+    if (id && !characterDetail) {
+      showToast('캐릭터를 찾을 수 없습니다.');
+      const timer = setTimeout(() => {
+        navigate('/character', { replace: true });
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [id, characterDetail, navigate, showToast]);
+
+  // 캐릭터 데이터가 없을 경우 null 반환 (리다이렉트 진행 중)
+  if (!characterDetail) {
+    return null;
+  }
 
   const handleLikeChange = (liked: boolean) => {
     setIsLiked(liked);
@@ -38,8 +65,8 @@ const CharacterDetailPage: React.FC = () => {
   ];
 
   return (
-    <div className='w-full min-h-screen bg-bg-purple-900 flex flex-col relative'>
-      <div className='relative w-screen max-w-[480px]'>
+    <div className='w-full min-h-screen flex flex-col items-center relative'>
+      <div className='relative w-full max-w-[480px]'>
         <Image src={imageSrc} alt={character?.title || '캐릭터'} className='w-full h-auto' />
 
         {/* 뒤로가기 버튼 */}
@@ -118,6 +145,9 @@ const CharacterDetailPage: React.FC = () => {
           );
         })}
       </div>
+
+      {/* 에러 토스트 */}
+      <ErrorToast isVisible={isVisible} message={message} onClose={hideToast} />
     </div>
   );
 };
