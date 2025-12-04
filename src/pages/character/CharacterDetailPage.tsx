@@ -1,0 +1,135 @@
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import Image from '@/components/ui/Image/Image';
+import BackButton from '@/components/ui/BackButton/BackButton';
+import LikeButton from '@/components/ui/LikeButton/LikeButton';
+import VoicePreviewItem from '@/features/character/VoicePreviewItem';
+import ErrorToast from '@/components/ui/ErrorToast/ErrorToast';
+import { useToast } from '@/hooks/useToast';
+import { characterImageMap, characters, characterDetails } from '@/constants/characters';
+import heartIcon from '@/assets/icons/heart.svg';
+import dividerIcon from '@/assets/icons/divider.svg';
+
+const CharacterDetailPage: React.FC = () => {
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const { isVisible, message, showToast, hideToast } = useToast();
+  const [isLiked, setIsLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(0);
+  const [playingIndex, setPlayingIndex] = useState<number | null>(null);
+
+  const characterId = id ? parseInt(id) : null;
+  const character = characters.find((c) => c.id === characterId);
+  const characterDetail = characterId ? characterDetails[characterId] : null;
+  const imageSrc = characterId ? characterImageMap[characterId] : undefined;
+
+  // 페이지 배경색 설정
+  useEffect(() => {
+    document.body.style.backgroundColor = '#1d1d2d'; // bg-purple-900
+    return () => {
+      document.body.style.backgroundColor = '';
+    };
+  }, []);
+
+  // 존재하지 않는 캐릭터 ID인 경우 에러 토스트 표시 후 캐릭터 목록으로 리다이렉트
+  useEffect(() => {
+    if (id && !characterDetail) {
+      showToast('캐릭터를 찾을 수 없습니다.');
+      const timer = setTimeout(() => {
+        navigate('/character', { replace: true });
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [id, characterDetail, navigate, showToast]);
+
+  // 캐릭터 데이터가 없을 경우 null 반환 (리다이렉트 진행 중)
+  if (!characterDetail) {
+    return null;
+  }
+
+  const handleLikeChange = (liked: boolean) => {
+    setIsLiked(liked);
+    setLikeCount((prev) => (liked ? prev + 1 : Math.max(0, prev - 1)));
+  };
+
+  const handlePlayChange = (index: number) => (playing: boolean) => {
+    setPlayingIndex(playing ? index : null);
+    // 음성 파일 재생 로직 추가할 예정
+  };
+
+  // 음성 미리듣기 데이터 (추후 API로 대체)
+  const voicePreviews = [
+    { title: 'Focus Attention', duration: '10 MIN' },
+    { title: 'Body Scan', duration: '5 MIN' },
+    { title: 'Making Happiness', duration: '3 MIN' },
+  ];
+
+  return (
+    <div className='w-full min-h-screen bg-bg-purple-900 flex flex-col items-center relative overflow-auto'>
+      <div className='relative w-full max-w-[480px] pb-12'>
+        <div className='relative'>
+          <Image src={imageSrc} alt={character?.title || '캐릭터'} className='w-full h-auto' />
+
+          {/* 뒤로가기 버튼 */}
+          <div className='absolute top-[18px] left-[20px]'>
+            <BackButton onClick={() => navigate('/character')} />
+          </div>
+
+          {/* 좋아요 버튼 */}
+          <div className='absolute top-[18px] right-[20px]'>
+            <LikeButton isLiked={isLiked} onClick={handleLikeChange} />
+          </div>
+        </div>
+
+        {/* 캐릭터 정보 섹션 */}
+        <div className='px-12 mt-8'>
+          {characterDetail && (
+            <>
+              {/* 캐릭터 제목 */}
+              <h1 className='nsr-34-eb text-fg-cream mb-4'>{characterDetail.title}</h1>
+
+              {/* 캐릭터 태그 */}
+              <p className='nbp-16-b text-fg-disabled mb-5'>{characterDetail.tags.join(' ')}</p>
+
+              {/* 캐릭터 설명 */}
+              <p className='nbp-16-b text-fg-cream mb-6'>{characterDetail.description}</p>
+
+              {/* 좋아요 카운트 */}
+              <div className='flex items-center gap-[9.94px] mb-10'>
+                <img src={heartIcon} alt='좋아요' className='w-[18.26px] h-[16.14px]' />
+                <span className='pre-14-m text-fg-disabled'>{likeCount}</span>
+              </div>
+            </>
+          )}
+
+          {/* 음성 미리 듣기 */}
+          <h2 className='nsr-20-eb text-fg-cream mb-[30px]'>음성 미리 듣기</h2>
+
+          {/* 음성 재생 컴포넌트 */}
+          <div className='flex flex-col'>
+            {voicePreviews.map((voice, index) => (
+              <React.Fragment key={index}>
+                <VoicePreviewItem
+                  title={voice.title}
+                  duration={voice.duration}
+                  isPlaying={playingIndex === index}
+                  onPlayChange={handlePlayChange(index)}
+                />
+
+                {/* Divider */}
+                {index < voicePreviews.length - 1 && (
+                  <img src={dividerIcon} alt='구분선' className='w-full h-[3px] my-5' />
+                )}
+              </React.Fragment>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* 에러 토스트 */}
+      <ErrorToast isVisible={isVisible} message={message} onClose={hideToast} />
+    </div>
+  );
+};
+
+export default CharacterDetailPage;
