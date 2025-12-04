@@ -13,8 +13,8 @@ const UserInfoList: React.FC<UserInfoListProps> = ({ items, onChange, isEditMode
   return (
     <div className='w-full rounded-[5px] opacity-100'>
       <div className='space-y-6'>
-        {items.map((item, index) => (
-          <div key={index} className='w-full opacity-100'>
+        {items.map((item) => (
+          <div key={item.key} className='w-full opacity-100'>
             <label className='block text-fg-primary pre-16-43-r mb-2'>{item.key}</label>
             {item.key === '성별' ? (
               <GenderSelect
