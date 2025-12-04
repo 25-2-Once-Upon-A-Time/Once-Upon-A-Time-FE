@@ -11,7 +11,7 @@ const MyPage: React.FC = () => {
   const [userInfo, setUserInfo] = useState<UserInfoItem[]>([
     { key: '이름', value: '', placeholder: '이름' },
     { key: '생년월일', value: '', placeholder: '2004-01-01' },
-    { key: '전화번호', value: '', placeholder: '01011112222', type: 'tel' },
+    { key: '전화번호', value: '', placeholder: '010-1111-2222', type: 'tel' },
     { key: '성별', value: '', placeholder: '여성' },
     { key: '닉네임', value: '', placeholder: '컴공' },
   ]);
@@ -36,17 +36,17 @@ const MyPage: React.FC = () => {
       <TopNav className='bg-bg-purple-50' title='내정보' />
       <div className='w-full px-7 overflow-y-auto flex-1 pt-[65px] pb-[80px]'>
         <UserInfoList items={userInfo} onChange={handleChange} isEditMode={isEditMode} />
-        <div className='mt-6 flex justify-start'>
+        <div className='mt-6 flex justify-end'>
           <Button
             variant='primary'
             onClick={handleEdit}
-            className='w-[61px] h-[31px] text-[14px] px-0 rounded-[4px]'
+            className='w-[79px] h-[31px] pre-16-43-r px-0 rounded-[4px]'
           >
             {isEditMode ? '완료' : '수정'}
           </Button>
         </div>
-        <div className='mt-4 flex justify-end'>
-          <TextButton variant='body' color='gray' className='text-[14px] h-[26px]'>
+        <div className='mt-[56px] flex justify-center'>
+          <TextButton variant='body' className='pre-14-r text-fg-primary h-[26px]'>
             로그아웃
           </TextButton>
         </div>
