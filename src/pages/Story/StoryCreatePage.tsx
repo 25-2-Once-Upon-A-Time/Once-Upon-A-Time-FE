@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ImageCard from '@/components/ui/ImageCard/ImageCard';
 import Button from '@/components/ui/Button/Button';
+import Image from '@/components/ui/Image/Image';
 import LoadingModal from '@/components/ui/LoadingModal';
 import backIcon from '@/assets/Nav/icons/back.png';
 import { addStory } from '@/TestDB/StoryData_Test'; //테스트용
@@ -32,16 +33,18 @@ const STEP_CONFIG = {
   2: { progress: 50, text: '동화의 분위기를 선택하세요' },
   3: { progress: 75, text: '어떤 이야기를 만들어 볼까요?' },
   4: { progress: 100, text: '동화 제목을 지어주세요' },
+  5: { progress: 100, text: '동화 생성 완료!' },
 };
 
 const StoryCreatePage: React.FC = () => {
   const navigate = useNavigate();
-  const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
+  const [step, setStep] = useState<1 | 2 | 3 | 4 | 5>(1);
   const [selectedTheme, setSelectedTheme] = useState<string | null>(null);
   const [selectedMood, setSelectedMood] = useState<string | null>(null);
   const [storyPrompt, setStoryPrompt] = useState('');
   const [storyTitle, setStoryTitle] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [generatedImageSrc, setGeneratedImageSrc] = useState<string | undefined>(undefined);
 
   const currentStep = STEP_CONFIG[step];
 
@@ -49,8 +52,10 @@ const StoryCreatePage: React.FC = () => {
   const handleBack = () => {
     if (step === 1) {
       navigate('/story');
+    } else if (step === 5) {
+      navigate('/story');
     } else {
-      setStep((prev) => (prev - 1) as 1 | 2 | 3 | 4);
+      setStep((prev) => (prev - 1) as 1 | 2 | 3 | 4 | 5);
     }
   };
 
@@ -86,11 +91,9 @@ const StoryCreatePage: React.FC = () => {
   const handleCreateStory = () => {
     setIsLoading(true);
 
-    // 더미 콘텐츠 생성
     const dummyContent = `${'테스트로 만들어진 동화입니다'}`;
 
     setTimeout(() => {
-      // 더미 데이터 추가
       addStory({
         title: storyTitle,
         imageSrc: undefined,
@@ -100,9 +103,15 @@ const StoryCreatePage: React.FC = () => {
         content: dummyContent,
       });
 
+      setGeneratedImageSrc(undefined);
       setIsLoading(false);
-      navigate('/story');
+      setStep(5);
     }, 3000);
+  };
+
+  // 동화 목록으로 이동
+  const handleGoToList = () => {
+    navigate('/story');
   };
 
   return (
@@ -131,7 +140,7 @@ const StoryCreatePage: React.FC = () => {
           {/* 단계 설명 */}
           <div className='px-4 pb-4'>
             <p className='nbp-16-b text-center'>
-              {step}단계: {currentStep.text}
+              {step === 5 ? currentStep.text : `${step}단계: ${currentStep.text}`}
             </p>
           </div>
         </div>
@@ -209,6 +218,36 @@ const StoryCreatePage: React.FC = () => {
                 동화 생성
               </Button>
             )}
+          </div>
+        )}
+
+        {/* 5단계: 생성 완료 */}
+        {step === 5 && (
+          <div className='flex flex-col items-center space-y-6'>
+            {/* 생성된 이미지 */}
+            <Image
+              src={generatedImageSrc}
+              alt={storyTitle}
+              className='w-full aspect-square rounded-[16px]'
+            />
+
+            {/* 동화 제목 */}
+            <h2 className='nsr-20-eb text-center'>{storyTitle}</h2>
+
+            {/* 테마 & 분위기 태그 */}
+            <div className='flex gap-2'>
+              <span className='ng-14-r text-[#898AC4]'>#{getThemeLabel(selectedTheme || '')}</span>
+              <span className='ng-14-r text-[#898AC4]'>#{getMoodLabel(selectedMood || '')}</span>
+            </div>
+
+            {/* 동화 목록으로 이동 버튼 */}
+            <Button
+              onClick={handleGoToList}
+              fullWidth
+              className='bg-[#898AC4] text-white rounded-[12px] hover:brightness-95 active:brightness-90'
+            >
+              동화 목록으로 이동
+            </Button>
           </div>
         )}
       </div>
