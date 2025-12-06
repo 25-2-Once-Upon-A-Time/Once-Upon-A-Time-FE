@@ -46,7 +46,7 @@ const LoadingModal: React.FC<LoadingModalProps> = ({
       <div
         className={twMerge(
           'relative w-[320px] bg-white rounded-[24px] p-8 flex flex-col items-center',
-          'border-2 border-[#898AC4]',
+          'border-2 border-border-purple',
           className,
         )}
       >
@@ -56,15 +56,15 @@ const LoadingModal: React.FC<LoadingModalProps> = ({
         </div>
 
         {/* 동화를 생성중입니다 */}
-        <p className='nsr-20-eb text-[#A2AADB] mb-2'>{title}</p>
+        <p className='nsr-20-eb text-fg-purple-800 mb-2'>{title}</p>
 
         {/* 잠시만 기다려주세요 */}
         <p className='pre-14-r text-black mb-6'>{subtitle}</p>
 
         {/* 프로그래스바 */}
-        <div className='w-full h-[8px] bg-[#DBDBDB] rounded-full overflow-hidden mb-6'>
+        <div className='w-full h-[8px] bg-fg-disabled rounded-full overflow-hidden mb-6'>
           <div
-            className='h-full bg-[#898AC4] rounded-full transition-all duration-[40ms] ease-out'
+            className='h-full bg-bg-purple-300 rounded-full transition-all duration-[40ms] ease-out'
             style={{ width: `${progress}%` }}
           />
         </div>

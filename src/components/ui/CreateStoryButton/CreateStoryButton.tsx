@@ -11,11 +11,7 @@ const CreateStoryButton: React.FC<CreateStoryButtonProps> = ({
   const navigate = useNavigate();
 
   const handleClick = () => {
-    if (onClick) {
-      onClick();
-    } else {
-      navigate('/story/create');
-    }
+    onClick ? onClick() : navigate('/story/create');
   };
 
   return (
@@ -23,23 +19,35 @@ const CreateStoryButton: React.FC<CreateStoryButtonProps> = ({
       type='button'
       onClick={handleClick}
       className={twMerge(
-        'h-[38px] rounded-[19px]',
-        'bg-[#898AC4] text-white font-semibold',
-        'flex items-center justify-center',
-        'shadow-md hover:brightness-95 active:brightness-90',
-        'transition-all duration-300',
+        'flex items-center justify-center h-[38px] rounded-full',
+        'bg-bg-purple-300 text-white shadow-md',
+        'transition-all duration-300 ease-in-out',
+        'hover:brightness-95 active:brightness-90',
         collapsed ? 'w-[38px]' : 'w-[119px] gap-1',
         className,
       )}
     >
-      <span className='text-[18px]'>+</span>
+      <svg
+        width='18'
+        height='18'
+        viewBox='0 0 24 24'
+        fill='none'
+        xmlns='http://www.w3.org/2000/svg'
+        className='shrink-0'
+      >
+        <path
+          d='M12 5V19M5 12H19'
+          stroke='currentColor'
+          strokeWidth='2.5'
+          strokeLinecap='round'
+          strokeLinejoin='round'
+        />
+      </svg>
+
       <span
         className={twMerge(
-          'text-[14px] whitespace-nowrap overflow-hidden',
-          'transition-opacity',
-          collapsed
-            ? 'opacity-0 w-0 duration-100' // 축소 시 빠르게 사라짐
-            : 'opacity-100 delay-200 duration-200', // 확장 시 도형 완성 후 나타남
+          'pre-14-m whitespace-nowrap overflow-hidden transition-all',
+          collapsed ? 'w-0 opacity-0 duration-200' : 'w-auto opacity-100 duration-300 delay-100',
         )}
       >
         동화생성

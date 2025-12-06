@@ -129,9 +129,9 @@ const StoryCreatePage: React.FC = () => {
 
           {/* 프로그래스바 */}
           <div className='px-4 py-4'>
-            <div className='w-full h-[8px] bg-[#DBDBDB] rounded-full overflow-hidden'>
+            <div className='w-full h-[8px] bg-fg-disabled rounded-full overflow-hidden'>
               <div
-                className='h-full bg-[#898AC4] rounded-full transition-all duration-300'
+                className='h-full bg-bg-purple-300 rounded-full transition-all duration-300'
                 style={{ width: `${currentStep.progress}%` }}
               />
             </div>
@@ -139,15 +139,13 @@ const StoryCreatePage: React.FC = () => {
 
           {/* 단계 설명 */}
           <div className='px-4 pb-4'>
-            <p className='nbp-16-b text-center'>
-              {step === 5 ? currentStep.text : `${step}단계: ${currentStep.text}`}
-            </p>
+            <p className='nbp-16-b text-left'>{`${step}단계: ${currentStep.text}`}</p>
           </div>
         </div>
       </div>
 
       {/* 본문 */}
-      <div className='flex-1 w-full pt-[160px] px-4 pb-20 overflow-y-auto'>
+      <div className='flex-1 w-full pt-[140px] px-4 pb-20 overflow-y-auto'>
         {/* 1단계: 테마 선택 */}
         {step === 1 && (
           <div className='grid grid-cols-2 gap-4'>
@@ -185,14 +183,10 @@ const StoryCreatePage: React.FC = () => {
               value={storyPrompt}
               onChange={(e) => setStoryPrompt(e.target.value)}
               placeholder='ex) 친구와 음식을 나누어먹는 이야기'
-              className='w-full h-[150px] p-4 border-2 border-[#898AC4] rounded-[16px] ng-16-r placeholder:text-gray-400 focus:outline-none resize-none'
+              className='w-full h-[300px] p-4 border-2 border-border-purple rounded-[16px] ng-16-r placeholder:text-fg-gray focus:outline-none resize-none'
             />
             {storyPrompt.length > 0 && (
-              <Button
-                onClick={handleNextToTitle}
-                fullWidth
-                className='bg-[#898AC4] text-white rounded-[12px] hover:brightness-95 active:brightness-90'
-              >
+              <Button onClick={handleNextToTitle} variant='primary' fullWidth>
                 다음
               </Button>
             )}
@@ -206,15 +200,10 @@ const StoryCreatePage: React.FC = () => {
               value={storyTitle}
               onChange={(e) => setStoryTitle(e.target.value)}
               placeholder='ex) 나누어먹으면 맛있어요'
-              rows={2}
-              className='w-full p-4 border-2 border-[#898AC4] rounded-[16px] ng-16-r placeholder:text-gray-400 focus:outline-none resize-none'
+              className='w-full h-[300px] p-4 border-2 border-border-purple rounded-[16px] ng-16-r placeholder:text-fg-gray focus:outline-none resize-none'
             />
             {storyTitle.length > 0 && (
-              <Button
-                onClick={handleCreateStory}
-                fullWidth
-                className='bg-[#898AC4] text-white rounded-[12px] hover:brightness-95 active:brightness-90'
-              >
+              <Button onClick={handleCreateStory} variant='primary' fullWidth>
                 동화 생성
               </Button>
             )}
@@ -236,16 +225,12 @@ const StoryCreatePage: React.FC = () => {
 
             {/* 테마 & 분위기 태그 */}
             <div className='flex gap-2'>
-              <span className='ng-14-r text-[#898AC4]'>#{getThemeLabel(selectedTheme || '')}</span>
-              <span className='ng-14-r text-[#898AC4]'>#{getMoodLabel(selectedMood || '')}</span>
+              <span className='ng-16-r text-fg-primary'>#{getThemeLabel(selectedTheme || '')}</span>
+              <span className='ng-16-r text-fg-primary'>#{getMoodLabel(selectedMood || '')}</span>
             </div>
 
             {/* 동화 목록으로 이동 버튼 */}
-            <Button
-              onClick={handleGoToList}
-              fullWidth
-              className='bg-[#898AC4] text-white rounded-[12px] hover:brightness-95 active:brightness-90'
-            >
+            <Button onClick={handleGoToList} variant='primary' fullWidth>
               동화 목록으로 이동
             </Button>
           </div>
