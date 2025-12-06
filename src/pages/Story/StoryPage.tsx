@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { BottomNav } from '@/components/BottomNav';
-import { TopNav } from '@/components/TopNav';
+import { BottomNav } from '@/components/ui/BottomNav';
+import { TopNav } from '@/components/ui/TopNav';
 import SearchInput from '@/components/ui/SearchInput/SearchInput';
 import ImageCard from '@/components/ui/ImageCard/ImageCard';
 import CreateStoryButton from '@/components/ui/CreateStoryButton';
