@@ -115,9 +115,9 @@ const StoryCreatePage: React.FC = () => {
   };
 
   return (
-    <div className='w-full min-h-screen flex flex-col bg-white'>
+    <div className='w-full min-h-screen flex flex-col'>
       {/* 상단 고정 영역 */}
-      <div className='fixed top-0 left-0 right-0 z-40 bg-white'>
+      <div className='fixed top-0 left-0 right-0 z-40'>
         <div className='max-w-[480px] mx-auto'>
           {/* 헤더 */}
           <div className='h-[56px] flex items-center justify-center relative'>

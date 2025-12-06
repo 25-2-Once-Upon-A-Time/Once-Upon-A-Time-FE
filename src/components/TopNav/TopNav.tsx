@@ -16,7 +16,7 @@ const TopNav: React.FC<TopNavProps> = ({ title, showBack = false, className }) =
       className={twMerge(
         'fixed top-0 left-0 right-0',
         'flex items-center justify-center',
-        'h-[56px] bg-white',
+        'h-[56px]',
         'z-50',
         className,
       )}

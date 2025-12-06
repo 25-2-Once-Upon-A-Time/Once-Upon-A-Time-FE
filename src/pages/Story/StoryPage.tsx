@@ -7,6 +7,7 @@ import ImageCard from '@/components/ui/ImageCard/ImageCard';
 import CreateStoryButton from '@/components/ui/CreateStoryButton';
 import ErrorToast from '@/components/ui/ErrorToast/ErrorToast';
 import NothingImage from '@/assets/images/nothing.svg';
+import notFoundIllustration from '@/assets/images/404Illustration.svg';
 import { storyList } from '@/TestDB/StoryData_Test';
 
 // 특수문자 포함 체크 정규식
@@ -24,6 +25,9 @@ const StoryPage: React.FC = () => {
   const filteredStories = storyList.filter((story) =>
     story.title.toLowerCase().includes(searchQuery.toLowerCase()),
   );
+
+  // 동화 목록이 비어있는지 확인
+  const isEmptyList = storyList.length === 0;
 
   const handleScroll = () => {
     if (mainRef.current) {
@@ -83,9 +87,38 @@ const StoryPage: React.FC = () => {
     navigate(`/story/${id}`);
   };
 
+  // 빈 상태 렌더링 함수
+  const renderEmptyState = () => {
+    // 1. 동화 목록 자체가 비어있을 때
+    if (isEmptyList) {
+      return (
+        <div className='absolute left-1/2 -translate-x-1/2 top-[129px] flex flex-col items-center'>
+          <img src={NothingImage} alt='생성된 동화 없음' className='w-[197px] h-[131px]' />
+          <p className='pre-14-r text-fg-primary mt-4 text-center'>
+            생성된 동화가 없어요!
+            <br />
+            나만의 동화를 만들러가볼까요?
+          </p>
+        </div>
+      );
+    }
+
+    // 2. 검색 결과가 없을 때
+    if (showNotFound) {
+      return (
+        <div className='absolute left-1/2 -translate-x-1/2 top-[129px] flex flex-col items-center'>
+          <img src={notFoundIllustration} alt='검색 결과 없음' className='w-[197px] h-[131px]' />
+          <p className='pre-14-r text-fg-primary mt-4'>검색 결과가 없습니다.</p>
+        </div>
+      );
+    }
+
+    return null;
+  };
+
   return (
-    <div className='w-full h-screen flex flex-col bg-white overflow-hidden'>
-      <TopNav title='동화' showBack={false} className='static bg-white' />
+    <div className='w-full h-screen flex flex-col overflow-hidden'>
+      <TopNav title='동화' showBack={false} className='static' />
 
       <div className='w-full px-4 py-4 flex-shrink-0'>
         <SearchInput
@@ -114,11 +147,8 @@ const StoryPage: React.FC = () => {
         onScroll={handleScroll}
         className='flex-1 w-full px-[4%] pb-28 overflow-y-scroll relative overscroll-y-auto'
       >
-        {showError ? null : showNotFound ? (
-          <div className='absolute left-1/2 -translate-x-1/2 top-[129px] flex flex-col items-center'>
-            <img src={NothingImage} alt='검색 결과 없음' className='w-[197px] h-[131px]' />
-            <p className='pre-14-r text-fg-primary mt-4'>검색 결과가 없습니다.</p>
-          </div>
+        {showError ? null : isEmptyList || showNotFound ? (
+          renderEmptyState()
         ) : (
           <div className='grid grid-cols-2 gap-[4%] gap-y-4 pb-4'>
             {filteredStories.map((story) => (
