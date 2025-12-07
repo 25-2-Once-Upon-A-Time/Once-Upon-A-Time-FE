@@ -5,6 +5,9 @@ import StoryCreatePage from '@/pages/Story/StoryCreatePage';
 import CharacterListPage from '@/pages/character/CharacterListPage';
 import CharacterDetailPage from '@/pages/character/CharacterDetailPage';
 import MyPage from '@/pages/mypage/MyPage';
+import AudioBook from '@/pages/audiobook/AudioBookPage';
+import AudioBookPlayPage from '@/pages/audiobook/AudioBookPlayPage';
+import AudioBookCreatePage from '@/pages/audiobook/AudioBookCreatePage';
 
 function App() {
   return (
@@ -16,6 +19,9 @@ function App() {
         <Route path='/character' element={<CharacterListPage />} />
         <Route path='/character/:id' element={<CharacterDetailPage />} />
         <Route path='/mypage' element={<MyPage />} />
+        <Route path='/audiobook' element={<AudioBook />} />
+        <Route path='/audiobook/:id' element={<AudioBookPlayPage />} />
+        <Route path='/audiobook/create' element={<AudioBookCreatePage />} />
       </Routes>
     </BrowserRouter>
   );
