@@ -4,7 +4,7 @@ import ImageCard from '@/components/ui/ImageCard/ImageCard';
 import Button from '@/components/ui/Button/Button';
 import Image from '@/components/ui/Image/Image';
 import LoadingModal from '@/components/ui/LoadingModal';
-import backIcon from '@/assets/Nav/icons/back.png';
+import backIcon from '@/assets/icons/back.svg';
 import { addStory } from '@/TestDB/StoryData_Test'; //테스트용
 
 // 테마 옵션
