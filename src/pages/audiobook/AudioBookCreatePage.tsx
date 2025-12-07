@@ -100,7 +100,7 @@ const AudioBookCreatePage: React.FC = () => {
       </div>
 
       {/* 단계 설명 */}
-      <div className='px-4 pb-4 mt-[48px]'>
+      <div className='px-4 pb-4 mt-[24px]'>
         <p className='ng-16-n text-gray-800 self-stretch'>
           {step === 3 ? currentStep.text : `${step}단계: ${currentStep.text}`}
         </p>
@@ -147,13 +147,7 @@ const AudioBookCreatePage: React.FC = () => {
         <div className='relative flex flex-col items-center self-stretch flex-1 justify-start pt-6'>
           {/* 동화/캐릭터 circle은 설명문 아래에 렌더됩니다 (아래로 이동됨) */}
 
-          <div className='mt-[5px]'>
-            <img
-              src={headphonesIcon}
-              alt='headphones'
-              className='w-[150px] h-[150px] mb-4 mx-auto'
-            />
-          </div>
+          <img src={headphonesIcon} alt='headphones' className='w-[150px] h-[150px] mb-4 mx-auto' />
 
           <h2 className='ng-25-n text-fg-primary'>오디오북을 생성할까요?</h2>
 
@@ -162,12 +156,12 @@ const AudioBookCreatePage: React.FC = () => {
             {'\n'}동화를 들려드려요
           </p>
 
-          {/* 동화/캐릭터 circle: 버튼 상단으로부터 100px 위에 고정 */}
-          <div className='absolute left-1/2 transform -translate-x-1/2 flex items-center justify-center gap-[70px] bottom-[250px]'>
+          {/* 동화/캐릭터 circle: 버튼 상단으로부터 약 100px 위에 위치 (반응형) */}
+          <div className='mx-auto mt-[60px] flex items-center justify-center gap-[50px] md:gap-[70px] mb-[80px]'>
             {/* Story circle */}
             <div className='flex flex-col items-center'>
               <div
-                className='w-[90px] h-[90px] rounded-full flex items-center justify-center'
+                className='w-[72px] h-[72px] md:w-[90px] md:h-[90px] rounded-full flex items-center justify-center'
                 style={{ backgroundColor: 'var(--color-fg-peach)' }}
               >
                 {selectedStoryId ? (
@@ -177,7 +171,7 @@ const AudioBookCreatePage: React.FC = () => {
                       <Image
                         src={story?.imageSrc || ''}
                         alt={story?.title || 'story'}
-                        className='w-[32px] h-[32px]'
+                        className='w-[28px] h-[28px] md:w-[32px] md:h-[32px]'
                       />
                     );
                   })()
@@ -195,7 +189,7 @@ const AudioBookCreatePage: React.FC = () => {
             {/* Character circle */}
             <div className='flex flex-col items-center'>
               <div
-                className='w-[90px] h-[90px] rounded-full flex items-center justify-center'
+                className='w-[72px] h-[72px] md:w-[90px] md:h-[90px] rounded-full flex items-center justify-center'
                 style={{ backgroundColor: 'var(--color-fg-yellow)' }}
               >
                 {selectedCharacter ? (
@@ -205,7 +199,7 @@ const AudioBookCreatePage: React.FC = () => {
                       <Image
                         src={char?.imageSrc || ''}
                         alt={char?.title || 'character'}
-                        className='w-[32px] h-[32px]'
+                        className='w-[28px] h-[28px] md:w-[32px] md:h-[32px]'
                       />
                     );
                   })()
