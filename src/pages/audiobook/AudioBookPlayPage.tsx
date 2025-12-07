@@ -100,7 +100,7 @@ const AudioBookPlayPage: React.FC = () => {
           <div className='w-full max-w-[318px] mx-auto'>
             {/* 타이틀 */}
             <div className='mt-[18px]'>
-              <h1 className='nsr-34-eb text-fg-cream'>{audiobook.character}</h1>
+              <h1 className='nsr-34-eb text-fg-cream'>{audiobook.title}</h1>
             </div>
 
             {/* 태그 */}
