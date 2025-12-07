@@ -32,16 +32,27 @@ const CharacterListPage: React.FC = () => {
       return;
     }
 
+    // 특수문자 여부 확인
+    // Unicode 속성 기반으로 문자(Letter) 또는 숫자(Number) 또는 공백이면 허용
+    // (한글 음절과 자모 모두 \\p{L}에 포함되므로 자모 입력은 특수문자로 인식되지 않음)
+    const hasSpecial = /[^\p{L}\p{N}\s]/u.test(searchTerm);
+
     setSearchQuery(searchTerm);
 
     const filtered = characters.filter((character) =>
       character.title.toLowerCase().includes(searchTerm.toLowerCase()),
     );
 
-    if (filtered.length === 0) {
+    if (hasSpecial) {
+      // 특수문자가 포함된 경우 에러 토스트만 표시
       setShowError(true);
       setShowNotFound(false);
+    } else if (filtered.length === 0) {
+      // 특수문자가 없고 결과가 없는 경우에는 '검색 결과 없음' UI 표시
+      setShowError(false);
+      setShowNotFound(true);
     } else {
+      // 결과가 있을 때
       setShowError(false);
       setShowNotFound(false);
     }
@@ -68,7 +79,7 @@ const CharacterListPage: React.FC = () => {
     <div className='w-full min-h-screen flex flex-col bg-bg-purple-50'>
       <TopNav title='캐릭터' className='bg-bg-purple-50' />
 
-      <div className='w-full pt-[56px] px-4 py-4'>
+      <div className='w-full pt-[72px] px-4 py-4'>
         <SearchInput
           className='w-full'
           value={searchTerm}
