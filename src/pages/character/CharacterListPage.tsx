@@ -77,7 +77,7 @@ const CharacterListPage: React.FC = () => {
     <div className='w-full min-h-screen flex flex-col bg-bg-purple-50'>
       <TopNav title='캐릭터' className='bg-bg-purple-50' />
 
-      {/* Search (fixed under TopNav) */}
+      {/* Search */}
       <div className='fixed top-[72px] left-0 right-0 z-40 px-4'>
         <div className='max-w-[480px] mx-auto'>
           <SearchInput

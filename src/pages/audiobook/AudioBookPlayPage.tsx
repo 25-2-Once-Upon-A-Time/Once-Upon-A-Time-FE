@@ -4,7 +4,6 @@ import BackButton from '@/components/ui/BackButton/BackButton';
 import Image from '@/components/ui/Image/Image';
 import AudioProgressBar from '@/features/audiobook/AudioProgressBar';
 import AudioControls from '@/features/audiobook/AudioControls';
-// cinderellaImage removed: use ImagePlaceholder when no image
 import { audiobooks } from '@/constants/audiobooks';
 
 const AudioBookPlayPage: React.FC = () => {
@@ -13,21 +12,20 @@ const AudioBookPlayPage: React.FC = () => {
   const [currentTime, setCurrentTime] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
 
-  // 오디오북 데이터 가져오기 (constants에서 찾고, 없으면 location.state에서 fallback)
+  // 오디오북 데이터 가져오기
   const location = useLocation();
   const fallback = (location.state as any)?.audiobook as any | undefined;
   const audiobook =
     audiobooks.find((ab) => ab.id === Number(id)) ||
     (fallback && Number(fallback.id) === Number(id) ? fallback : undefined);
 
-  // 전체 시간 (HH:MM:SS를 초로 변환)
+  // 전체 시간
   const totalTime = audiobook
     ? parseInt(audiobook.time.split(':')[0]) * 3600 +
       parseInt(audiobook.time.split(':')[1]) * 60 +
       parseInt(audiobook.time.split(':')[2])
     : 0;
 
-  // 페이지 배경색 설정
   useEffect(() => {
     document.body.classList.add('bg-bg-purple-900');
     return () => {
@@ -58,22 +56,18 @@ const AudioBookPlayPage: React.FC = () => {
     };
   }, [isPlaying, currentTime, totalTime]);
 
-  // 재생/일시정지 핸들러
   const handlePlayPause = () => {
     setIsPlaying(!isPlaying);
   };
 
-  // 15초 뒤로 핸들러
   const handleSkipBackward = () => {
     setCurrentTime((prev) => Math.max(0, prev - 15));
   };
 
-  // 15초 앞으로 핸들러
   const handleSkipForward = () => {
     setCurrentTime((prev) => Math.min(totalTime, prev + 15));
   };
 
-  // 진행 바 시간 이동 핸들러
   const handleSeek = (time: number) => {
     setCurrentTime(time);
   };
@@ -96,7 +90,6 @@ const AudioBookPlayPage: React.FC = () => {
 
       {audiobook && (
         <div className='px-4'>
-          {/* 컨텐츠 영역 - 재생바와 동일한 시작 위치 */}
           <div className='w-full max-w-[318px] mx-auto'>
             {/* 타이틀 */}
             <div className='mt-[18px]'>
@@ -108,7 +101,6 @@ const AudioBookPlayPage: React.FC = () => {
               <p className='roboto-14-m text-fg-white'>{audiobook.tags.join(' ')}</p>
             </div>
 
-            {/* 캐릭터 + 시간 */}
             <div className='mt-[22px] flex items-center gap-2'>
               {/* 캐릭터 뱃지 */}
               <div className='w-[52px] h-5 rounded-[10px] bg-bg-yellow flex items-center justify-center'>

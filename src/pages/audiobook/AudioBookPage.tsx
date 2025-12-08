@@ -9,7 +9,6 @@ import { audiobooks } from '@/constants/audiobooks';
 
 const AudioBook: React.FC = () => {
   const navigate = useNavigate();
-  // load any locally-created audiobooks (saved during creation) and show most-recent-first
   const [audiobookList, setAudiobookList] = useState(() => {
     try {
       const stored = JSON.parse(localStorage.getItem('localAudiobooks') || '[]');
@@ -20,7 +19,6 @@ const AudioBook: React.FC = () => {
   });
 
   useEffect(() => {
-    // ensure list is kept up-to-date on mount (in case storage changed)
     try {
       const stored = JSON.parse(localStorage.getItem('localAudiobooks') || '[]');
       const combined = Array.isArray(stored) ? [...stored, ...audiobooks] : [...audiobooks];
@@ -57,7 +55,7 @@ const AudioBook: React.FC = () => {
         </div>
       </div>
 
-      {/* 오디오북 생성 버튼 - BottomNav 위 29px 고정 */}
+      {/* 오디오북 생성 버튼 */}
       <div className='fixed bottom-[109px] left-1/2 -translate-x-1/2 z-50'>
         <CreateAudioBookButton onClick={() => navigate('/audiobook/create')} />
       </div>
