@@ -84,7 +84,7 @@ const AudioBookCreatePage: React.FC = () => {
 
       {/* 프로그래스바 */}
       <div className='px-4 mt-[72px]'>
-        <div className='w-full h-[8px] bg-[#DBDBDB] rounded-full overflow-hidden'>
+        <div className='w-full h-[8px] bg-bg-disabled rounded-full overflow-hidden'>
           <div
             className='h-full bg-[#898AC4] rounded-full transition-all duration-300'
             style={{ width: `${currentStep.progress}%` }}
