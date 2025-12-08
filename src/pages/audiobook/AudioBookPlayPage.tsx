@@ -15,9 +15,25 @@ const AudioBookPlayPage: React.FC = () => {
   // 오디오북 데이터 가져오기
   const location = useLocation();
   const fallback = (location.state as any)?.audiobook as any | undefined;
-  const audiobook =
-    audiobooks.find((ab) => ab.id === Number(id)) ||
-    (fallback && Number(fallback.id) === Number(id) ? fallback : undefined);
+
+  // 1. 로컬스토리지(localAudiobooks)에서 찾아보고, 없으면 정적 `audiobooks`,
+  // 2. navigate state로 전달된 fallback을 사용
+  let audiobook: any | undefined;
+  try {
+    const stored = JSON.parse(localStorage.getItem('localAudiobooks') || '[]');
+    const foundInStored = Array.isArray(stored)
+      ? stored.find((ab: any) => Number(ab.id) === Number(id))
+      : undefined;
+
+    audiobook =
+      foundInStored ||
+      audiobooks.find((ab) => ab.id === Number(id)) ||
+      (fallback && Number(fallback.id) === Number(id) ? fallback : undefined);
+  } catch (e) {
+    audiobook =
+      audiobooks.find((ab) => ab.id === Number(id)) ||
+      (fallback && Number(fallback.id) === Number(id) ? fallback : undefined);
+  }
 
   // 전체 시간
   const totalTime = audiobook
