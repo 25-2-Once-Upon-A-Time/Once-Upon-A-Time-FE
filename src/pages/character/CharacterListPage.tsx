@@ -33,8 +33,6 @@ const CharacterListPage: React.FC = () => {
     }
 
     // 특수문자 여부 확인
-    // Unicode 속성 기반으로 문자(Letter) 또는 숫자(Number) 또는 공백이면 허용
-    // (한글 음절과 자모 모두 \\p{L}에 포함되므로 자모 입력은 특수문자로 인식되지 않음)
     const hasSpecial = /[^\p{L}\p{N}\s]/u.test(searchTerm);
 
     setSearchQuery(searchTerm);
@@ -79,28 +77,31 @@ const CharacterListPage: React.FC = () => {
     <div className='w-full min-h-screen flex flex-col bg-bg-purple-50'>
       <TopNav title='캐릭터' className='bg-bg-purple-50' />
 
-      <div className='w-full pt-[72px] px-4 py-4'>
-        <SearchInput
-          className='w-full'
-          value={searchTerm}
-          onChange={handleSearch}
-          onKeyPress={handleKeyPress}
-        />
-      </div>
-
-      {showError && (
-        <div className='w-full px-4 mb-2'>
-          <ErrorToast
-            isVisible={showError}
-            message='검색 결과가 없습니다.'
-            onClose={handleErrorClose}
+      {/* Search (fixed under TopNav) */}
+      <div className='fixed top-[72px] left-0 right-0 z-40 px-4'>
+        <div className='max-w-[480px] mx-auto'>
+          <SearchInput
             className='w-full'
+            value={searchTerm}
+            onChange={handleSearch}
+            onKeyPress={handleKeyPress}
           />
         </div>
-      )}
+      </div>
 
       {/* 캐릭터 리스트 */}
-      <div className='flex-1 w-full px-4 pb-20 overflow-y-auto relative'>
+      <div className='flex-1 w-full px-4 pb-20 overflow-y-auto relative pt-[140px]'>
+        {showError && (
+          <div className='w-full mb-2'>
+            <ErrorToast
+              isVisible={showError}
+              message='검색 결과가 없습니다.'
+              onClose={handleErrorClose}
+              className='w-full'
+            />
+          </div>
+        )}
+
         {showNotFound ? (
           <div className='absolute left-1/2 -translate-x-1/2 top-[129px] flex flex-col items-center'>
             <img src={notFoundIllustration} alt='검색 결과 없음' className='w-[197px] h-[131px]' />
