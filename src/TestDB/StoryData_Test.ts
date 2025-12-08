@@ -1,15 +1,16 @@
-import testImage from '@/assets/images/test-image.svg';
-import testStoryImgae from '@/assets/images/korea.png';
+//import testImage from '@/assets/images/test-image.svg';
+//import testStoryImgae from '@/assets/images/korea.png';
 
 // 타입 정의
 export interface Story {
   id: number;
   title: string;
   imageSrc?: string;
-  summary: string;
-  theme: string;
-  mood: string;
-  content: string;
+  summary?: string;
+  theme?: string;
+  mood?: string;
+  tags?: string[];
+  content?: string;
 }
 // 동화 추가 함수(테스트용)
 export const addStory = (story: Omit<Story, 'id'>) => {

@@ -32,22 +32,22 @@ const MyPage: React.FC = () => {
   // 추후에 로그아웃 로직 생성할 예정
 
   return (
-    <div className='flex flex-col h-full bg-bg-purple-50'>
+    <div className='max-w-[430px] min-w-[360px] min-h-screen flex flex-col mx-auto'>
       <TopNav className='bg-bg-purple-50' title='내정보' />
-      <div className='w-full px-7 overflow-y-auto flex-1 pt-[65px] pb-[80px]'>
+      <div className='w-full px-7 overflow-y-auto flex-1 pt-[90px] pb-[85px]'>
         <UserInfoList items={userInfo} onChange={handleChange} isEditMode={isEditMode} />
-        <div className='mt-6 flex justify-start'>
+        <div className='mt-8 flex justify-end'>
           <Button
             variant='primary'
             onClick={handleEdit}
-            className='w-[61px] h-[31px] text-[14px] px-0 rounded-[4px]'
+            className='w-[70px] h-[31px] rounded-[4px]'
           >
-            {isEditMode ? '완료' : '수정'}
+            <span className='pre-16-43-r'>{isEditMode ? '완료' : '수정'}</span>
           </Button>
         </div>
-        <div className='mt-4 flex justify-end'>
-          <TextButton variant='body' color='gray' className='text-[14px] h-[26px]'>
-            로그아웃
+        <div className='mt-20 flex justify-center'>
+          <TextButton variant='body' className='h-[26px]'>
+            <span className='pre-16-43-r fg-fg-primary'>로그아웃</span>
           </TextButton>
         </div>
       </div>

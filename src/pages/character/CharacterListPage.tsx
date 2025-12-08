@@ -32,16 +32,25 @@ const CharacterListPage: React.FC = () => {
       return;
     }
 
+    // 특수문자 여부 확인
+    const hasSpecial = /[^\p{L}\p{N}\s]/u.test(searchTerm);
+
     setSearchQuery(searchTerm);
 
     const filtered = characters.filter((character) =>
       character.title.toLowerCase().includes(searchTerm.toLowerCase()),
     );
 
-    if (filtered.length === 0) {
+    if (hasSpecial) {
+      // 특수문자가 포함된 경우 에러 토스트만 표시
       setShowError(true);
       setShowNotFound(false);
+    } else if (filtered.length === 0) {
+      // 특수문자가 없고 결과가 없는 경우에는 '검색 결과 없음' UI 표시
+      setShowError(false);
+      setShowNotFound(true);
     } else {
+      // 결과가 있을 때
       setShowError(false);
       setShowNotFound(false);
     }
@@ -68,28 +77,31 @@ const CharacterListPage: React.FC = () => {
     <div className='w-full min-h-screen flex flex-col bg-bg-purple-50'>
       <TopNav title='캐릭터' className='bg-bg-purple-50' />
 
-      <div className='w-full pt-[56px] px-4 py-4'>
-        <SearchInput
-          className='w-full'
-          value={searchTerm}
-          onChange={handleSearch}
-          onKeyPress={handleKeyPress}
-        />
-      </div>
-
-      {showError && (
-        <div className='w-full px-4 mb-2'>
-          <ErrorToast
-            isVisible={showError}
-            message='검색 결과가 없습니다.'
-            onClose={handleErrorClose}
+      {/* Search */}
+      <div className='fixed top-[72px] left-0 right-0 z-40 px-4'>
+        <div className='max-w-[480px] mx-auto'>
+          <SearchInput
             className='w-full'
+            value={searchTerm}
+            onChange={handleSearch}
+            onKeyPress={handleKeyPress}
           />
         </div>
-      )}
+      </div>
 
       {/* 캐릭터 리스트 */}
-      <div className='flex-1 w-full px-4 pb-20 overflow-y-auto relative'>
+      <div className='flex-1 w-full px-4 pb-20 overflow-y-auto relative pt-[140px]'>
+        {showError && (
+          <div className='w-full mb-2'>
+            <ErrorToast
+              isVisible={showError}
+              message='검색 결과가 없습니다.'
+              onClose={handleErrorClose}
+              className='w-full'
+            />
+          </div>
+        )}
+
         {showNotFound ? (
           <div className='absolute left-1/2 -translate-x-1/2 top-[129px] flex flex-col items-center'>
             <img src={notFoundIllustration} alt='검색 결과 없음' className='w-[197px] h-[131px]' />
