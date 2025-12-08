@@ -8,6 +8,7 @@ interface PlayButtonProps {
   onClick?: (isPlaying: boolean) => void;
   className?: string;
   iconSize?: string;
+  pauseIconSize?: string;
   showBorder?: boolean;
 }
 
@@ -16,6 +17,7 @@ const PlayButton: React.FC<PlayButtonProps> = ({
   onClick,
   className,
   iconSize = 'w-[11px] h-[12px]',
+  pauseIconSize = 'w-[15px] h-[15px]',
   showBorder = true,
 }) => {
   const handleClick = () => {
@@ -49,7 +51,7 @@ const PlayButton: React.FC<PlayButtonProps> = ({
       <img
         src={isPlaying ? pauseIcon : playIcon}
         alt={isPlaying ? '일시정지' : '재생'}
-        className={iconSize}
+        className={isPlaying ? pauseIconSize : iconSize}
       />
     </button>
   );

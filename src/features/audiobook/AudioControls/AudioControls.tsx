@@ -30,6 +30,7 @@ const AudioControls: React.FC<AudioControlsProps> = ({
         onClick={onPlayPause}
         className='w-[60px] h-[60px] bg-bg-purple-800'
         iconSize='w-[16.5px] h-[18px]'
+        pauseIconSize='w-[21px] h-[21px]'
         showBorder={false}
       />
 
