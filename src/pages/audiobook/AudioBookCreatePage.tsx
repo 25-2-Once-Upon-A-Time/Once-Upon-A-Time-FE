@@ -155,7 +155,7 @@ const AudioBookCreatePage: React.FC = () => {
                       <Image
                         src={story?.imageSrc || ''}
                         alt={story?.title || 'story'}
-                        className='w-[28px] h-[28px] md:w-[32px] md:h-[32px]'
+                        className='w-[43px] h-[43px] md:w-[32px] md:h-[32px]'
                       />
                     );
                   })()
@@ -183,7 +183,7 @@ const AudioBookCreatePage: React.FC = () => {
                       <Image
                         src={char?.imageSrc || ''}
                         alt={char?.title || 'character'}
-                        className='w-[28px] h-[28px] md:w-[32px] md:h-[32px]'
+                        className='w-[43px] h-[43px] md:w-[32px] md:h-[32px]'
                       />
                     );
                   })()
