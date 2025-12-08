@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TopNav from '@/components/ui/TopNav/TopNav';
-import Image from '@/components/ui/Image/Image';
 import ImageCard from '@/components/ui/ImageCard/ImageCard';
 import Button from '@/components/ui/Button/Button';
 import headphonesIcon from '@/assets/icons/headphones.svg';
 import { characters } from '@/constants/characters';
 import { storyList } from '@/TestDB/StoryData_Test';
 import LoadingModal from '@/components/ui/LoadingModal';
+import CircleSelect from '@/features/audiobook/CircleSelect/CircleSelect';
 
 const AudioBookCreatePage: React.FC = () => {
   const navigate = useNavigate();
@@ -69,6 +69,13 @@ const AudioBookCreatePage: React.FC = () => {
   };
 
   const currentStep = STEP_CONFIG[step];
+
+  const selectedStory = selectedStoryId
+    ? storyList.find((s) => s.id === selectedStoryId)
+    : undefined;
+  const selectedChar = selectedCharacter
+    ? characters.find((c) => c.id === selectedCharacter)
+    : undefined;
 
   return (
     <div className='max-w-[430px] min-w-[360px] min-h-screen flex flex-col mx-auto'>
@@ -141,62 +148,26 @@ const AudioBookCreatePage: React.FC = () => {
           </p>
 
           {/* 동화/캐릭터 circle */}
-          <div className='mx-auto mt-[60px] flex items-center justify-center gap-[50px] md:gap-[70px] mb-[80px]'>
-            {/* Story circle */}
-            <div className='flex flex-col items-center'>
-              <div
-                className='w-[72px] h-[72px] md:w-[90px] md:h-[90px] rounded-full flex items-center justify-center'
-                style={{ backgroundColor: 'var(--color-fg-peach)' }}
-              >
-                {selectedStoryId ? (
-                  (() => {
-                    const story = storyList.find((s) => s.id === selectedStoryId);
-                    return (
-                      <Image
-                        src={story?.imageSrc || ''}
-                        alt={story?.title || 'story'}
-                        className='w-[43px] h-[43px] md:w-[32px] md:h-[32px]'
-                      />
-                    );
-                  })()
-                ) : (
-                  <div className='w-[32px] h-[32px]' />
-                )}
-              </div>
-              <span className='ng-15-n mt-3'>
-                {selectedStoryId
-                  ? storyList.find((s) => s.id === selectedStoryId)?.title || ''
-                  : '동화'}
-              </span>
-            </div>
+          <div className='mx-auto mt-[60px] flex items-start justify-center gap-[50px] md:gap-[70px] mb-[80px]'>
+            <CircleSelect
+              title={selectedStory ? selectedStory.title : '동화'}
+              imageSrc={selectedStory?.imageSrc}
+              alt={selectedStory?.title}
+              bgColor='var(--color-fg-peach)'
+              circleSize='w-[72px] h-[72px] md:w-[90px] md:h-[90px]'
+              imgSize='w-[43px] h-[43px] md:w-[32px] md:h-[32px]'
+              titleMaxWidth='max-w-[72px] md:max-w-[90px]'
+            />
 
-            {/* Character circle */}
-            <div className='flex flex-col items-center'>
-              <div
-                className='w-[72px] h-[72px] md:w-[90px] md:h-[90px] rounded-full flex items-center justify-center'
-                style={{ backgroundColor: 'var(--color-fg-yellow)' }}
-              >
-                {selectedCharacter ? (
-                  (() => {
-                    const char = characters.find((c) => c.id === selectedCharacter);
-                    return (
-                      <Image
-                        src={char?.imageSrc || ''}
-                        alt={char?.title || 'character'}
-                        className='w-[43px] h-[43px] md:w-[32px] md:h-[32px]'
-                      />
-                    );
-                  })()
-                ) : (
-                  <div className='w-[32px] h-[32px]' />
-                )}
-              </div>
-              <span className='ng-15-n mt-3'>
-                {selectedCharacter
-                  ? characters.find((c) => c.id === selectedCharacter)?.title || ''
-                  : '캐릭터'}
-              </span>
-            </div>
+            <CircleSelect
+              title={selectedChar ? selectedChar.title : '캐릭터'}
+              imageSrc={selectedChar?.imageSrc}
+              alt={selectedChar?.title}
+              bgColor='var(--color-fg-yellow)'
+              circleSize='w-[72px] h-[72px] md:w-[90px] md:h-[90px]'
+              imgSize='w-[43px] h-[43px] md:w-[32px] md:h-[32px]'
+              titleMaxWidth='max-w-[72px] md:max-w-[90px]'
+            />
           </div>
 
           {/* 하단 고정 버튼들 */}
