@@ -92,7 +92,7 @@ const StoryPage: React.FC = () => {
     // 1. 동화 목록 자체가 비어있을 때
     if (isEmptyList) {
       return (
-        <div className='absolute left-1/2 -translate-x-1/2 top-[129px] flex flex-col items-center'>
+        <div className='flex flex-col items-center mt-[100px]'>
           <img src={NothingImage} alt='생성된 동화 없음' className='w-[197px] h-[131px]' />
           <p className='pre-14-r text-fg-primary mt-4 text-center'>
             생성된 동화가 없어요!
@@ -106,7 +106,7 @@ const StoryPage: React.FC = () => {
     // 2. 검색 결과가 없을 때
     if (showNotFound) {
       return (
-        <div className='absolute left-1/2 -translate-x-1/2 top-[129px] flex flex-col items-center'>
+        <div className='flex flex-col items-center mt-[40px]'>
           <img src={notFoundIllustration} alt='검색 결과 없음' className='w-[197px] h-[131px]' />
           <p className='pre-14-r text-fg-primary mt-4'>검색 결과가 없습니다.</p>
         </div>
@@ -118,36 +118,36 @@ const StoryPage: React.FC = () => {
 
   return (
     <div className='w-full h-screen flex flex-col overflow-hidden'>
-      <TopNav title='동화' showBack={false} className='static' />
+      <TopNav title='동화' showBack={false} />
 
-      <div className='w-full px-4 py-4 flex-shrink-0'>
-        <SearchInput
-          className='w-full'
-          value={searchTerm}
-          onChange={handleSearch}
-          onKeyPress={handleKeyPress}
-        />
-      </div>
-
-      {/* 특수문자 오류 토스트 */}
-      {showError && (
-        <div className='w-full px-4 mb-2 flex-shrink-0'>
-          <ErrorToast
-            isVisible={showError}
-            message='검색오류입니다.'
-            onClose={handleErrorClose}
-            className='static translate-x-0 w-full'
+      {/* Search */}
+      <div className='fixed top-[72px] left-0 right-0 z-40 px-4'>
+        <div className='max-w-[480px] mx-auto'>
+          <SearchInput
+            className='w-full'
+            value={searchTerm}
+            onChange={handleSearch}
+            onKeyPress={handleKeyPress}
           />
         </div>
-      )}
+      </div>
 
       {/* 동화 리스트 (스크롤 영역) */}
       <div
         ref={mainRef}
         onScroll={handleScroll}
-        className='flex-1 w-full px-[4%] pb-28 overflow-y-scroll relative overscroll-y-auto'
+        className='flex-1 w-full px-[4%] pb-28 overflow-y-scroll relative overscroll-y-auto pt-[140px]'
       >
-        {showError ? null : isEmptyList || showNotFound ? (
+        {showError ? (
+          <div className='w-full px-0 mb-2'>
+            <ErrorToast
+              isVisible={showError}
+              message='검색오류입니다.'
+              onClose={handleErrorClose}
+              className='w-full'
+            />
+          </div>
+        ) : isEmptyList || showNotFound ? (
           renderEmptyState()
         ) : (
           <div className='grid grid-cols-2 gap-[4%] gap-y-4 pb-4'>
@@ -165,7 +165,7 @@ const StoryPage: React.FC = () => {
       </div>
 
       {/* 동화생성 버튼 */}
-      <div className='fixed bottom-[90px] right-[20px] z-50'>
+      <div className='fixed bottom-[100px] right-[20px] z-50'>
         <CreateStoryButton collapsed={isScrolled} />
       </div>
 
