@@ -23,7 +23,7 @@ const AudioBookCreatePage: React.FC = () => {
     }
 
     setIsLoading(true);
-    const newId = Math.floor(Date.now() / 1000);
+    const newId = Date.now() + Math.floor(Math.random() * 1000);
     setTimeout(() => {
       setIsLoading(false);
       const story = storyList.find((s) => s.id === selectedStoryId);
@@ -31,12 +31,12 @@ const AudioBookCreatePage: React.FC = () => {
 
       let storyTags: string[] = [];
       if (story) {
-        if ((story as any).tags && Array.isArray((story as any).tags)) {
-          storyTags = (story as any).tags;
+        if (story.tags && Array.isArray(story.tags)) {
+          storyTags = story.tags;
         } else {
           const derived: string[] = [];
-          if ((story as any).theme) derived.push(`#${(story as any).theme}`);
-          if ((story as any).mood) derived.push(`#${(story as any).mood}`);
+          if (story.theme) derived.push(`#${story.theme}`);
+          if (story.mood) derived.push(`#${story.mood}`);
           storyTags = derived;
         }
       }
