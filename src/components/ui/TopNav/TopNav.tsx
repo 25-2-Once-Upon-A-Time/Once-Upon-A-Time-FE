@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
-import backIcon from '@/assets/Nav/icons/back.png';
+import backIcon from '@/assets/icons/backarrow.svg';
 import type { TopNavProps } from './TopNav.types';
 
 const TopNav: React.FC<TopNavProps> = ({ title, showBack = false, className }) => {
@@ -16,7 +16,7 @@ const TopNav: React.FC<TopNavProps> = ({ title, showBack = false, className }) =
       className={twMerge(
         'fixed top-0 left-0 right-0',
         'flex items-center justify-center',
-        'h-[56px] bg-white',
+        'h-[56px]',
         'z-50',
         className,
       )}
