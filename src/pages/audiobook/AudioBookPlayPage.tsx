@@ -53,7 +53,7 @@ const AudioBookPlayPage: React.FC = () => {
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null;
 
-    if (isPlaying && currentTime < totalTime) {
+    if (isPlaying) {
       interval = setInterval(() => {
         setCurrentTime((prev) => {
           if (prev >= totalTime) {
@@ -70,7 +70,7 @@ const AudioBookPlayPage: React.FC = () => {
         clearInterval(interval);
       }
     };
-  }, [isPlaying, currentTime, totalTime]);
+  }, [isPlaying, totalTime]);
 
   const handlePlayPause = () => {
     setIsPlaying(!isPlaying);
