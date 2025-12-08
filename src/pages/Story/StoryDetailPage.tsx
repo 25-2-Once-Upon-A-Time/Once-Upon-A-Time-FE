@@ -21,7 +21,7 @@ const StoryDetailPage: React.FC = () => {
   };
 
   return (
-    <div className='max-w-[480px] min-w-[360px] h-screen mx-auto bg-[#23283E] flex flex-col overflow-hidden'>
+    <div className='max-w-[480px] min-w-[360px] h-screen mx-auto bg-bg-purple-700 flex flex-col overflow-hidden'>
       {/* 동화 이미지 + 버튼들 */}
       <div className='relative w-full flex-shrink-0'>
         <Image src={story.imageSrc} alt={story.title} className='w-full aspect-square' />
