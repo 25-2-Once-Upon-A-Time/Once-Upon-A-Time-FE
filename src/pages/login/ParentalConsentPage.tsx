@@ -13,6 +13,10 @@ import TermsDetailModal from '@/components/ui/TermsDetailModal';
 // 상수
 import { PARENTAL_PRIVACY_TERMS } from '@/constants/termsData';
 
+// 인증 관련
+import type { VerificationStatus } from './verification';
+import { getVerificationMessage } from './verification';
+
 // 공통 스타일
 const INPUT_CLASS = 'border-border-purple bg-bg-purple-800 placeholder:text-fg-gray';
 const LABEL_CLASS = 'block text-fg-primary pre-16-43-r mb-2';
@@ -40,13 +44,14 @@ const ParentalConsentPage: React.FC = () => {
 
   // 인증 상태 관리
   const [isCodeSent, setIsCodeSent] = useState(false);
-  const [verificationStatus, setVerificationStatus] = useState<'idle' | 'success' | 'failed'>(
-    'idle',
-  );
+  const [verificationStatus, setVerificationStatus] = useState<VerificationStatus>('idle');
 
   // 모달 상태 관리
   const [showTermsModal, setShowTermsModal] = useState(false);
   const [showCompleteModal, setShowCompleteModal] = useState(false);
+
+  // 인증 메시지 계산
+  const verificationMessage = getVerificationMessage(verificationStatus);
 
   // 입력 핸들러
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -204,13 +209,9 @@ const ParentalConsentPage: React.FC = () => {
               </button>
             </div>
             {/* 인증 상태 메시지 */}
-            {verificationStatus !== 'idle' && (
-              <p
-                className={`mt-2 pre-11-m text-right ${
-                  verificationStatus === 'success' ? 'text-fg-blue' : 'text-fg-error'
-                }`}
-              >
-                {verificationStatus === 'success' ? '인증되었습니다.' : '인증되지 않았습니다.'}
+            {verificationMessage && (
+              <p className={`mt-2 pre-11-m text-right ${verificationMessage.colorClass}`}>
+                {verificationMessage.text}
               </p>
             )}
           </div>
@@ -240,7 +241,7 @@ const ParentalConsentPage: React.FC = () => {
       </div>
 
       {/* 하단 고정 버튼 영역 */}
-      <div className='fixed bottom-0 left-0 right-0 w-full px-7 pb-8 pt-4 bg-bg-purple-50'>
+      <div className='fixed bottom-0 w-full px-7 pb-8 pt-4 bg-bg-purple-50'>
         <Button
           variant='primary'
           fullWidth

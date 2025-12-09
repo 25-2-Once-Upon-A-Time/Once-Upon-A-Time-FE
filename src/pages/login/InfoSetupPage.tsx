@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-// 컴포넌트
 import { TopNav } from '@/components/ui/TopNav';
 import { Input } from '@/components/ui/Input';
 import Checkbox from '@/components/ui/Checkbox/Checkbox';
@@ -9,8 +7,6 @@ import Button from '@/components/ui/Button/Button';
 import TextButton from '@/components/ui/TextButton/TextButton';
 import VerificationCompleteModal from '@/components/ui/VerificationCompleteModal';
 import TermsDetailModal from '@/components/ui/TermsDetailModal';
-
-// 에셋 & 상수
 import loginImg from '@/assets/images/login.svg';
 import fatherhoodImg from '@/assets/images/fatherhood.svg';
 import { SERVICE_TERMS, PRIVACY_TERMS } from '@/constants/termsData';
@@ -235,7 +231,7 @@ const InfoSetupPage: React.FC = () => {
       </div>
 
       {/* 하단 고정 버튼 영역 */}
-      <div className='fixed bottom-0 left-0 right-0 w-full px-7 pb-8 pt-4 bg-bg-purple-50'>
+      <div className='fixed bottom-0 w-full px-7 pb-8 pt-4 bg-bg-purple-50'>
         <Button
           variant='primary'
           fullWidth

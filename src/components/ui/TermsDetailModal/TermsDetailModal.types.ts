@@ -4,6 +4,6 @@ export interface TermsDetailModalProps {
   isOpen: boolean;
   onClose: () => void;
   title: string;
-  subtitle?: string; // 추가
+  subtitle?: string;
   termsData: TermsItem[];
 }
