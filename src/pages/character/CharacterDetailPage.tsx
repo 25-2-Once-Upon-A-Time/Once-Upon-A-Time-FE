@@ -25,9 +25,9 @@ const CharacterDetailPage: React.FC = () => {
 
   // 페이지 배경색 설정
   useEffect(() => {
-    document.body.style.backgroundColor = '#1d1d2d'; // bg-purple-900
+    document.body.classList.add('bg-bg-purple-900');
     return () => {
-      document.body.style.backgroundColor = '';
+      document.body.classList.remove('bg-bg-purple-900');
     };
   }, []);
 
