@@ -233,149 +233,150 @@
     line-height: 26px;
     letter-spacing: 0.46px;
     text-transform: uppercase;
-  .nbp-20-b-center {
-    font-family: 'NanumBarunpenOTF';
-    font-size: 20px;
-    font-weight: 700;
-    line-height: 20px;
-    text-align: center;
+    .nbp-20-b-center {
+      font-family: 'NanumBarunpenOTF';
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 20px;
+      text-align: center;
+    }
+
+    .nbp-16-b {
+      font-family: 'NanumBarunpenOTF';
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 145%;
+    }
+
+    /* Inter */
+    .inter-14-r {
+      font-family: 'Inter';
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 20px;
+    }
+
+    .roboto-14-m {
+      font-family: 'Roboto';
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 20px;
+      letter-spacing: 0.25px;
+    }
+
+    .inter-12-r {
+      font-family: 'Inter';
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 16px;
+      letter-spacing: 1%;
+    }
+
+    .inter-12-sb {
+      font-family: 'Inter';
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 18px;
+    }
+
+    .inter-16-sb {
+      font-family: 'Inter';
+      font-size: 16px;
+      font-weight: 600;
+      line-height: 100%;
+    }
+
+    /* Pretendard */
+    .pre-16-43-r {
+      font-family: 'Pretendard';
+      font-size: 16.43px;
+      font-weight: 400;
+      line-height: 25.81px;
+      letter-spacing: 5%;
+    }
+
+    .pre-15-r {
+      font-family: 'Pretendard';
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 25.81px;
+      letter-spacing: 5%;
+    }
+    .pre-14-r {
+      font-family: 'Pretendard';
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 25.81px;
+      letter-spacing: 5%;
+    }
+
+    .pre-14-m {
+      font-family: 'Pretendard';
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 108%;
+      text-transform: capitalize;
+    }
+
+    .pre-11-m {
+      font-family: 'Pretendard';
+      font-size: 11px;
+      font-weight: 500;
+      line-height: 108%;
+      letter-spacing: 5%;
+    }
+
+    .pre-18-sb-uppercase {
+      font-family: 'Pretendard';
+      font-size: 18px;
+      font-weight: 600;
+      line-height: 26px;
+      letter-spacing: 0.46px;
+      text-transform: uppercase;
+    }
+
+    .pre-18-77-b {
+      font-family: 'Pretendard';
+      font-size: 18.77px;
+      font-weight: 700;
+      line-height: 16.43px;
+      text-transform: capitalize;
+      text-align: center;
+    }
   }
 
-  .nbp-16-b {
+  @keyframes fade-in-down {
+    0% {
+      opacity: 0;
+      transform: translate(-50%, -10px);
+    }
+    100% {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+  }
+
+  .animate-fade-in-down {
+    animation: fade-in-down 0.3s ease-out;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .ng-16-b {
     font-family: 'NanumBarunpenOTF';
     font-size: 16px;
+    font-weight: 700;
+    line-height: 100%;
+  }
+  .nbp-12-b {
+    font-family: 'NanumBarunpenOTF';
+    font-size: 12px;
     font-weight: 700;
     line-height: 145%;
   }
-
-  /* Inter */
-  .inter-14-r {
-    font-family: 'Inter';
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 20px;
-  }
-
-  .roboto-14-m {
-    font-family: 'Roboto';
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 20px;
-    letter-spacing: 0.25px;
-  }
-
-  .inter-12-r {
-    font-family: 'Inter';
-    font-size: 12px;
-    font-weight: 400;
-    line-height: 16px;
-    letter-spacing: 1%;
-  }
-
-  .inter-12-sb {
-    font-family: 'Inter';
-    font-size: 12px;
-    font-weight: 600;
-    line-height: 18px;
-  }
-
-  .inter-16-sb {
-    font-family: 'Inter';
-    font-size: 16px;
-    font-weight: 600;
-    line-height: 100%;
-  }
-
-  /* Pretendard */
-  .pre-16-43-r {
-    font-family: 'Pretendard';
-    font-size: 16.43px;
-    font-weight: 400;
-    line-height: 25.81px;
-    letter-spacing: 5%;
-  }
-
-  .pre-15-r {
-    font-family: 'Pretendard';
-    font-size: 15px;
-    font-weight: 400;
-    line-height: 25.81px;
-    letter-spacing: 5%;
-  }
-  .pre-14-r {
-    font-family: 'Pretendard';
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 25.81px;
-    letter-spacing: 5%;
-  }
-
-  .pre-14-m {
-    font-family: 'Pretendard';
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 108%;
-    text-transform: capitalize;
-  }
-
-  .pre-11-m {
-    font-family: 'Pretendard';
-    font-size: 11px;
-    font-weight: 500;
-    line-height: 108%;
-    letter-spacing: 5%;
-  }
-
-  .pre-18-sb-uppercase {
-    font-family: 'Pretendard';
-    font-size: 18px;
-    font-weight: 600;
-    line-height: 26px;
-    letter-spacing: 0.46px;
-    text-transform: uppercase;
-  }
-
-  .pre-18-77-b {
-    font-family: 'Pretendard';
-    font-size: 18.77px;
-    font-weight: 700;
-    line-height: 16.43px;
-    text-transform: capitalize;
-    text-align: center;
-  }
-}
-
-@keyframes fade-in-down {
-  0% {
-    opacity: 0;
-    transform: translate(-50%, -10px);
-  }
-  100% {
-    opacity: 1;
-    transform: translate(-50%, 0);
-  }
-}
-
-.animate-fade-in-down {
-  animation: fade-in-down 0.3s ease-out;
-}
-
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-.ng-16-b {
-  font-family: 'NanumBarunpenOTF';
-  font-size: 16px;
-  font-weight: 700;
-  line-height: 100%;
-}
-.nbp-12-b {
-  font-family: 'NanumBarunpenOTF';
-  font-size: 12px;
-  font-weight: 700;
-  line-height: 145%;
 }
