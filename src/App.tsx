@@ -4,6 +4,9 @@ import StoryDetailPage from '@/pages/Story/StoryDetailPage';
 import StoryCreatePage from '@/pages/Story/StoryCreatePage';
 import CharacterListPage from '@/pages/character/CharacterListPage';
 import CharacterDetailPage from '@/pages/character/CharacterDetailPage';
+import LoginPage from '@/pages/login/LoginPage';
+import InfoSetupPage from './pages/login/InfoSetupPage';
+import ParentalConsentPage from './pages/login/ParentalConsentPage';
 import MyPage from '@/pages/mypage/MyPage';
 import AudioBook from '@/pages/audiobook/AudioBookPage';
 import AudioBookPlayPage from '@/pages/audiobook/AudioBookPlayPage';
@@ -18,6 +21,9 @@ function App() {
         <Route path='/story/create' element={<StoryCreatePage />} />
         <Route path='/character' element={<CharacterListPage />} />
         <Route path='/character/:id' element={<CharacterDetailPage />} />
+        <Route path='/login' element={<LoginPage />} />
+        <Route path='/info-setup' element={<InfoSetupPage />} />
+        <Route path='/parental-consent' element={<ParentalConsentPage />} />
         <Route path='/mypage' element={<MyPage />} />
         <Route path='/audiobook' element={<AudioBook />} />
         <Route path='/audiobook/:id' element={<AudioBookPlayPage />} />

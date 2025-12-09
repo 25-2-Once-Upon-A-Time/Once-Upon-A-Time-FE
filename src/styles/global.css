@@ -226,6 +226,13 @@
     text-transform: uppercase;
   }
 
+  .nbp-30-b-uppercase {
+    font-family: 'NanumBarunpenOTF';
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 26px;
+    letter-spacing: 0.46px;
+    text-transform: uppercase;
   .nbp-20-b-center {
     font-family: 'NanumBarunpenOTF';
     font-size: 20px;

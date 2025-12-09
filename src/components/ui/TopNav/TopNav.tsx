@@ -27,7 +27,7 @@ const TopNav: React.FC<TopNavProps> = ({ title, showBack = false, className }) =
         </button>
       )}
 
-      <span className='text-[20px] font-bold font-nanum-square-round'>{title}</span>
+      <span className='nsr-24-eb'>{title}</span>
     </div>
   );
 };
