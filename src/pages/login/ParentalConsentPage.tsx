@@ -9,6 +9,7 @@ import Button from '@/components/ui/Button/Button';
 import TextButton from '@/components/ui/TextButton/TextButton';
 import VerificationCompleteModal from '@/components/ui/VerificationCompleteModal';
 import TermsDetailModal from '@/components/ui/TermsDetailModal';
+import FormField from '@/components/ui/FormField';
 
 // 상수
 import { PARENTAL_PRIVACY_TERMS } from '@/constants/termsData';
@@ -19,7 +20,6 @@ import { getVerificationMessage } from './verification';
 
 // 공통 스타일
 const INPUT_CLASS = 'border-border-purple bg-bg-purple-800 placeholder:text-fg-gray';
-const LABEL_CLASS = 'block text-fg-primary pre-16-43-r mb-2';
 const INLINE_BTN_BASE =
   'absolute right-2 top-1/2 -translate-y-1/2 px-4 py-1.5 rounded-full text-white pre-14-m transition-colors';
 const INLINE_BTN_ACTIVE = 'bg-bg-purple-500 hover:bg-bg-purple-700';
@@ -118,8 +118,7 @@ const ParentalConsentPage: React.FC = () => {
       <div className='w-full px-7 overflow-y-auto flex-1 pb-[120px]'>
         <div className='space-y-6'>
           {/* 이름 */}
-          <div className='w-full'>
-            <label className={LABEL_CLASS}>이름</label>
+          <FormField label='이름'>
             <Input
               name='name'
               value={formData.name}
@@ -128,11 +127,10 @@ const ParentalConsentPage: React.FC = () => {
               className={INPUT_CLASS}
               autoComplete='off'
             />
-          </div>
+          </FormField>
 
           {/* 성별 */}
-          <div className='w-full'>
-            <label className={LABEL_CLASS}>성별</label>
+          <FormField label='성별'>
             <div className='flex gap-12'>
               <Checkbox
                 id='parent-gender-female'
@@ -147,11 +145,10 @@ const ParentalConsentPage: React.FC = () => {
                 onChange={() => handleGenderChange('M')}
               />
             </div>
-          </div>
+          </FormField>
 
           {/* 관계 */}
-          <div className='w-full'>
-            <label className={LABEL_CLASS}>관계</label>
+          <FormField label='관계'>
             <Input
               name='relation'
               value={formData.relation}
@@ -160,11 +157,10 @@ const ParentalConsentPage: React.FC = () => {
               className={INPUT_CLASS}
               autoComplete='off'
             />
-          </div>
+          </FormField>
 
           {/* 전화번호 */}
-          <div className='w-full'>
-            <label className={LABEL_CLASS}>전화번호</label>
+          <FormField label='전화번호'>
             <div className='relative'>
               <Input
                 type='tel'
@@ -184,11 +180,10 @@ const ParentalConsentPage: React.FC = () => {
                 {isCodeSent ? '재발송' : '인증'}
               </button>
             </div>
-          </div>
+          </FormField>
 
           {/* 인증코드 */}
-          <div className='w-full'>
-            <label className={LABEL_CLASS}>인증코드</label>
+          <FormField label='인증코드'>
             <div className='relative'>
               <Input
                 name='verificationCode'
@@ -214,7 +209,7 @@ const ParentalConsentPage: React.FC = () => {
                 {verificationMessage.text}
               </p>
             )}
-          </div>
+          </FormField>
 
           {/* 약관 동의 */}
           <div className='w-full'>

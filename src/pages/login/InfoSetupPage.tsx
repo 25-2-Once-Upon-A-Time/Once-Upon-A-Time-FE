@@ -7,6 +7,7 @@ import Button from '@/components/ui/Button/Button';
 import TextButton from '@/components/ui/TextButton/TextButton';
 import VerificationCompleteModal from '@/components/ui/VerificationCompleteModal';
 import TermsDetailModal from '@/components/ui/TermsDetailModal';
+import FormField from '@/components/ui/FormField';
 import loginImg from '@/assets/images/login.svg';
 import fatherhoodImg from '@/assets/images/fatherhood.svg';
 import { SERVICE_TERMS, PRIVACY_TERMS } from '@/constants/termsData';
@@ -120,8 +121,7 @@ const InfoSetupPage: React.FC = () => {
       <div className='w-full px-7 overflow-y-auto flex-1 pb-[120px]'>
         <div className='space-y-6'>
           {/* 이름 */}
-          <div className='w-full'>
-            <label className='block text-fg-primary pre-16-43-r mb-2'>이름</label>
+          <FormField label='이름'>
             <Input
               name='name'
               value={formData.name}
@@ -130,11 +130,10 @@ const InfoSetupPage: React.FC = () => {
               className={INPUT_CLASS}
               autoComplete='off'
             />
-          </div>
+          </FormField>
 
           {/* 생년월일 */}
-          <div className='w-full'>
-            <label className='block text-fg-primary pre-16-43-r mb-2'>생년월일</label>
+          <FormField label='생년월일'>
             <Input
               name='birth'
               value={formData.birth}
@@ -144,11 +143,10 @@ const InfoSetupPage: React.FC = () => {
               className={INPUT_CLASS}
               autoComplete='off'
             />
-          </div>
+          </FormField>
 
           {/* 전화번호 */}
-          <div className='w-full'>
-            <label className='block text-fg-primary pre-16-43-r mb-2'>전화번호</label>
+          <FormField label='전화번호'>
             <Input
               type='tel'
               name='phone'
@@ -158,11 +156,10 @@ const InfoSetupPage: React.FC = () => {
               className={INPUT_CLASS}
               autoComplete='off'
             />
-          </div>
+          </FormField>
 
           {/* 성별 */}
-          <div className='w-full'>
-            <label className='block text-fg-primary pre-16-43-r mb-2'>성별</label>
+          <FormField label='성별'>
             <div className='flex gap-12'>
               <Checkbox
                 id='gender-female'
@@ -177,11 +174,10 @@ const InfoSetupPage: React.FC = () => {
                 onChange={() => handleGenderChange('M')}
               />
             </div>
-          </div>
+          </FormField>
 
           {/* 닉네임 */}
-          <div className='w-full'>
-            <label className='block text-fg-primary pre-16-43-r mb-2'>닉네임</label>
+          <FormField label='닉네임'>
             <Input
               name='nickname'
               value={formData.nickname}
@@ -190,7 +186,7 @@ const InfoSetupPage: React.FC = () => {
               className={INPUT_CLASS}
               autoComplete='off'
             />
-          </div>
+          </FormField>
 
           {/* 약관 동의 */}
           <div className='w-full space-y-4'>
