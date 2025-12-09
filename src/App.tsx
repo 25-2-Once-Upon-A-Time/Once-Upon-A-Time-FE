@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import StoryPage from '@/pages/Story/StoryPage';
 import StoryDetailPage from '@/pages/Story/StoryDetailPage';
 import StoryCreatePage from '@/pages/Story/StoryCreatePage';
@@ -16,6 +16,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path='/' element={<Navigate to='/login' replace />} />
         <Route path='/story' element={<StoryPage />} />
         <Route path='/story/:id' element={<StoryDetailPage />} />
         <Route path='/story/create' element={<StoryCreatePage />} />
