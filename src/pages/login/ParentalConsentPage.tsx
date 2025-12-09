@@ -15,8 +15,12 @@ import FormField from '@/components/ui/FormField';
 import { PARENTAL_PRIVACY_TERMS } from '@/constants/termsData';
 
 // 인증 관련
-import type { VerificationStatus } from './verification';
-import { getVerificationMessage } from './verification';
+import type { VerificationStatus, ParentalConsentFormData } from './verification';
+import {
+  getVerificationMessage,
+  isParentalConsentFormComplete,
+  INITIAL_PARENTAL_CONSENT_FORM,
+} from './verification';
 
 // 공통 스타일
 const INPUT_CLASS = 'border-border-purple bg-bg-purple-800 placeholder:text-fg-gray';
@@ -33,14 +37,7 @@ const ParentalConsentPage: React.FC = () => {
   const childFormData = location.state?.formData;
 
   // 폼 상태 관리
-  const [formData, setFormData] = useState({
-    name: '',
-    gender: '',
-    relation: '',
-    phone: '',
-    verificationCode: '',
-    agreePrivacy: false,
-  });
+  const [formData, setFormData] = useState<ParentalConsentFormData>(INITIAL_PARENTAL_CONSENT_FORM);
 
   // 인증 상태 관리
   const [isCodeSent, setIsCodeSent] = useState(false);
@@ -65,18 +62,21 @@ const ParentalConsentPage: React.FC = () => {
   };
 
   // 인증코드 발송 핸들러
-  const handleSendCode = () => {
+  const handleSendCode = async () => {
     if (!formData.phone) return;
     console.log('인증코드 발송:', formData.phone);
-    setIsCodeSent(true);
     // TODO: 실제 인증코드 발송 API 호출
+    // const response = await sendVerificationCode(formData.phone);
+    setIsCodeSent(true);
   };
 
   // 인증코드 확인 핸들러
-  const handleVerifyCode = () => {
+  const handleVerifyCode = async () => {
     if (!formData.verificationCode) return;
     console.log('인증코드 확인:', formData.verificationCode);
-    // TODO: 실제 인증코드 검증 API 호출 (임시: 1234)
+    // TODO: 실제 인증코드 검증 API 호출
+    // const response = await verifyCode(formData.verificationCode);
+    // setVerificationStatus(response.success ? 'success' : 'failed');
     setVerificationStatus(formData.verificationCode === '1234' ? 'success' : 'failed');
   };
 
@@ -94,14 +94,7 @@ const ParentalConsentPage: React.FC = () => {
   };
 
   // 폼 완성 여부 체크
-  const isFormComplete =
-    formData.name !== '' &&
-    formData.gender !== '' &&
-    formData.relation !== '' &&
-    formData.phone !== '' &&
-    formData.verificationCode !== '' &&
-    verificationStatus === 'success' &&
-    formData.agreePrivacy;
+  const isFormComplete = isParentalConsentFormComplete(formData, verificationStatus);
 
   return (
     <div className='flex flex-col h-full bg-bg-purple-50'>

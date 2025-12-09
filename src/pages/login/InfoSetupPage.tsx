@@ -12,6 +12,10 @@ import loginImg from '@/assets/images/login.svg';
 import fatherhoodImg from '@/assets/images/fatherhood.svg';
 import { SERVICE_TERMS, PRIVACY_TERMS } from '@/constants/termsData';
 
+// 인증 관련
+import type { InfoSetupFormData } from './verification';
+import { isInfoSetupFormComplete, calculateAge, INITIAL_INFO_SETUP_FORM } from './verification';
+
 // 공통 Input 스타일
 const INPUT_CLASS = 'border-border-purple bg-bg-purple-800 placeholder:text-fg-gray';
 
@@ -19,33 +23,12 @@ const InfoSetupPage: React.FC = () => {
   const navigate = useNavigate();
 
   // 폼 상태 관리
-  const [formData, setFormData] = useState({
-    name: '',
-    birth: '',
-    phone: '',
-    gender: '',
-    nickname: '',
-    agreeTerms: false,
-    agreePrivacy: false,
-  });
+  const [formData, setFormData] = useState<InfoSetupFormData>(INITIAL_INFO_SETUP_FORM);
 
   // 모달 상태 관리
   const [showUnderageModal, setShowUnderageModal] = useState(false);
   const [showCompleteModal, setShowCompleteModal] = useState(false);
   const [termsModal, setTermsModal] = useState<'terms' | 'privacy' | null>(null);
-
-  // 만 나이 계산 함수
-  const calculateAge = (birthDate: string): number => {
-    const today = new Date();
-    const birth = new Date(birthDate);
-    let age = today.getFullYear() - birth.getFullYear();
-    const monthDiff = today.getMonth() - birth.getMonth();
-
-    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
-      age--;
-    }
-    return age;
-  };
 
   // 생년월일 포맷팅 (YYYY-MM-DD)
   const formatBirth = (value: string) => {
@@ -99,14 +82,7 @@ const InfoSetupPage: React.FC = () => {
   };
 
   // 폼 완성 여부 체크
-  const isFormComplete =
-    formData.name !== '' &&
-    formData.birth !== '' &&
-    formData.phone !== '' &&
-    formData.gender !== '' &&
-    formData.nickname !== '' &&
-    formData.agreeTerms &&
-    formData.agreePrivacy;
+  const isFormComplete = isInfoSetupFormComplete(formData);
 
   return (
     <div className='flex flex-col h-full bg-bg-purple-50'>
