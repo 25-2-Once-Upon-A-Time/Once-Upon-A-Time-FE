@@ -7,6 +7,9 @@ import type { BottomNavProps } from './BottomNav.types';
 const BottomNav: React.FC<BottomNavProps> = ({ className }) => {
   const location = useLocation();
 
+  // 비활성화할 탭 목록
+  const disabledTabs = ['커뮤니티'];
+
   return (
     <div className={twMerge('fixed bottom-0 left-0 right-0', 'w-full', 'z-50', className)}>
       <nav
@@ -16,11 +19,13 @@ const BottomNav: React.FC<BottomNavProps> = ({ className }) => {
       >
         {NAV_ITEMS.map(({ label, to, icon: Icon }) => {
           const isActive = location.pathname === to;
+          const isDisabled = disabledTabs.includes(label);
 
           return (
             <Link
               key={to}
               to={to}
+              onClick={(e) => isDisabled && e.preventDefault()}
               className='flex flex-col w-full items-center justify-center gap-[4px]'
             >
               <div
