@@ -7,7 +7,8 @@ export default defineConfig({
   plugins: [react(), svgr()],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'), // ✅ 꼭 있어야 함
+      '@': path.resolve(__dirname, './src'),
+      zustand: path.resolve(__dirname, './src/lib/zustand'),
     },
   },
   server: {
