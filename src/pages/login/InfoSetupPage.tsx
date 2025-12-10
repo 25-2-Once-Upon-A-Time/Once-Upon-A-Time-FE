@@ -72,7 +72,7 @@ const InfoSetupPage: React.FC = () => {
   // 회원가입 완료 확인 핸들러
   const handleCompleteConfirm = () => {
     setShowCompleteModal(false);
-    navigate('/'); // TODO: 원하는 페이지로 이동
+    navigate('/story');
   };
 
   // 법정대리인 동의 페이지로 이동
