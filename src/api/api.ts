@@ -38,19 +38,13 @@ api.interceptors.response.use(
       !originalRequest._retry;
 
     if (isExpired) {
-      try {
-        originalRequest._retry = true;
+      originalRequest._retry = true;
 
-        useAuthStore.getState().logout();
-        window.location.href = '/login';
-        return;
-      } catch {
-        useAuthStore.getState().logout();
-        window.location.href = '/login';
-      }
+      useAuthStore.getState().logout();
+      window.location.href = '/login';
+
+      return Promise.reject(error);
     }
-
-    return Promise.reject(error);
   },
 );
 
