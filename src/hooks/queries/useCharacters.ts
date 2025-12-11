@@ -12,6 +12,6 @@ export const useCharacterDetail = (id: number) => {
   return useQuery({
     queryKey: ['characterDetail', id],
     queryFn: () => fetchCharacterDetail(id),
-    enabled: !!id, // id 있을 때만 실행
+    enabled: !!id, // id 있으면 true(실행), 없으면 false(비실행)
   });
 };
