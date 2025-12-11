@@ -25,7 +25,11 @@ const StoryDetailPage: React.FC = () => {
   }
 
   // 🚀 서버 에러 처리
-  if (isError || !story) {
+  if (isError) {
+    return <div className='text-center mt-20 text-white'>동화를 찾을 수 없습니다.</div>;
+  }
+
+  if (!story) {
     return <div className='text-center mt-20 text-white'>동화를 찾을 수 없습니다.</div>;
   }
 
