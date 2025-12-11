@@ -5,7 +5,7 @@ import Button from '@/components/ui/Button/Button';
 import Image from '@/components/ui/Image/Image';
 import LoadingModal from '@/components/ui/LoadingModal';
 import backIcon from '@/assets/icons/back.svg';
-import { addStory } from '@/TestDB/StoryData_Test'; //테스트용
+import { useCreateStory } from '@/hooks/queries/useStories';
 
 // 테마 옵션
 const THEME_OPTIONS = [
@@ -39,41 +39,50 @@ const STEP_CONFIG = {
 const StoryCreatePage: React.FC = () => {
   const navigate = useNavigate();
   const [step, setStep] = useState<1 | 2 | 3 | 4 | 5>(1);
+
   const [selectedTheme, setSelectedTheme] = useState<string | null>(null);
   const [selectedMood, setSelectedMood] = useState<string | null>(null);
   const [storyPrompt, setStoryPrompt] = useState('');
   const [storyTitle, setStoryTitle] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [generatedImageSrc, setGeneratedImageSrc] = useState<string | undefined>(undefined);
+
+  const [generatedImage, setGeneratedImage] = useState<string | undefined>(undefined);
+
+  // React Query Mutation
+  const createStoryMutation = useCreateStory();
+
+  const isLoading = createStoryMutation.isPending;
 
   const currentStep = STEP_CONFIG[step];
 
   // 뒤로가기
   const handleBack = () => {
-    if (step === 1) {
-      navigate('/story');
-    } else if (step === 5) {
+    if (step === 1 || step === 5) {
       navigate('/story');
     } else {
-      setStep((prev) => (prev - 1) as 1 | 2 | 3 | 4 | 5);
+      setStep((p) => (p - 1) as any);
     }
   };
 
-  // 테마 선택
-  const handleThemeSelect = (themeId: string) => {
-    setSelectedTheme(themeId);
-    setStep(2);
-  };
+  const handleCreate = () => {
+    if (!selectedTheme || !selectedMood) return;
 
-  // 분위기 선택
-  const handleMoodSelect = (moodId: string) => {
-    setSelectedMood(moodId);
-    setStep(3);
-  };
-
-  // 다음 단계 (제목 입력)
-  const handleNextToTitle = () => {
-    setStep(4);
+    createStoryMutation.mutate(
+      {
+        theme: selectedTheme,
+        vibe: selectedMood,
+        prompt: storyPrompt,
+        title: storyTitle,
+      },
+      {
+        onSuccess: (data) => {
+          setGeneratedImage(data.thumbnailUrl);
+          setStep(5);
+        },
+        onError: () => {
+          alert('동화를 생성하는 중 문제가 발생했습니다.');
+        },
+      },
+    );
   };
 
   // 테마/분위기 라벨 가져오기
@@ -85,33 +94,6 @@ const StoryCreatePage: React.FC = () => {
   const getMoodLabel = (id: string) => {
     const mood = MOOD_OPTIONS.find((m) => m.id === id);
     return mood?.label || '';
-  };
-
-  // 동화 생성
-  const handleCreateStory = () => {
-    setIsLoading(true);
-
-    const dummyContent = `${'테스트로 만들어진 동화입니다'}`;
-
-    setTimeout(() => {
-      addStory({
-        title: storyTitle,
-        imageSrc: undefined,
-        summary: storyPrompt,
-        theme: getThemeLabel(selectedTheme || ''),
-        mood: getMoodLabel(selectedMood || ''),
-        content: dummyContent,
-      });
-
-      setGeneratedImageSrc(undefined);
-      setIsLoading(false);
-      setStep(5);
-    }, 3000);
-  };
-
-  // 동화 목록으로 이동
-  const handleGoToList = () => {
-    navigate('/story');
   };
 
   return (
@@ -149,13 +131,15 @@ const StoryCreatePage: React.FC = () => {
         {/* 1단계: 테마 선택 */}
         {step === 1 && (
           <div className='grid grid-cols-2 gap-4'>
-            {THEME_OPTIONS.map((theme) => (
+            {THEME_OPTIONS.map((t) => (
               <div
-                key={theme.id}
-                onClick={() => handleThemeSelect(theme.id)}
-                className='cursor-pointer'
+                key={t.id}
+                onClick={() => {
+                  setSelectedTheme(t.id);
+                  setStep(2);
+                }}
               >
-                <ImageCard title={theme.label} imageSrc={theme.imageSrc} className='w-full' />
+                <ImageCard title={t.label} className='w-full' />
               </div>
             ))}
           </div>
@@ -164,13 +148,15 @@ const StoryCreatePage: React.FC = () => {
         {/* 2단계: 분위기 선택 */}
         {step === 2 && (
           <div className='grid grid-cols-2 gap-4'>
-            {MOOD_OPTIONS.map((mood) => (
+            {MOOD_OPTIONS.map((m) => (
               <div
-                key={mood.id}
-                onClick={() => handleMoodSelect(mood.id)}
-                className='cursor-pointer'
+                key={m.id}
+                onClick={() => {
+                  setSelectedMood(m.id);
+                  setStep(3);
+                }}
               >
-                <ImageCard title={mood.label} imageSrc={mood.imageSrc} className='w-full' />
+                <ImageCard title={m.label} className='w-full' />
               </div>
             ))}
           </div>
@@ -185,8 +171,8 @@ const StoryCreatePage: React.FC = () => {
               placeholder='ex) 친구와 음식을 나누어먹는 이야기'
               className='w-full h-[300px] p-4 border-2 border-border-purple rounded-[16px] ng-16-r placeholder:text-fg-gray focus:outline-none resize-none'
             />
-            {storyPrompt.length > 0 && (
-              <Button onClick={handleNextToTitle} variant='primary' fullWidth>
+            {storyPrompt && (
+              <Button variant='primary' fullWidth onClick={() => setStep(4)}>
                 다음
               </Button>
             )}
@@ -202,8 +188,8 @@ const StoryCreatePage: React.FC = () => {
               placeholder='ex) 나누어먹으면 맛있어요'
               className='w-full h-[300px] p-4 border-2 border-border-purple rounded-[16px] ng-16-r placeholder:text-fg-gray focus:outline-none resize-none'
             />
-            {storyTitle.length > 0 && (
-              <Button onClick={handleCreateStory} variant='primary' fullWidth>
+            {storyTitle && (
+              <Button variant='primary' fullWidth onClick={handleCreate}>
                 동화 생성
               </Button>
             )}
@@ -215,7 +201,7 @@ const StoryCreatePage: React.FC = () => {
           <div className='flex flex-col items-center space-y-6'>
             {/* 생성된 이미지 */}
             <Image
-              src={generatedImageSrc}
+              src={generatedImage}
               alt={storyTitle}
               className='w-full aspect-square rounded-[16px]'
             />
@@ -230,7 +216,7 @@ const StoryCreatePage: React.FC = () => {
             </div>
 
             {/* 동화 목록으로 이동 버튼 */}
-            <Button onClick={handleGoToList} variant='primary' fullWidth>
+            <Button variant='primary' fullWidth onClick={() => navigate('/story')}>
               동화 목록으로 이동
             </Button>
           </div>
