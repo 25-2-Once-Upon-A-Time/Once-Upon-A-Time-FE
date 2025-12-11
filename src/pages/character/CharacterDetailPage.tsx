@@ -12,12 +12,13 @@ import { useCharacterDetail } from '@/hooks/queries/useCharacters';
 
 const CharacterDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  if (!id) return null;
   const navigate = useNavigate();
   const { isVisible, message, showToast, hideToast } = useToast();
 
-  const numericId = id ? Number(id) : null;
+  const numericId = Number(id);
 
-  const { data, isLoading, isError } = useCharacterDetail(numericId!);
+  const { data, isLoading, isError } = useCharacterDetail(numericId);
 
   const [isLiked, setIsLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
