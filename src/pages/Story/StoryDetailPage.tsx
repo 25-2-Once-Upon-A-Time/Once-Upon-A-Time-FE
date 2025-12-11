@@ -1,19 +1,32 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { storyList } from '@/TestDB/StoryData_Test';
 import Image from '@/components/ui/Image/Image';
 import BackButton from '@/components/ui/BackButton/BackButton';
 import LikeButton from '@/components/ui/LikeButton/LikeButton';
+import { useStoryDetail } from '@/hooks/queries/useStories';
 
 const StoryDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const storyId = id ? Number(id) : null;
   const navigate = useNavigate();
+
   const [isLiked, setIsLiked] = useState(false);
 
-  const story = storyList.find((s) => s.id === Number(id));
+  // API로 상세 조회
+  const { data: story, isLoading, isError } = useStoryDetail(storyId!);
 
   if (!story) {
     return <div>동화를 찾을 수 없습니다.</div>;
+  }
+
+  // 🚀 로딩 처리
+  if (isLoading) {
+    return <div className='text-center mt-20 text-white'>동화를 불러오는 중...</div>;
+  }
+
+  // 🚀 서버 에러 처리
+  if (isError || !story) {
+    return <div className='text-center mt-20 text-white'>동화를 찾을 수 없습니다.</div>;
   }
 
   const handleLikeChange = (liked: boolean) => {
@@ -24,7 +37,7 @@ const StoryDetailPage: React.FC = () => {
     <div className='max-w-[480px] min-w-[360px] h-screen mx-auto bg-bg-purple-700 flex flex-col overflow-hidden'>
       {/* 동화 이미지 + 버튼들 */}
       <div className='relative w-full flex-shrink-0'>
-        <Image src={story.imageSrc} alt={story.title} className='w-full aspect-square' />
+        <Image src={story.thumbnailUrl} alt={story.title} className='w-full aspect-square' />
 
         {/* 뒤로가기 버튼 - 왼쪽 위 */}
         <div className='absolute top-[18px] left-[20px]'>
@@ -43,7 +56,7 @@ const StoryDetailPage: React.FC = () => {
         <h1 className='nsr-24-eb text-white flex-shrink-0'>{story.title}</h1>
 
         {/* 한 줄 요약 */}
-        <p className='nbp-16-b text-gray-300 flex-shrink-0'>{story.summary}</p>
+        <p className='nbp-16-b text-gray-300 flex-shrink-0'>{story.description}</p>
 
         {/* 테마 & 분위기 태그 */}
         <div className='flex gap-2 flex-shrink-0'>
@@ -51,7 +64,7 @@ const StoryDetailPage: React.FC = () => {
             {story.theme}
           </span>
           <span className='px-3 py-1 bg-white/20 text-white text-[12px] rounded-full nbp-16-b'>
-            {story.mood}
+            {story.vibe}
           </span>
         </div>
 
