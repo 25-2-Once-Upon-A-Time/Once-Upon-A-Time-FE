@@ -5,19 +5,18 @@ import SearchInput from '@/components/ui/SearchInput/SearchInput';
 import ImageCard from '@/components/ui/ImageCard/ImageCard';
 import { BottomNav } from '@/components/ui/BottomNav';
 import ErrorToast from '@/components/ui/ErrorToast/ErrorToast';
-import { characters } from '@/constants/characters';
+import { useCharacters } from '@/hooks/queries/useCharacters';
 import notFoundIllustration from '@/assets/images/404Illustration.svg';
 
 const CharacterListPage: React.FC = () => {
   const navigate = useNavigate();
+
   const [searchTerm, setSearchTerm] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [showError, setShowError] = useState(false);
   const [showNotFound, setShowNotFound] = useState(false);
 
-  const filteredCharacters = characters.filter((character) =>
-    character.title.toLowerCase().includes(searchQuery.toLowerCase()),
-  );
+  const { data, isLoading, isError } = useCharacters();
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
@@ -34,11 +33,10 @@ const CharacterListPage: React.FC = () => {
 
     // 특수문자 여부 확인
     const hasSpecial = /[^\p{L}\p{N}\s]/u.test(searchTerm);
-
     setSearchQuery(searchTerm);
 
-    const filtered = characters.filter((character) =>
-      character.title.toLowerCase().includes(searchTerm.toLowerCase()),
+    const filtered = (data || []).filter((character) =>
+      character.name.toLowerCase().includes(searchTerm.toLowerCase()),
     );
 
     if (hasSpecial) {
@@ -72,6 +70,24 @@ const CharacterListPage: React.FC = () => {
   const handleCharacterClick = (id: number) => {
     navigate(`/character/${id}`);
   };
+
+  // 로딩/에러 화면 처리
+  if (isLoading) {
+    return <div className='w-full text-center mt-20'>캐릭터 불러오는 중...</div>;
+  }
+
+  if (isError) {
+    return (
+      <div className='w-full text-center mt-20 text-red-500'>
+        캐릭터 데이터를 불러오지 못했습니다.
+      </div>
+    );
+  }
+
+  // API 데이터 기반 필터링
+  const filteredCharacters =
+    data?.filter((character) => character.name.toLowerCase().includes(searchQuery.toLowerCase())) ||
+    [];
 
   return (
     <div className='w-full min-h-screen flex flex-col bg-bg-purple-50'>
@@ -116,8 +132,8 @@ const CharacterListPage: React.FC = () => {
                 className='cursor-pointer'
               >
                 <ImageCard
-                  title={character.title}
-                  imageSrc={character.imageSrc}
+                  title={character.name}
+                  imageSrc={character.thumbnailUrl}
                   className='w-full'
                 />
               </div>
