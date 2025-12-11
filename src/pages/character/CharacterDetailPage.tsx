@@ -12,13 +12,14 @@ import { useCharacterDetail } from '@/hooks/queries/useCharacters';
 
 const CharacterDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  if (!id) return null;
   const navigate = useNavigate();
   const { isVisible, message, showToast, hideToast } = useToast();
 
-  const numericId = Number(id);
+  // id가 없는 경우를 대비 (URL 문제 등)
+  const numericId = id ? Number(id) : null;
 
-  const { data, isLoading, isError } = useCharacterDetail(numericId);
+  // API 요청
+  const { data, isLoading, isError } = useCharacterDetail(numericId ?? 0);
 
   const [isLiked, setIsLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
@@ -49,7 +50,10 @@ const CharacterDetailPage: React.FC = () => {
   }, [isError, isLoading, data, showToast, navigate]);
 
   // 3) 화면 렌더링
-  if (isLoading) return <div>불러오는 중...</div>;
+  if (isLoading) {
+    return <div className='text-center text-white mt-20'>불러오는 중...</div>;
+  }
+
   if (isError || !data) return null;
 
   // API 데이터 구조
