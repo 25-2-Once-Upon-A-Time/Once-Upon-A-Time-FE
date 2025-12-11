@@ -32,25 +32,28 @@ const CharacterDetailPage: React.FC = () => {
     };
   }, []);
 
-  // 데이터 로딩 중
-  if (isLoading) {
-    return <div className='text-center text-white mt-20'>불러오는 중...</div>;
-  }
+  // 1) 데이터 기반으로 좋아요 초기값 설정
+  useEffect(() => {
+    if (data?.likeCount !== undefined) {
+      setLikeCount(data.likeCount);
+    }
+  }, [data?.likeCount]);
 
-  // API 오류 또는 존재하지 않는 캐릭터
-  if (isError || !data) {
-    showToast('캐릭터를 찾을 수 없습니다.');
-    setTimeout(() => navigate('/character'), 1000);
-    return null;
-  }
+  // 2) 에러 발생 시 토스트 + 이동 처리
+  useEffect(() => {
+    if (isError || (!isLoading && !data)) {
+      showToast('캐릭터를 찾을 수 없습니다.');
+      const timer = setTimeout(() => navigate('/character'), 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [isError, isLoading, data, showToast, navigate]);
+
+  // 3) 화면 렌더링
+  if (isLoading) return <div>불러오는 중...</div>;
+  if (isError || !data) return null;
 
   // API 데이터 구조
   const character = data;
-
-  useEffect(() => {
-    // 좋아요 초기값
-    setLikeCount(character.likeCount);
-  }, [character.likeCount]);
 
   const handleLikeChange = (liked: boolean) => {
     setIsLiked(liked);
