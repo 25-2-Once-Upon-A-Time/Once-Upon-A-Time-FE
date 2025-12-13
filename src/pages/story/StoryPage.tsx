@@ -8,23 +8,28 @@ import CreateStoryButton from '@/components/ui/CreateStoryButton';
 import ErrorToast from '@/components/ui/ErrorToast/ErrorToast';
 import NothingImage from '@/assets/images/nothing.svg';
 import notFoundIllustration from '@/assets/images/404Illustration.svg';
-import { storyList } from '@/TestDB/StoryData_Test';
+import { useStories } from '@/hooks/queries/useStories';
 
 // 특수문자 포함 체크 정규식
 const HAS_SPECIAL_CHAR = /[*%$#@!^&()+=\[\]{}<>?/\\|~`]/;
 
 const StoryPage: React.FC = () => {
   const navigate = useNavigate();
-  const [searchTerm, setSearchTerm] = useState('');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [showError, setShowError] = useState(false); // 특수문자 오류
-  const [showNotFound, setShowNotFound] = useState(false); // 검색 결과 없음
-  const [isScrolled, setIsScrolled] = useState(false);
   const mainRef = useRef<HTMLDivElement>(null);
 
-  const filteredStories = storyList.filter((story) =>
-    story.title.toLowerCase().includes(searchQuery.toLowerCase()),
-  );
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [showError, setShowError] = useState(false);
+  const [showNotFound, setShowNotFound] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  // API로 스토리 목록 가져오기
+  const { data, isLoading, isError } = useStories();
+  const storyList = data || [];
+
+  const filteredStories =
+    storyList.filter((story) => story.title.toLowerCase().includes(searchQuery.toLowerCase())) ||
+    [];
 
   // 동화 목록이 비어있는지 확인
   const isEmptyList = storyList.length === 0;
@@ -57,18 +62,13 @@ const StoryPage: React.FC = () => {
     }
 
     setSearchQuery(searchTerm);
+
     const filtered = storyList.filter((story) =>
       story.title.toLowerCase().includes(searchTerm.toLowerCase()),
     );
 
-    // 검색 결과 없음
-    if (filtered.length === 0) {
-      setShowNotFound(true);
-      setShowError(false);
-    } else {
-      setShowNotFound(false);
-      setShowError(false);
-    }
+    setShowNotFound(filtered.length === 0);
+    setShowError(false);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -86,6 +86,18 @@ const StoryPage: React.FC = () => {
   const handleStoryClick = (id: number) => {
     navigate(`/story/${id}`);
   };
+
+  // 🚀 로딩 처리
+  if (isLoading) {
+    return <div className='text-center mt-40'>동화를 불러오는 중...</div>;
+  }
+
+  // 🚀 API 에러 처리
+  if (isError) {
+    return (
+      <div className='text-center mt-40 text-red-500'>동화 목록을 불러오는 데 실패했습니다.</div>
+    );
+  }
 
   // 빈 상태 렌더링 함수
   const renderEmptyState = () => {
@@ -157,7 +169,7 @@ const StoryPage: React.FC = () => {
                 onClick={() => handleStoryClick(story.id)}
                 className='cursor-pointer'
               >
-                <ImageCard title={story.title} imageSrc={story.imageSrc} className='w-full' />
+                <ImageCard title={story.title} imageSrc={story.thumbnailUrl} className='w-full' />
               </div>
             ))}
           </div>
