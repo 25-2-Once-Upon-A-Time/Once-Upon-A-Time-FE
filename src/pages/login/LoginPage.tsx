@@ -16,7 +16,7 @@ const LoginPage: React.FC = () => {
     const fetchKakaoClientId = async () => {
       try {
         const response = await api.get('/api/v1/auth/kakao/url');
-        console.log('API 응답:', response.data);
+        // console.log('API 응답:', response.data);
 
         if (response.data.success && response.data.data.redirectUrl) {
           // redirectUrl에서 client_id 파라미터 추출
@@ -24,7 +24,7 @@ const LoginPage: React.FC = () => {
           const clientId = url.searchParams.get('client_id');
 
           if (clientId) {
-            console.log('추출한 client_id:', clientId);
+            // console.log('추출한 client_id:', clientId);
             setKakaoClientId(clientId);
           }
         }
@@ -46,7 +46,7 @@ const LoginPage: React.FC = () => {
     const REDIRECT_URI = `${window.location.origin}/kakao/callback`;
     const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${kakaoClientId}&redirect_uri=${REDIRECT_URI}&response_type=code`;
 
-    console.log('프론트엔드에서 생성한 카카오 URL:', kakaoAuthUrl);
+    // console.log('프론트엔드에서 생성한 카카오 URL:', kakaoAuthUrl);
 
     // 카카오 로그인 페이지로 이동
     window.location.href = kakaoAuthUrl;

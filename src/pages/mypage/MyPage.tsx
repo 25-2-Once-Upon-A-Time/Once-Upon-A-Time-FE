@@ -7,7 +7,7 @@ import { TopNav } from '@/components/ui/TopNav';
 import { BottomNav } from '@/components/ui/BottomNav';
 import Button from '@/components/ui/Button/Button';
 import TextButton from '@/components/ui/TextButton/TextButton';
-import { userApi, type UserProfile } from '@/api/user';
+import { userApi, type UserProfile } from '@/api/mypage/user';
 import { useAuthStore } from '@/stores/authStore';
 
 const MyPage: React.FC = () => {

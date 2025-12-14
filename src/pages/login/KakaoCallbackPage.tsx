@@ -43,7 +43,7 @@ const KakaoCallbackPage: React.FC = () => {
         const params = new URLSearchParams(window.location.search);
         const code = params.get('code');
 
-        console.log('카카오 인가 코드:', code);
+        // console.log('카카오 인가 코드:', code);
 
         if (!code) throw new Error('인가 코드가 없습니다.');
 
@@ -52,14 +52,14 @@ const KakaoCallbackPage: React.FC = () => {
           headers: { Accept: 'application/json, application/xml' },
         });
 
-        console.log('백엔드 응답:', res.data);
+        // console.log('백엔드 응답:', res.data);
 
         // JSON / XML 둘 다 대응
         let payload: any = res.data;
 
         if (typeof payload === 'string') {
           const trimmed = payload.trim();
-          console.log('String 응답:', trimmed);
+          // console.log('String 응답:', trimmed);
 
           if (trimmed.startsWith('<')) {
             payload = parseXmlToData(trimmed);
@@ -75,25 +75,25 @@ const KakaoCallbackPage: React.FC = () => {
         // ApiResult 형태라면 data만 꺼내기
         const data: KakaoCallbackData = payload?.data ?? payload;
 
-        console.log('파싱된 데이터:', data);
+        // console.log('파싱된 데이터:', data);
 
         if (data?.isNewUser) {
           if (!data.signupToken) throw new Error('signupToken이 없습니다.');
 
-          console.log('=== 신규 사용자 처리 ===');
-          console.log('signupToken:', data.signupToken);
+          // console.log('=== 신규 사용자 처리 ===');
+          // console.log('signupToken:', data.signupToken);
 
           // ✅ Zustand store에 저장
           setSignupToken(data.signupToken);
-          console.log('Zustand에 저장 완료');
+          // console.log('Zustand에 저장 완료');
 
           // ✅ sessionStorage에도 직접 저장 (백업)
           sessionStorage.setItem('temp_signup_token', data.signupToken);
-          console.log('sessionStorage에 백업 저장 완료');
+          // console.log('sessionStorage에 백업 저장 완료');
 
           // ✅ persist가 저장될 시간을 주기 위해 약간의 딜레이
           setTimeout(() => {
-            console.log('회원가입 페이지로 이동');
+            // console.log('회원가입 페이지로 이동');
             navigate('/info-setup', { replace: true });
           }, 100);
           return;
@@ -101,7 +101,7 @@ const KakaoCallbackPage: React.FC = () => {
 
         if (!data?.accessToken) throw new Error('accessToken이 없습니다.');
 
-        console.log('기존 사용자 - 메인 페이지로 이동');
+        // console.log('기존 사용자 - 메인 페이지로 이동');
 
         setAccessToken(data.accessToken);
         if (data.refreshToken) {
@@ -110,7 +110,7 @@ const KakaoCallbackPage: React.FC = () => {
 
         navigate('/story', { replace: true });
       } catch (err: any) {
-        console.error('===== 카카오 로그인 처리 실패 =====', err);
+        // console.error('===== 카카오 로그인 처리 실패 =====', err);
 
         // ✅ 500 에러 응답 상세 출력
         if (err?.response?.status === 500) {

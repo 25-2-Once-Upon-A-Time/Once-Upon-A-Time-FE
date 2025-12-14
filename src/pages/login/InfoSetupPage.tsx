@@ -11,7 +11,7 @@ import FormField from '@/components/ui/FormField';
 import loginImg from '@/assets/images/login.svg';
 import fatherhoodImg from '@/assets/images/fatherhood.svg';
 import { SERVICE_TERMS, PRIVACY_TERMS } from '@/constants/termsData';
-import { authService } from '@/api/authService';
+import { authService } from '@/api/auth/authService';
 import { useAuthStore } from '@/stores/authStore';
 import type { InfoSetupFormData } from './verification';
 import { isInfoSetupFormComplete, calculateAge, INITIAL_INFO_SETUP_FORM } from './verification';
@@ -31,24 +31,24 @@ const InfoSetupPage: React.FC = () => {
   const [termsModal, setTermsModal] = useState<'terms' | 'privacy' | null>(null);
 
   useEffect(() => {
-    console.log('=== InfoSetupPage useEffect 실행 ===');
-    console.log('showCompleteModal:', showCompleteModal);
-    console.log('isSubmitting:', isSubmitting);
+    // console.log('=== InfoSetupPage useEffect 실행 ===');
+    // console.log('showCompleteModal:', showCompleteModal);
+    // console.log('isSubmitting:', isSubmitting);
 
     if (showCompleteModal || isSubmitting) {
-      console.log('체크 건너뜀');
+      // console.log('체크 건너뜀');
       return;
     }
 
     let token = signupToken;
-    console.log('Zustand signupToken:', token);
+    // console.log('Zustand signupToken:', token);
 
     if (!token) {
       const tempToken = sessionStorage.getItem('temp_signup_token');
-      console.log('sessionStorage temp_signup_token:', tempToken);
+      // console.log('sessionStorage temp_signup_token:', tempToken);
 
       if (tempToken) {
-        console.log('sessionStorage에서 signupToken 복구');
+        // console.log('sessionStorage에서 signupToken 복구');
         setSignupToken(tempToken);
         token = tempToken;
       }
@@ -59,7 +59,7 @@ const InfoSetupPage: React.FC = () => {
       alert('signupToken이 없습니다. 카카오 로그인을 다시 해주세요.');
       navigate('/login', { replace: true });
     } else {
-      console.log('signupToken 확인 완료:', token);
+      // console.log('signupToken 확인 완료:', token);
     }
   }, [signupToken, navigate, setSignupToken, showCompleteModal, isSubmitting]);
 
@@ -111,7 +111,7 @@ const InfoSetupPage: React.FC = () => {
       return;
     }
 
-    console.log('회원가입 API 호출, 사용할 토큰:', token);
+    // console.log('회원가입 API 호출, 사용할 토큰:', token);
 
     setIsSubmitting(true);
 
@@ -124,17 +124,17 @@ const InfoSetupPage: React.FC = () => {
         personalPhone: formData.phone,
       };
 
-      console.log('회원가입 요청 데이터:', requestData);
+      // console.log('회원가입 요청 데이터:', requestData);
 
       const response = await authService.signup(requestData, token);
 
-      console.log('회원가입 응답:', response);
+      // console.log('회원가입 응답:', response);
 
       if (response.success && response.data) {
         const { accessToken, refreshToken } = response.data;
 
-        console.log('추출한 accessToken:', accessToken);
-        console.log('추출한 refreshToken:', refreshToken);
+        // console.log('추출한 accessToken:', accessToken);
+        // console.log('추출한 refreshToken:', refreshToken);
 
         setAccessToken(accessToken);
         setRefreshToken(refreshToken);
@@ -158,7 +158,7 @@ const InfoSetupPage: React.FC = () => {
   };
 
   const handleCompleteConfirm = () => {
-    console.log('=== 회원가입 완료 확인 ===');
+    // console.log('=== 회원가입 완료 확인 ===');
 
     clearSignupToken();
     sessionStorage.removeItem('temp_signup_token');
