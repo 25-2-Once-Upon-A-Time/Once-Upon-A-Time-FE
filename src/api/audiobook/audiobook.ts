@@ -5,12 +5,19 @@ import type {
   AudioBookPlaybackStartResponse,
 } from '@/types/audiobook';
 import type { ApiResponse, ApiListResponse } from '@/types/common';
+import {
+  audioBookListMock,
+  audioBookPlaybackInfoMock,
+  audioBookPlaybackStartMock,
+} from '@/mocks/audiobook';
+import type { AudioPlaybackStatus } from '@/types/audiobook';
 
-// 재생 진행도 업데이트 (Pause / Resume / Seek)
 interface UpdateAudioPlaybackPayload {
   currentTime: number;
-  status: 'PLAYING' | 'PAUSED' | 'COMPLETED';
+  status: AudioPlaybackStatus;
 }
+
+const isMock = import.meta.env.VITE_API_MODE === 'MOCK';
 
 // 재생 완료
 interface FinishAudioPlaybackPayload {
@@ -20,6 +27,10 @@ interface FinishAudioPlaybackPayload {
 
 // 오디오북 리스트 조회
 export const fetchAudioBookList = async (): Promise<AudioBookSummaryResponse[]> => {
+  if (isMock) {
+    return Promise.resolve(audioBookListMock);
+  }
+
   const { data } = await api.get<ApiListResponse<AudioBookSummaryResponse>>('/api/v1/audiobooks');
 
   return data.data.items;
@@ -29,6 +40,10 @@ export const fetchAudioBookList = async (): Promise<AudioBookSummaryResponse[]> 
 export const fetchAudioBookPlaybackInfo = async (
   audiobookId: number,
 ): Promise<AudioBookPlaybackInfoResponse> => {
+  if (isMock) {
+    return Promise.resolve(audioBookPlaybackInfoMock(audiobookId));
+  }
+
   const { data } = await api.get<ApiResponse<AudioBookPlaybackInfoResponse>>(
     `/api/v1/audiobooks/${audiobookId}/playback`,
   );
@@ -40,6 +55,10 @@ export const fetchAudioBookPlaybackInfo = async (
 export const startAudioBookPlayback = async (
   audiobookId: number,
 ): Promise<AudioBookPlaybackStartResponse> => {
+  if (isMock) {
+    return Promise.resolve(audioBookPlaybackStartMock(audiobookId));
+  }
+
   const { data } = await api.post<ApiResponse<AudioBookPlaybackStartResponse>>(
     `/api/v1/audiobooks/${audiobookId}/playback/start`,
   );
@@ -47,7 +66,7 @@ export const startAudioBookPlayback = async (
   return data.data;
 };
 
-// 오디오북 재생 진행도 업데이트 (Pause / Resume / Seek)
+// 오디오북 재생 진행도 업데이트 (REAL only)
 export const updateAudioPlayback = async (
   audiobookId: number,
   payload: UpdateAudioPlaybackPayload,
@@ -62,7 +81,7 @@ export const updateAudioPlayback = async (
   }
 };
 
-// 오디오북 재생 완료
+// 오디오북 재생 완료 (REAL only)
 export const finishAudioPlayback = async (
   audiobookId: number,
   payload?: FinishAudioPlaybackPayload,
