@@ -10,14 +10,14 @@ import {
   audioBookPlaybackInfoMock,
   audioBookPlaybackStartMock,
 } from '@/mocks/audiobook';
+import type { AudioPlaybackStatus } from '@/types/audiobook';
 
-const isMock = import.meta.env.VITE_API_MODE === 'MOCK';
-
-// 재생 진행도 업데이트 (Pause / Resume / Seek)
 interface UpdateAudioPlaybackPayload {
   currentTime: number;
-  status: 'PAYING' | 'PAUSED' | 'COMPLETED';
+  status: AudioPlaybackStatus;
 }
+
+const isMock = import.meta.env.VITE_API_MODE === 'MOCK';
 
 // 재생 완료
 interface FinishAudioPlaybackPayload {

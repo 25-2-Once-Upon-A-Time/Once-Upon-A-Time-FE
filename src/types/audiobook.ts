@@ -34,3 +34,5 @@ export interface AudioBookPlaybackStartResponse {
   status: 'PLAYING';
   audioUrl: string;
 }
+
+export type AudioPlaybackStatus = 'PLAYING' | 'PAUSED' | 'COMPLETED';
