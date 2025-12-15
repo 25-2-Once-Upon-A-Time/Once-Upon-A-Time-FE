@@ -25,11 +25,11 @@ const StoryPage: React.FC = () => {
 
   // API로 스토리 목록 가져오기
   const { data, isLoading, isError } = useStories();
-  const storyList = data || [];
+  const storyList = Array.isArray(data) ? data : [];
 
-  const filteredStories =
-    storyList.filter((story) => story.title.toLowerCase().includes(searchQuery.toLowerCase())) ||
-    [];
+  const filteredStories = storyList.filter((story) =>
+    story.title.toLowerCase().includes(searchQuery.toLowerCase()),
+  );
 
   // 동화 목록이 비어있는지 확인
   const isEmptyList = storyList.length === 0;
