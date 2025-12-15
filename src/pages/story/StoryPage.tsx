@@ -24,7 +24,15 @@ const StoryPage: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
 
   // API로 스토리 목록 가져오기
-  const { data, isLoading, isError } = useStories();
+  const { data, isLoading, isError, error } = useStories();
+
+  // 디버깅 로그
+  // console.log('📚 동화 목록 API 상태:');
+  // console.log('- isLoading:', isLoading);
+  // console.log('- isError:', isError);
+  // console.log('- error:', error);
+  // console.log('- data:', data);
+
   const storyList = Array.isArray(data) ? data : [];
 
   const filteredStories = storyList.filter((story) =>
