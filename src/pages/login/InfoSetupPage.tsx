@@ -15,6 +15,7 @@ import { authService } from '@/api/auth/authService';
 import { useAuthStore } from '@/stores/authStore';
 import type { InfoSetupFormData } from './verification';
 import { isInfoSetupFormComplete, calculateAge, INITIAL_INFO_SETUP_FORM } from './verification';
+import type { SignupRequest } from '@/api/auth/authService';
 
 const INPUT_CLASS = 'border-border-purple bg-bg-purple-800 placeholder:text-fg-gray';
 
@@ -116,7 +117,7 @@ const InfoSetupPage: React.FC = () => {
     setIsSubmitting(true);
 
     try {
-      const requestData = {
+      const requestData: SignupRequest = {
         name: formData.name.trim(),
         gender: formData.gender === 'M' ? 'MALE' : 'FEMALE',
         birth: formData.birth.replace(/-/g, '.'),
