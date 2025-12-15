@@ -8,7 +8,7 @@ const AudioBookCard: React.FC<AudioBookCardProps> = ({
   title,
   tags,
   character,
-  time,
+  duration,
   imageSrc,
   onPlayClick,
   className,
@@ -45,7 +45,7 @@ const AudioBookCard: React.FC<AudioBookCardProps> = ({
 
           {/* 시간 뱃지 */}
           <div className='w-[63px] h-5 rounded-[10px] bg-bg-peach flex items-center justify-center'>
-            <span className='ng-10-n text-fg-primary'>{time}</span>
+            <span className='ng-10-n text-fg-primary'>{duration}</span>
           </div>
         </div>
       </div>
