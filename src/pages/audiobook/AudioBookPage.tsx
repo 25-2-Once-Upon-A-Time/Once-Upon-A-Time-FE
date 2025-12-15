@@ -1,33 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TopNav } from '@/components/ui/TopNav';
 import { BottomNav } from '@/components/ui/BottomNav';
 import AudioBookCard from '@/features/audiobook/AudioBookCard';
 import CreateAudioBookButton from '@/features/audiobook/CreateAudioBookButton';
 import sortIcon from '@/assets/icons/sort.svg';
-import { audiobooks } from '@/constants/audiobooks';
+import { useAudioBooks } from '@/hooks/queries/useAudioBook';
 
 const AudioBook: React.FC = () => {
   const navigate = useNavigate();
-  const [audiobookList, setAudiobookList] = useState(() => {
-    try {
-      const stored = JSON.parse(localStorage.getItem('localAudiobooks') || '[]');
-      return Array.isArray(stored) ? [...stored, ...audiobooks] : [...audiobooks];
-    } catch (e) {
-      return [...audiobooks];
-    }
-  });
 
-  useEffect(() => {
-    try {
-      const stored = JSON.parse(localStorage.getItem('localAudiobooks') || '[]');
-      const combined = Array.isArray(stored) ? [...stored, ...audiobooks] : [...audiobooks];
-      combined.sort((a, b) => b.id - a.id);
-      setAudiobookList(combined);
-    } catch (e) {
-      setAudiobookList([...audiobooks]);
-    }
-  }, []);
+  const { data: audiobookList = [], isLoading, isError } = useAudioBooks();
+
+  if (isLoading) {
+    return <div className='text-center mt-20'>불러오는 중...</div>;
+  }
+
+  if (isError) {
+    return <div className='text-center mt-20'>오디오북을 불러오지 못했습니다.</div>;
+  }
 
   return (
     <div className='w-full min-w-[360px] min-h-screen flex flex-col mx-auto bg-bg-purple-50 relative'>
@@ -43,13 +34,13 @@ const AudioBook: React.FC = () => {
         <div className='w-full flex flex-col gap-[10px]'>
           {audiobookList.map((audiobook) => (
             <AudioBookCard
-              key={audiobook.id}
-              title={audiobook.title}
-              tags={audiobook.tags}
-              character={audiobook.character}
-              time={audiobook.time}
-              imageSrc={audiobook.imageSrc}
-              onPlayClick={() => navigate(`/audiobook/${audiobook.id}`)}
+              key={audiobook.audiobookId}
+              title={audiobook.audiobookName}
+              tags={[audiobook.theme, audiobook.vibe]}
+              character={audiobook.characterName}
+              duration={audiobook.duration}
+              imageSrc={audiobook.thumbnailUrl}
+              onPlayClick={() => navigate(`/audiobook/${audiobook.audiobookId}`)}
             />
           ))}
         </div>
