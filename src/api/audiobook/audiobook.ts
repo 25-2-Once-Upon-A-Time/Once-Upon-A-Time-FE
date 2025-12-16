@@ -3,13 +3,9 @@ import type {
   AudioBookSummaryResponse,
   AudioBookPlaybackInfoResponse,
   AudioBookPlaybackStartResponse,
+  AudioBookCreateResponse,
 } from '@/types/audiobook';
 import type { ApiResponse, ApiListResponse } from '@/types/common';
-import {
-  audioBookListMock,
-  audioBookPlaybackInfoMock,
-  audioBookPlaybackStartMock,
-} from '@/mocks/audiobook';
 import type { AudioPlaybackStatus } from '@/types/audiobook';
 
 interface UpdateAudioPlaybackPayload {
@@ -17,20 +13,21 @@ interface UpdateAudioPlaybackPayload {
   status: AudioPlaybackStatus;
 }
 
-const isMock = import.meta.env.VITE_API_MODE === 'MOCK';
-
 // 재생 완료
 interface FinishAudioPlaybackPayload {
   finalPosition?: number;
   status?: 'PLAYING' | 'PAUSED' | 'COMPLETED';
 }
 
+interface CreateAudioBookPayload {
+  storyId: number;
+  characterId: number;
+  theme: string;
+  vibe: string;
+}
+
 // 오디오북 리스트 조회
 export const fetchAudioBookList = async (): Promise<AudioBookSummaryResponse[]> => {
-  if (isMock) {
-    return Promise.resolve(audioBookListMock);
-  }
-
   const { data } = await api.get<ApiListResponse<AudioBookSummaryResponse>>('/api/v1/audiobooks');
 
   return data.data.items;
@@ -40,10 +37,6 @@ export const fetchAudioBookList = async (): Promise<AudioBookSummaryResponse[]> 
 export const fetchAudioBookPlaybackInfo = async (
   audiobookId: number,
 ): Promise<AudioBookPlaybackInfoResponse> => {
-  if (isMock) {
-    return Promise.resolve(audioBookPlaybackInfoMock(audiobookId));
-  }
-
   const { data } = await api.get<ApiResponse<AudioBookPlaybackInfoResponse>>(
     `/api/v1/audiobooks/${audiobookId}/playback`,
   );
@@ -55,10 +48,6 @@ export const fetchAudioBookPlaybackInfo = async (
 export const startAudioBookPlayback = async (
   audiobookId: number,
 ): Promise<AudioBookPlaybackStartResponse> => {
-  if (isMock) {
-    return Promise.resolve(audioBookPlaybackStartMock(audiobookId));
-  }
-
   const { data } = await api.post<ApiResponse<AudioBookPlaybackStartResponse>>(
     `/api/v1/audiobooks/${audiobookId}/playback/start`,
   );
@@ -66,7 +55,7 @@ export const startAudioBookPlayback = async (
   return data.data;
 };
 
-// 오디오북 재생 진행도 업데이트 (REAL only)
+// 오디오북 재생 진행도 업데이트
 export const updateAudioPlayback = async (
   audiobookId: number,
   payload: UpdateAudioPlaybackPayload,
@@ -81,7 +70,7 @@ export const updateAudioPlayback = async (
   }
 };
 
-// 오디오북 재생 완료 (REAL only)
+// 오디오북 재생 완료
 export const finishAudioPlayback = async (
   audiobookId: number,
   payload?: FinishAudioPlaybackPayload,
@@ -94,4 +83,20 @@ export const finishAudioPlayback = async (
   if (!data.success) {
     throw new Error('오디오북 재생 완료 처리 실패');
   }
+};
+
+// 오디오북 생성
+export const createAudioBook = async (
+  payload: CreateAudioBookPayload,
+): Promise<AudioBookCreateResponse> => {
+  const { data } = await api.post<ApiResponse<AudioBookCreateResponse>>(
+    '/api/v1/audiobooks',
+    payload,
+  );
+
+  if (!data.success) {
+    throw new Error('오디오북 생성 실패');
+  }
+
+  return data.data;
 };
