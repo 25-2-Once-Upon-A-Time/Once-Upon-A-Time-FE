@@ -71,7 +71,7 @@ const StoryCreatePage: React.FC = () => {
     const requestData = {
       theme: getThemeLabel(selectedTheme),
       vibe: getMoodLabel(selectedMood),
-      originalPrompt: storyPrompt,
+      prompt: storyPrompt,
       title: storyTitle,
     };
 
