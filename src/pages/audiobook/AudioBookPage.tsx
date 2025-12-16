@@ -6,15 +6,12 @@ import AudioBookCard from '@/features/audiobook/AudioBookCard';
 import CreateAudioBookButton from '@/features/audiobook/CreateAudioBookButton';
 import sortIcon from '@/assets/icons/sort.svg';
 import { useAudioBooks } from '@/hooks/queries/useAudioBook';
+import LoadingModal from '@/components/ui/LoadingModal';
 
 const AudioBook: React.FC = () => {
   const navigate = useNavigate();
 
   const { data: audiobookList = [], isLoading, isError } = useAudioBooks();
-
-  if (isLoading) {
-    return <div className='text-center mt-20'>불러오는 중...</div>;
-  }
 
   if (isError) {
     return <div className='text-center mt-20'>오디오북을 불러오지 못했습니다.</div>;
@@ -52,6 +49,13 @@ const AudioBook: React.FC = () => {
       </div>
 
       <BottomNav className='shadow-shadow-purple' />
+
+      {/* 로딩 모달 */}
+      <LoadingModal
+        isOpen={isLoading}
+        title='오디오북을 불러오는 중입니다'
+        subtitle='잠시만 기다려주세요'
+      />
     </div>
   );
 };
