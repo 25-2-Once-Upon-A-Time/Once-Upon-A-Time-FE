@@ -36,3 +36,14 @@ export interface AudioBookPlaybackStartResponse {
 }
 
 export type AudioPlaybackStatus = 'PLAYING' | 'PAUSED' | 'COMPLETED';
+
+// 오디오북 생성
+export interface AudioBookCreateResponse {
+  audiobookId: number;
+  audioUrl: string;
+  duration: number;
+  storyId: number;
+  characterId: number;
+  theme: string;
+  vibe: string;
+}
