@@ -8,24 +8,40 @@ import backIcon from '@/assets/icons/back.svg';
 import { useCreateStory } from '@/hooks/queries/useStories';
 import { generateThumbnail } from '@/api/story/story';
 
+// 테마 이미지 import
+import courageImg from '@/assets/images/themes/용기.jpg';
+import friendshipImg from '@/assets/images/themes/우정.jpg';
+import familyImg from '@/assets/images/themes/가족애.jpg';
+import adventureImg from '@/assets/images/themes/모험.jpg';
+import cooperationImg from '@/assets/images/themes/협동.jpg';
+import diversityImg from '@/assets/images/themes/다양성.jpg';
+
+// 분위기 이미지 import
+import warmImg from '@/assets/images/moods/warm.jpg';
+import excitingImg from '@/assets/images/moods/exciting.jpg';
+import mysteriousImg from '@/assets/images/moods/mysterious.jpg';
+import funnyImg from '@/assets/images/moods/funny.jpg';
+import calmImg from '@/assets/images/moods/calm.jpg';
+import dreamyImg from '@/assets/images/moods/dreamy.jpg';
+
 // 테마 옵션
 const THEME_OPTIONS = [
-  { id: 'courage', label: '용기', imageSrc: undefined },
-  { id: 'friendship', label: '우정', imageSrc: undefined },
-  { id: 'family', label: '가족애', imageSrc: undefined },
-  { id: 'adventure', label: '모험', imageSrc: undefined },
-  { id: 'cooperation', label: '협동', imageSrc: undefined },
-  { id: 'diversity', label: '다양성', imageSrc: undefined },
+  { id: 'courage', label: '용기', imageSrc: courageImg },
+  { id: 'friendship', label: '우정', imageSrc: friendshipImg },
+  { id: 'family', label: '가족애', imageSrc: familyImg },
+  { id: 'adventure', label: '모험', imageSrc: adventureImg },
+  { id: 'cooperation', label: '협동', imageSrc: cooperationImg },
+  { id: 'diversity', label: '다양성', imageSrc: diversityImg },
 ];
 
 // 분위기 옵션
 const MOOD_OPTIONS = [
-  { id: 'warm', label: '따뜻한', imageSrc: undefined },
-  { id: 'exciting', label: '신나는', imageSrc: undefined },
-  { id: 'mysterious', label: '신비로운', imageSrc: undefined },
-  { id: 'funny', label: '유쾌한', imageSrc: undefined },
-  { id: 'calm', label: '잔잔한', imageSrc: undefined },
-  { id: 'dreamy', label: '몽환적인', imageSrc: undefined },
+  { id: 'warm', label: '따뜻한', imageSrc: warmImg },
+  { id: 'exciting', label: '신나는', imageSrc: excitingImg },
+  { id: 'mysterious', label: '신비로운', imageSrc: mysteriousImg },
+  { id: 'funny', label: '유쾌한', imageSrc: funnyImg },
+  { id: 'calm', label: '잔잔한', imageSrc: calmImg },
+  { id: 'dreamy', label: '몽환적인', imageSrc: dreamyImg },
 ];
 
 // 단계 설정
@@ -180,7 +196,11 @@ const StoryCreatePage: React.FC = () => {
                   setStep(2);
                 }}
               >
-                <ImageCard title={t.label} className='w-full' />
+                <ImageCard
+                  title={t.label}
+                  imageSrc={t.imageSrc} // ← 이미지 전달
+                  className='w-full'
+                />
               </div>
             ))}
           </div>
@@ -197,7 +217,11 @@ const StoryCreatePage: React.FC = () => {
                   setStep(3);
                 }}
               >
-                <ImageCard title={m.label} className='w-full' />
+                <ImageCard
+                  title={m.label}
+                  imageSrc={m.imageSrc} // ← 이미지 전달
+                  className='w-full'
+                />
               </div>
             ))}
           </div>
