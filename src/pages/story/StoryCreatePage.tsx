@@ -11,7 +11,7 @@ import { generateThumbnail } from '@/api/story/story';
 // 테마 이미지 import
 import courageImg from '@/assets/images/themes/courage.jpg';
 import friendshipImg from '@/assets/images/themes/friendship.jpg';
-import familyImg from '@/assets/images/themes/family.jpg';
+import familyImg from '@/assets/images/themes/family_.jpg';
 import adventureImg from '@/assets/images/themes/adventure.jpg';
 import cooperationImg from '@/assets/images/themes/cooperation.jpg';
 import diversityImg from '@/assets/images/themes/diversity.jpg';
