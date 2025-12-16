@@ -3,8 +3,8 @@ import { useAuthStore } from '@/stores/authStore';
 
 const BASE_URL =
   import.meta.env.MODE === 'production'
-    ? '' // ⭐ 배포(Vercel)에서는 rewrite 사용
-    : import.meta.env.VITE_API_BASE_URL; // ⭐ 로컬에서만 학교 서버 주소 직접 사용
+    ? '' // 배포(Vercel)에서는 rewrite 사용
+    : import.meta.env.VITE_API_BASE_URL; // 로컬에서만 학교 서버 주소 직접 사용
 
 export const api = axios.create({
   baseURL: BASE_URL,

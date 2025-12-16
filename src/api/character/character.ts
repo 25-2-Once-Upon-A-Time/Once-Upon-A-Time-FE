@@ -1,25 +1,25 @@
 import { api } from '../api';
 import type { CharacterSummary, CharacterDetail } from '@/types/character';
-import { characterListMock, characterDetailMock } from '@/mocks/character';
-
-const isMock = import.meta.env.VITE_API_MODE === 'MOCK';
+import type { ApiResponse, ApiListResponse } from '@/types/common';
 
 // 캐릭터 목록 조회
 export const fetchCharacters = async (): Promise<CharacterSummary[]> => {
-  if (isMock) {
-    return Promise.resolve(characterListMock);
-  }
+  const { data } = await api.get<ApiListResponse<CharacterSummary>>('/api/v1/characters');
 
-  const { data } = await api.get<CharacterSummary[]>('/api/v1/characters');
-  return data;
+  return data.data.items || []; // items만 반환, undefined 방지
 };
 
-// 캐릭터 상세 조회
 export const fetchCharacterDetail = async (characterId: number): Promise<CharacterDetail> => {
-  if (isMock) {
-    return Promise.resolve(characterDetailMock(characterId));
-  }
+  console.log('[fetchCharacterDetail] characterId:', characterId);
 
-  const { data } = await api.get<CharacterDetail>(`/api/v1/characters/${characterId}`);
-  return data;
+  try {
+    const res = await api.get<ApiResponse<CharacterDetail>>(`/api/v1/characters/${characterId}`);
+    console.log('[fetchCharacterDetail] raw response:', res);
+    console.log('[fetchCharacterDetail] response.data:', res.data);
+
+    return res.data.data;
+  } catch (e) {
+    console.error('[fetchCharacterDetail] ERROR:', e);
+    throw e;
+  }
 };
