@@ -12,5 +12,12 @@ export default defineConfig({
   },
   server: {
     port: 3000,
+    proxy: {
+      '/api': {
+        target: 'http://ceprj.gachon.ac.kr:60008',
+        changeOrigin: true,
+        secure: false,
+      },
+    },
   },
 });
