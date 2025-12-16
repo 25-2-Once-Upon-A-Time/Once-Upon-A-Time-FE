@@ -1,7 +1,11 @@
 {
   "rewrites": [
     {
-      "source": "/(.*)",
+      "source": "/api/:path*",
+      "destination": "http://ceprj.gachon.ac.kr:60008/api/:path*"
+    },
+    {
+      "source": "/((?!api|.*\\..*).*)",
       "destination": "/index.html"
     }
   ]
