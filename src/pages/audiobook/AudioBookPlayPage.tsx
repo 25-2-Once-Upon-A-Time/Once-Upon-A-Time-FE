@@ -10,6 +10,7 @@ import {
   useUpdateAudioPlayback,
   useFinishAudioPlayback,
 } from '@/hooks/queries/useAudioBook';
+import { formatTime } from '@/utils/time';
 
 const AudioBookPlayPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -214,7 +215,7 @@ const AudioBookPlayPage: React.FC = () => {
 
             {/* 시간 뱃지 */}
             <div className='w-[63px] h-5 rounded-[10px] bg-bg-peach flex items-center justify-center'>
-              <span className='ng-10-n text-fg-primary'>{playbackInfo.duration}</span>
+              <span className='ng-10-n text-fg-primary'>{formatTime(playbackInfo.duration)}</span>
             </div>
           </div>
 
