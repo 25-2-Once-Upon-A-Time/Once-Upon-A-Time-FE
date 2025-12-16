@@ -40,7 +40,8 @@ const AudioBookCreatePage: React.FC = () => {
       {
         onSuccess: (data) => {
           // 생성 완료 후 해당 오디오북 상세/재생 페이지로 이동
-          navigate(`/audiobook/${data.audiobookId}`, { replace: true });
+          const targetId = data.audiobookId || (data as any).id;
+          navigate(`/audiobook/${targetId}/playback`, { replace: true });
         },
         onError: (error: any) => {
           console.error('오디오북 생성 실패:', error);

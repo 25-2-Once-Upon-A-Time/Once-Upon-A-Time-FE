@@ -98,5 +98,10 @@ export const createAudioBook = async (
     throw new Error('오디오북 생성 실패');
   }
 
-  return data.data;
+  // ID 매핑 (backend가 id로 줄 경우 대비)
+  const responseData = data.data as any;
+  return {
+    ...data.data,
+    audiobookId: responseData.audiobookId || responseData.id,
+  };
 };

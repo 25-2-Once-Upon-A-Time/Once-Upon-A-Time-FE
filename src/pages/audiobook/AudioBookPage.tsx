@@ -27,7 +27,6 @@ const AudioBook: React.FC = () => {
           <img src={sortIcon} alt='정렬' className='w-5 h-5' />
         </div>
 
-        {/* 오디오북 카드 리스트 */}
         <div className='w-full flex flex-col gap-[10px]'>
           {audiobookList.map((audiobook) => (
             <AudioBookCard
@@ -37,7 +36,18 @@ const AudioBook: React.FC = () => {
               character={audiobook.characterName}
               duration={audiobook.duration}
               imageSrc={audiobook.thumbnailUrl}
-              onPlayClick={() => navigate(`/audiobook/${audiobook.audiobookId}`)}
+              onPlayClick={() =>
+                navigate(`/audiobook/${audiobook.audiobookId}/playback`, {
+                  state: {
+                    thumbnailUrl: audiobook.thumbnailUrl,
+                    storyTitle: audiobook.audiobookName,
+                    theme: audiobook.theme,
+                    vibe: audiobook.vibe,
+                    characterName: audiobook.characterName,
+                    duration: audiobook.duration,
+                  },
+                })
+              }
             />
           ))}
         </div>

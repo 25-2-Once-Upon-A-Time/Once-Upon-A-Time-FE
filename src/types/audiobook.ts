@@ -33,6 +33,12 @@ export interface AudioBookPlaybackStartResponse {
   progressRate: number;
   status: 'PLAYING';
   audioUrl: string;
+  thumbnailUrl: string;
+  storyTitle: string;
+  theme: string;
+  vibe: string;
+  characterName: string;
+  duration: number;
 }
 
 export type AudioPlaybackStatus = 'PLAYING' | 'PAUSED' | 'COMPLETED';
