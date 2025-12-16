@@ -1,92 +1,180 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import React, { useEffect, useRef, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import BackButton from '@/components/ui/BackButton/BackButton';
 import Image from '@/components/ui/Image/Image';
 import AudioProgressBar from '@/features/audiobook/AudioProgressBar';
 import AudioControls from '@/features/audiobook/AudioControls';
-import { audiobooks } from '@/constants/audiobooks';
+import {
+  useAudioBookPlaybackInfo,
+  useStartAudioBookPlayback,
+  useUpdateAudioPlayback,
+  useFinishAudioPlayback,
+} from '@/hooks/queries/useAudioBook';
 
 const AudioBookPlayPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const audiobookId = Number(id);
   const navigate = useNavigate();
+
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
   const [currentTime, setCurrentTime] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [totalTime, setTotalTime] = useState(0);
 
-  // 오디오북 데이터 가져오기
-  const location = useLocation();
-  const fallback = (location.state as any)?.audiobook as any | undefined;
+  /* --------------------------------------------------
+   * Queries / Mutations
+   * -------------------------------------------------- */
 
-  // 1. 로컬스토리지(localAudiobooks)에서 찾아보고, 없으면 정적 `audiobooks`,
-  // 2. navigate state로 전달된 fallback을 사용
-  let audiobook: any | undefined;
-  try {
-    const stored = JSON.parse(localStorage.getItem('localAudiobooks') || '[]');
-    const foundInStored = Array.isArray(stored)
-      ? stored.find((ab: any) => Number(ab.id) === Number(id))
-      : undefined;
+  // 재생 정보 조회 (복구용)
+  const { data: playbackInfo, isLoading, isError } = useAudioBookPlaybackInfo(audiobookId);
 
-    audiobook =
-      foundInStored ||
-      audiobooks.find((ab) => ab.id === Number(id)) ||
-      (fallback && Number(fallback.id) === Number(id) ? fallback : undefined);
-  } catch (e) {
-    audiobook =
-      audiobooks.find((ab) => ab.id === Number(id)) ||
-      (fallback && Number(fallback.id) === Number(id) ? fallback : undefined);
-  }
+  // 재생 시작 (audioUrl 받기)
+  const startPlaybackMutation = useStartAudioBookPlayback();
 
-  // 전체 시간
-  const totalTime = audiobook
-    ? parseInt(audiobook.time.split(':')[0]) * 3600 +
-      parseInt(audiobook.time.split(':')[1]) * 60 +
-      parseInt(audiobook.time.split(':')[2])
-    : 0;
+  // 진행도 PATCH
+  const updatePlaybackMutation = useUpdateAudioPlayback();
 
+  // 재생 완료
+  const finishPlaybackMutation = useFinishAudioPlayback();
+
+  /* --------------------------------------------------
+   * Effects
+   * -------------------------------------------------- */
+
+  // 페이지 진입 시 재생 시작
   useEffect(() => {
-    document.body.classList.add('bg-bg-purple-900');
-    return () => {
-      document.body.classList.remove('bg-bg-purple-900');
+    if (!audiobookId) return;
+
+    startPlaybackMutation.mutate(audiobookId, {
+      onSuccess: (data) => {
+        const audio = audioRef.current;
+        if (!audio) return;
+
+        audio.src = data.audioUrl;
+        audio.currentTime = data.lastPosition;
+        audio.play();
+
+        setCurrentTime(data.lastPosition);
+        setIsPlaying(true);
+      },
+    });
+  }, [audiobookId]);
+
+  // timeupdate → currentTime 동기화
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const handleTimeUpdate = () => {
+      setCurrentTime(Math.floor(audio.currentTime));
     };
+
+    audio.addEventListener('timeupdate', handleTimeUpdate);
+    return () => audio.removeEventListener('timeupdate', handleTimeUpdate);
   }, []);
 
-  // 재생 타이머
+  // 5초마다 진행도 PATCH
   useEffect(() => {
-    let interval: NodeJS.Timeout | null = null;
+    if (!isPlaying) return;
 
-    if (isPlaying) {
-      interval = setInterval(() => {
-        setCurrentTime((prev) => {
-          if (prev >= totalTime) {
-            setIsPlaying(false);
-            return totalTime;
-          }
-          return prev + 1;
-        });
-      }, 1000);
-    }
+    const interval = setInterval(() => {
+      const audio = audioRef.current;
+      if (!audio) return;
 
-    return () => {
-      if (interval) {
-        clearInterval(interval);
-      }
-    };
-  }, [isPlaying, totalTime]);
+      updatePlaybackMutation.mutate({
+        audiobookId,
+        currentTime: Math.floor(audio.currentTime),
+        status: 'PLAYING',
+      });
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [isPlaying, audiobookId]);
+
+  /* --------------------------------------------------
+   * Handlers
+   * -------------------------------------------------- */
+
+  const handleLoadedMetadata = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    setTotalTime(Math.floor(audio.duration));
+  };
 
   const handlePlayPause = () => {
-    setIsPlaying(!isPlaying);
-  };
+    const audio = audioRef.current;
+    if (!audio) return;
 
-  const handleSkipBackward = () => {
-    setCurrentTime((prev) => Math.max(0, prev - 15));
-  };
+    if (isPlaying) {
+      audio.pause();
+      setIsPlaying(false);
 
-  const handleSkipForward = () => {
-    setCurrentTime((prev) => Math.min(totalTime, prev + 15));
+      updatePlaybackMutation.mutate({
+        audiobookId,
+        currentTime: Math.floor(audio.currentTime),
+        status: 'PAUSED',
+      });
+    } else {
+      audio.play();
+      setIsPlaying(true);
+
+      updatePlaybackMutation.mutate({
+        audiobookId,
+        currentTime: Math.floor(audio.currentTime),
+        status: 'PLAYING',
+      });
+    }
   };
 
   const handleSeek = (time: number) => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    audio.currentTime = time;
     setCurrentTime(time);
+
+    updatePlaybackMutation.mutate({
+      audiobookId,
+      currentTime: time,
+      status: isPlaying ? 'PLAYING' : 'PAUSED',
+    });
   };
+
+  const handleSkipBackward = () => {
+    handleSeek(Math.max(0, currentTime - 15));
+  };
+
+  const handleSkipForward = () => {
+    handleSeek(Math.min(totalTime, currentTime + 15));
+  };
+
+  // 재생 완료
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const handleEnded = () => {
+      setIsPlaying(false);
+      finishPlaybackMutation.mutate({ audiobookId });
+      navigate('/audiobook', { replace: true });
+    };
+
+    audio.addEventListener('ended', handleEnded);
+    return () => audio.removeEventListener('ended', handleEnded);
+  }, [audiobookId]);
+
+  /* --------------------------------------------------
+   * Render
+   * -------------------------------------------------- */
+
+  if (isLoading || !playbackInfo) {
+    return <div className='text-center mt-20'>불러오는 중...</div>;
+  }
+
+  if (isError) {
+    return <div className='text-center mt-20'>재생 정보를 불러오지 못했습니다.</div>;
+  }
 
   return (
     <div className='max-w-[430px] min-w-[360px] min-h-screen flex flex-col mx-auto bg-bg-purple-900 relative'>
@@ -96,60 +184,64 @@ const AudioBookPlayPage: React.FC = () => {
       </div>
 
       {/* 이미지 영역 */}
-      <div className='flex h-[370px] p-10 flex-col justify-center items-center gap-[10px] shrink-0 self-stretch mt-[93px]'>
+      <div className='flex h-[400px] p-10 flex-col justify-center items-center shrink-0 self-stretch mt-[50px]'>
         <Image
-          src={audiobook?.imageSrc || ''}
-          alt={audiobook?.title || '오디오북 이미지'}
+          src={playbackInfo.thumbnailUrl}
+          alt={playbackInfo.storyTitle}
           className='w-[315px] h-full object-cover'
         />
       </div>
 
-      {audiobook && (
-        <div className='px-4'>
-          <div className='w-full max-w-[318px] mx-auto'>
-            {/* 타이틀 */}
-            <div className='mt-[18px]'>
-              <h1 className='nsr-34-eb text-fg-cream'>{audiobook.title}</h1>
+      <div className='px-4'>
+        <div className='w-full max-w-[318px] mx-auto'>
+          {/* 타이틀 */}
+          <div className='mt-[8px]'>
+            <h1 className='nsr-34-eb text-fg-cream'>{playbackInfo.storyTitle}</h1>
+          </div>
+
+          {/* 태그 */}
+          <div className='mt-[11px]'>
+            <p className='roboto-14-m text-fg-white'>
+              {playbackInfo.theme} · {playbackInfo.vibe}
+            </p>
+          </div>
+
+          <div className='mt-[22px] flex items-center gap-2'>
+            {/* 캐릭터 뱃지 */}
+            <div className='w-[52px] h-5 rounded-[10px] bg-bg-yellow flex items-center justify-center'>
+              <span className='ng-10-n text-fg-primary'>{playbackInfo.characterName}</span>
             </div>
 
-            {/* 태그 */}
-            <div className='mt-[11px]'>
-              <p className='roboto-14-m text-fg-white'>{audiobook.tags.join(' ')}</p>
-            </div>
-
-            <div className='mt-[22px] flex items-center gap-2'>
-              {/* 캐릭터 뱃지 */}
-              <div className='w-[52px] h-5 rounded-[10px] bg-bg-yellow flex items-center justify-center'>
-                <span className='ng-10-n text-fg-primary'>{audiobook.character}</span>
-              </div>
-
-              {/* 시간 뱃지 */}
-              <div className='w-[63px] h-5 rounded-[10px] bg-bg-peach flex items-center justify-center'>
-                <span className='ng-10-n text-fg-primary'>{audiobook.time}</span>
-              </div>
-            </div>
-
-            {/* 재생 진행 바 */}
-            <div className='mt-[48px]'>
-              <AudioProgressBar
-                currentTime={currentTime}
-                totalTime={totalTime}
-                onSeek={handleSeek}
-              />
+            {/* 시간 뱃지 */}
+            <div className='w-[63px] h-5 rounded-[10px] bg-bg-peach flex items-center justify-center'>
+              <span className='ng-10-n text-fg-primary'>{playbackInfo.duration}</span>
             </div>
           </div>
 
-          {/* 오디오 컨트롤 */}
-          <div className='mt-[41px] flex justify-center'>
-            <AudioControls
-              isPlaying={isPlaying}
-              onPlayPause={handlePlayPause}
-              onSkipBackward={handleSkipBackward}
-              onSkipForward={handleSkipForward}
-            />
+          {/* 재생 진행 바 */}
+          <div className='mt-[48px]'>
+            <AudioProgressBar currentTime={currentTime} totalTime={totalTime} onSeek={handleSeek} />
           </div>
         </div>
-      )}
+
+        {/* 오디오 컨트롤 */}
+        <div className='mt-[41px] flex justify-center'>
+          <AudioControls
+            isPlaying={isPlaying}
+            onPlayPause={handlePlayPause}
+            onSkipBackward={handleSkipBackward}
+            onSkipForward={handleSkipForward}
+          />
+        </div>
+      </div>
+
+      {/* 실제 오디오 태그 */}
+      <audio
+        ref={audioRef}
+        preload='auto'
+        onLoadedMetadata={handleLoadedMetadata}
+        style={{ display: 'none' }}
+      />
     </div>
   );
 };

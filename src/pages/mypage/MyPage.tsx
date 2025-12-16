@@ -103,12 +103,18 @@ const MyPage: React.FC = () => {
 
         const gender = genderText === '남성' ? 'MALE' : 'FEMALE';
 
-        const requestData = {
+        const requestData: {
+          name: string;
+          nickname: string;
+          gender: 'MALE' | 'FEMALE';
+          birth: string;
+          personalPhone: string;
+        } = {
           name: name.trim(),
           nickname: nickname.trim(),
           gender,
-          birth: birth, // ✅ 그대로 보내기 (1999-02-21)
-          personalPhone: phone, // ✅ 그대로 보내기 (010-4512-3672)
+          birth,
+          personalPhone: phone,
         };
 
         console.log('=== 프로필 수정 요청 ===');
