@@ -33,6 +33,23 @@ export interface AudioBookPlaybackStartResponse {
   progressRate: number;
   status: 'PLAYING';
   audioUrl: string;
+  thumbnailUrl: string;
+  storyTitle: string;
+  theme: string;
+  vibe: string;
+  characterName: string;
+  duration: number;
 }
 
 export type AudioPlaybackStatus = 'PLAYING' | 'PAUSED' | 'COMPLETED';
+
+// 오디오북 생성
+export interface AudioBookCreateResponse {
+  audiobookId: number;
+  audioUrl: string;
+  duration: number;
+  storyId: number;
+  characterId: number;
+  theme: string;
+  vibe: string;
+}

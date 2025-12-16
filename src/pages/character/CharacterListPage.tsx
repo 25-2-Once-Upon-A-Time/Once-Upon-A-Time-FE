@@ -36,7 +36,7 @@ const CharacterListPage: React.FC = () => {
     setSearchQuery(searchTerm);
 
     const filtered = (data || []).filter((character) =>
-      character.name.toLowerCase().includes(searchTerm.toLowerCase()),
+      character.characterName.toLowerCase().includes(searchTerm.toLowerCase()),
     );
 
     if (hasSpecial) {
@@ -86,8 +86,9 @@ const CharacterListPage: React.FC = () => {
 
   // API 데이터 기반 필터링
   const filteredCharacters =
-    data?.filter((character) => character.name.toLowerCase().includes(searchQuery.toLowerCase())) ||
-    [];
+    data?.filter((character) =>
+      character.characterName.toLowerCase().includes(searchQuery.toLowerCase()),
+    ) || [];
 
   return (
     <div className='w-full min-h-screen flex flex-col bg-bg-purple-50'>
@@ -132,7 +133,7 @@ const CharacterListPage: React.FC = () => {
                 className='cursor-pointer'
               >
                 <ImageCard
-                  title={character.name}
+                  title={character.characterName}
                   imageSrc={character.thumbnailUrl}
                   className='w-full'
                 />

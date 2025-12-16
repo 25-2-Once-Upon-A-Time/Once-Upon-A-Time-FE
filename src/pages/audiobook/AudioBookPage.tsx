@@ -6,15 +6,12 @@ import AudioBookCard from '@/features/audiobook/AudioBookCard';
 import CreateAudioBookButton from '@/features/audiobook/CreateAudioBookButton';
 import sortIcon from '@/assets/icons/sort.svg';
 import { useAudioBooks } from '@/hooks/queries/useAudioBook';
+import LoadingModal from '@/components/ui/LoadingModal';
 
 const AudioBook: React.FC = () => {
   const navigate = useNavigate();
 
   const { data: audiobookList = [], isLoading, isError } = useAudioBooks();
-
-  if (isLoading) {
-    return <div className='text-center mt-20'>불러오는 중...</div>;
-  }
 
   if (isError) {
     return <div className='text-center mt-20'>오디오북을 불러오지 못했습니다.</div>;
@@ -30,7 +27,6 @@ const AudioBook: React.FC = () => {
           <img src={sortIcon} alt='정렬' className='w-5 h-5' />
         </div>
 
-        {/* 오디오북 카드 리스트 */}
         <div className='w-full flex flex-col gap-[10px]'>
           {audiobookList.map((audiobook) => (
             <AudioBookCard
@@ -40,7 +36,18 @@ const AudioBook: React.FC = () => {
               character={audiobook.characterName}
               duration={audiobook.duration}
               imageSrc={audiobook.thumbnailUrl}
-              onPlayClick={() => navigate(`/audiobook/${audiobook.audiobookId}`)}
+              onPlayClick={() =>
+                navigate(`/audiobook/${audiobook.audiobookId}/playback`, {
+                  state: {
+                    thumbnailUrl: audiobook.thumbnailUrl,
+                    storyTitle: audiobook.audiobookName,
+                    theme: audiobook.theme,
+                    vibe: audiobook.vibe,
+                    characterName: audiobook.characterName,
+                    duration: audiobook.duration,
+                  },
+                })
+              }
             />
           ))}
         </div>
@@ -48,10 +55,17 @@ const AudioBook: React.FC = () => {
 
       {/* 오디오북 생성 버튼 */}
       <div className='fixed bottom-[109px] left-1/2 -translate-x-1/2 z-50'>
-        <CreateAudioBookButton onClick={() => navigate('/audiobook/create')} />
+        <CreateAudioBookButton onClick={() => navigate('/audiobook/make')} />
       </div>
 
       <BottomNav className='shadow-shadow-purple' />
+
+      {/* 로딩 모달 */}
+      <LoadingModal
+        isOpen={isLoading}
+        title='오디오북을 불러오는 중입니다'
+        subtitle='잠시만 기다려주세요'
+      />
     </div>
   );
 };

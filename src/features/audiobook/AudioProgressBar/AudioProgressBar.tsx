@@ -1,14 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { twMerge } from 'tailwind-merge';
 import type { AudioProgressBarProps } from './AudioProgressBar.types';
-
-// 초를 HH:MM:SS 형식으로 변환
-const formatTime = (seconds: number): string => {
-  const hours = Math.floor(seconds / 3600);
-  const minutes = Math.floor((seconds % 3600) / 60);
-  const secs = Math.floor(seconds % 60);
-  return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-};
+import { formatTime } from '@/utils/time';
 
 const AudioProgressBar: React.FC<AudioProgressBarProps> = ({
   currentTime,

@@ -1,19 +1,25 @@
 // 캐릭터 목록
 export interface CharacterSummary {
   id: number;
-  name: string;
+  characterName: string;
   thumbnailUrl: string;
 }
 
 // 캐릭터 상세
-export interface CharacterDetail extends CharacterSummary {
-  tags: string[];
+export interface CharacterDetail {
+  id: number;
+  characterName: string;
+  characterType: 'MAIN' | 'SUB' | null;
   description: string;
-  likeCount: number;
+  thumbnailUrl: string;
+  voiceSampleUrl: string;
+  voiceActor: string;
+  tags: string[];
+  audios: AudioSample[];
+}
 
-  audios: {
-    id: number;
-    title: string;
-    duration: number;
-  }[];
+export interface AudioSample {
+  title: string;
+  duration: string;
+  audioUrl: string;
 }
