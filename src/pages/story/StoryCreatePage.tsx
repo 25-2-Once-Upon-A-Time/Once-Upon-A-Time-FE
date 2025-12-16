@@ -9,12 +9,12 @@ import { useCreateStory } from '@/hooks/queries/useStories';
 import { generateThumbnail } from '@/api/story/story';
 
 // 테마 이미지 import
-import courageImg from '@/assets/images/themes/Courage.jpg';
-import friendshipImg from '@/assets/images/themes/Friendship.jpg';
-import familyImg from '@/assets/images/themes/Family.jpg';
-import adventureImg from '@/assets/images/themes/Adventure.jpg';
-import cooperationImg from '@/assets/images/themes/Cooperation.jpg';
-import diversityImg from '@/assets/images/themes/Diversity.jpg';
+import courageImg from '@/assets/images/themes/courage.jpg';
+import friendshipImg from '@/assets/images/themes/friendship.jpg';
+import familyImg from '@/assets/images/themes/family.jpg';
+import adventureImg from '@/assets/images/themes/adventure.jpg';
+import cooperationImg from '@/assets/images/themes/cooperation.jpg';
+import diversityImg from '@/assets/images/themes/diversity.jpg';
 
 // 분위기 이미지 import
 import warmImg from '@/assets/images/moods/warm.jpg';
