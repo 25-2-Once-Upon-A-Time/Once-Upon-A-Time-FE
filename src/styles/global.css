@@ -249,6 +249,12 @@
     font-weight: 700;
     line-height: 100%;
   }
+  .nbp-16-b-relaxed {
+    font-family: 'NanumBarunpenOTF';
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 120%;
+  }
   .nbp-12-b {
     font-family: 'NanumBarunpenOTF';
     font-size: 12px;

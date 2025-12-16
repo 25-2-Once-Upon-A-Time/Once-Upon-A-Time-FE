@@ -4,6 +4,8 @@ import ImageCard from '@/components/ui/ImageCard/ImageCard';
 import Button from '@/components/ui/Button/Button';
 import Image from '@/components/ui/Image/Image';
 import backIcon from '@/assets/icons/back.svg';
+import { useCreateStory } from '@/hooks/queries/useStories';
+import { generateThumbnail } from '@/api/story/story';
 
 // 테마 옵션
 const THEME_OPTIONS = [
@@ -42,7 +44,15 @@ const StoryCreatePage: React.FC = () => {
   const [selectedMood, setSelectedMood] = useState<string | null>(null);
   const [storyPrompt, setStoryPrompt] = useState('');
   const [storyTitle, setStoryTitle] = useState('');
-  const [generatedImage, setGeneratedImage] = useState<string | undefined>();
+
+  const [generatedStoryId, setGeneratedStoryId] = useState<number | null>(null);
+  const [generatedImage, setGeneratedImage] = useState<string | undefined>(undefined);
+  const [isGeneratingThumbnail, setIsGeneratingThumbnail] = useState(false);
+
+  // React Query Mutation
+  const createStoryMutation = useCreateStory();
+
+  const isLoading = createStoryMutation.isPending || isGeneratingThumbnail;
 
   const currentStep = STEP_CONFIG[step];
 
@@ -55,10 +65,64 @@ const StoryCreatePage: React.FC = () => {
     }
   };
 
-  // mock 생성 완료 처리
-  const handleCreate = () => {
-    setGeneratedImage('https://via.placeholder.com/600x600');
-    setStep(5);
+  const handleCreate = async () => {
+    if (!selectedTheme || !selectedMood) return;
+
+    const requestData = {
+      theme: getThemeLabel(selectedTheme),
+      vibe: getMoodLabel(selectedMood),
+      originalPrompt: storyPrompt,
+      title: storyTitle,
+    };
+
+    // console.log('🔍 동화 생성 요청 데이터:', requestData);
+
+    createStoryMutation.mutate(requestData, {
+      onSuccess: async (data) => {
+        // console.log('✅ 동화 생성 성공:', data);
+        // console.log('✅ data 타입:', typeof data);
+        // console.log('✅ data.storyId:', data?.storyId);
+
+        // 방어 코드: data나 storyId가 없는 경우 처리
+        if (!data || !data.storyId) {
+          // console.error('⚠️ storyId가 없습니다. 전체 data:', data);
+          alert('동화가 생성되었지만 ID를 받지 못했습니다. 목록 페이지로 이동합니다.');
+          navigate('/story');
+          return;
+        }
+
+        setGeneratedStoryId(data.storyId);
+
+        // 썸네일 생성 시작
+        setIsGeneratingThumbnail(true);
+        // console.log('🖼️ 썸네일 생성 시작... storyId:', data.storyId);
+
+        try {
+          const thumbnailResult = await generateThumbnail(data.storyId);
+          // console.log('✅ 썸네일 생성 성공:', thumbnailResult);
+
+          // 썸네일 URL 설정
+          if (thumbnailResult?.data?.thumbnailUrl) {
+            setGeneratedImage(thumbnailResult.data.thumbnailUrl);
+          } else if (thumbnailResult?.thumbnailUrl) {
+            setGeneratedImage(thumbnailResult.thumbnailUrl);
+          }
+        } catch (thumbnailError) {
+          // console.error('❌ 썸네일 생성 실패:', thumbnailError);
+          // 썸네일 실패해도 Step 5로 이동
+        } finally {
+          setIsGeneratingThumbnail(false);
+          // Step 5로 이동
+          setStep(5);
+        }
+      },
+      onError: (error: any) => {
+        // console.error('❌ 동화 생성 실패:', error);
+        // console.error('Response:', error.response?.data);
+        // console.error('Status:', error.response?.status);
+        alert('동화를 생성하는 중 문제가 발생했습니다.');
+      },
+    });
   };
 
   const getThemeLabel = (id: string) => THEME_OPTIONS.find((t) => t.id === id)?.label ?? '';
@@ -192,6 +256,16 @@ const StoryCreatePage: React.FC = () => {
           </div>
         )}
       </div>
+
+      {/* 로딩 모달 */}
+      <LoadingModal
+        isOpen={isLoading}
+        title={isGeneratingThumbnail ? '썸네일을 생성중입니다' : '동화를 생성중입니다'}
+        subtitle='잠시만 기다려주세요'
+        bottomText={
+          isGeneratingThumbnail ? '멋진 이미지를 만들고 있어요' : '특별한 이야기를 만들고 있어요'
+        }
+      />
     </div>
   );
 };
