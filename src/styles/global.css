@@ -1,0 +1,282 @@
+@import 'tailwindcss';
+@import './fonts.css';
+
+@theme {
+  /* Background */
+  --color-bg-purple-50: #eef0fa;
+  --color-bg-purple-100: #c0c9ee;
+  --color-bg-purple-300: #898ac4;
+  --color-bg-purple-500: #3c3c5e;
+  --color-bg-purple-600: #a7abc3;
+  --color-bg-purple-700: #23283e;
+  --color-bg-purple-800: #a2aadb;
+  --color-bg-purple-900: #1d1d2d;
+  --color-bg-light-purple-700: #8789fb;
+  --color-bg-cream: #fdfdff;
+  --color-bg-yellow: #fff098;
+  --color-bg-peach: #ffad98;
+  --color-bg-second-peach: #e79a9a;
+  --color-bg-yellow: #ffef98;
+  --color-bg-disabled: #dbdbdb;
+
+  /* Foreground */
+  --color-fg-primary: #081025;
+  --color-fg-purple-100: #c0c9ee;
+  --color-fg-purple-300: #898ac4;
+  --color-fg-purple-500: #3c3c5e;
+  --color-fg-purple-600: #a7abc3;
+  --color-fg-purple-800: #a2aadb;
+  --color-fg-cream: #fff9f0;
+  --color-fg-error: #ff3b3b;
+  --color-fg-blue: #413bff;
+  --color-fg-gray: #717272;
+  --color-fg-disabled: #dbdbdb;
+  --color-fg-light: #eef0fa;
+  --color-fg-white: #ffffff;
+  --color-fg-light-cream: #fdfdff;
+  --color-fg-peach: #e79a9a;
+  --color-fg-yellow: #ffef98;
+
+  /* Border */
+  --color-border-purple: #898ac4;
+
+  /* Shadow */
+  --color-shadow-purple: #898ac4;
+}
+
+@layer base {
+  html,
+  body {
+    @apply w-full h-screen p-0 m-0;
+    font-family: 'NanumSquareRoundOTF', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #eef0fa;
+  }
+
+  svg {
+    display: inline-block;
+  }
+
+  #root {
+    @apply w-full max-w-[480px] h-full;
+  }
+}
+
+@layer utilities {
+  /* NanumSquareRoundOTF – ExtraBold */
+  .nsr-34-eb {
+    font-family: 'NanumSquareRoundOTF';
+    font-size: 34px;
+    font-weight: 800;
+    line-height: 108%;
+    letter-spacing: 0%;
+  }
+
+  .nsr-28-eb-uppercase {
+    font-family: 'NanumSquareRoundOTF';
+    font-size: 28px;
+    font-weight: 800;
+    line-height: 26px;
+    letter-spacing: 0.46px;
+    text-transform: uppercase;
+  }
+
+  .nsr-25-eb-center {
+    font-family: 'NanumSquareRoundOTF';
+    font-size: 25px;
+    font-weight: 800;
+    line-height: 43px;
+    letter-spacing: 0%;
+    text-align: center;
+  }
+
+  .nsr-24-eb {
+    font-family: 'NanumSquareRoundOTF';
+    font-size: 24px;
+    font-weight: 800;
+    line-height: 150%;
+    letter-spacing: 0.15px;
+  }
+
+  .nsr-20-eb {
+    font-family: 'NanumSquareRoundOTF';
+    font-size: 20px;
+    font-weight: 800;
+    line-height: 108%;
+    letter-spacing: 0%;
+  }
+
+  .nsr-16-eb {
+    font-family: 'NanumSquareRoundOTF';
+    font-size: 16px;
+    font-weight: 800;
+    line-height: 108%;
+    letter-spacing: 0%;
+  }
+
+  .nsr-16-n {
+    font-family: 'NanumSquareRoundOTF';
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 108%;
+    letter-spacing: 0%;
+  }
+
+  .nsr-15-eb-uppercase {
+    font-family: 'NanumSquareRoundOTF';
+    font-size: 15px;
+    font-weight: 800;
+    line-height: 26px;
+    letter-spacing: 0.46px;
+    text-transform: uppercase;
+  }
+
+  /* NanumGothic */
+  .ng-16-r {
+    font-family: 'NanumGothic';
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 100%;
+  }
+
+  .ng-15-b {
+    font-family: 'NanumGothic';
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 43px;
+    letter-spacing: 0%;
+    text-align: center;
+  }
+
+  /* NanumGothicOTF */
+
+  .ng-8-n {
+    font-family: 'NanumGothicOTF';
+    font-size: 8px;
+    font-weight: 400;
+    line-height: 1.2; /* 또는 12px */
+  }
+
+  .ng-10-n {
+    font-family: 'NanumGothicOTF';
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 20px;
+    text-align: center;
+  }
+
+  .ng-15-n {
+    font-family: 'NanumGothicOTF';
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 43px;
+    text-align: center;
+    color: #000000;
+  }
+
+  .ng-18-n {
+    font-family: 'NanumGothicOTF';
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 30px;
+    text-align: center;
+    color: #000000;
+  }
+
+  .ng-22-n {
+    font-family: 'NanumGothicOTF';
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 30px;
+    text-align: center;
+    color: #000000;
+  }
+
+  .ng-12-n {
+    font-family: 'NanumGothicOTF';
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 43px;
+  }
+
+  .ng-16-n {
+    font-family: 'NanumGothicOTF';
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 18px;
+  }
+
+  .ng-25-n {
+    font-family: 'NanumGothicOTF';
+    font-size: 25px;
+    font-weight: 600;
+    line-height: 43px;
+    text-align: center;
+  }
+
+  /* NanumBarunpen */
+  .nbp-20-b-uppercase {
+    font-family: 'NanumBarunpenOTF';
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 26px;
+    letter-spacing: 0.46px;
+    text-transform: uppercase;
+  }
+
+  .nbp-30-b-uppercase {
+    font-family: 'NanumBarunpenOTF';
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 26px;
+    letter-spacing: 0.46px;
+    text-transform: uppercase;
+  }
+
+  .nbp-20-b-center {
+    font-family: 'NanumBarunpenOTF';
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 20px;
+    text-align: center;
+  }
+
+  .nbp-16-b {
+    font-family: 'NanumBarunpenOTF';
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 100%;
+  }
+  .nbp-12-b {
+    font-family: 'NanumBarunpenOTF';
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 145%;
+  }
+}
+
+.animate-fade-in-down {
+  animation: fade-in-down 0.3s ease-out;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.ng-16-b {
+  font-family: 'NanumBarunpenOTF';
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 100%;
+}
+.nbp-12-b {
+  font-family: 'NanumBarunpenOTF';
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 145%;
+}
