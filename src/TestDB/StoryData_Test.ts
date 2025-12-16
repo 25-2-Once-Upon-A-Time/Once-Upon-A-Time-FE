@@ -1,4 +1,3 @@
-import testImage from '@/assets/images/test-image.svg';
 import testStoryImgae from '@/assets/images/korea.png';
 
 // 타입 정의

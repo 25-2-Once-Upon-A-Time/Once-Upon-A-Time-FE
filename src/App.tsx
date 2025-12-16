@@ -13,6 +13,7 @@ import AudioBook from '@/pages/audiobook/AudioBookPage';
 import AudioBookPlayPage from '@/pages/audiobook/AudioBookPlayPage';
 import AudioBookCreatePage from '@/pages/audiobook/AudioBookCreatePage';
 import KakaoCallbackPage from '@/pages/login/KakaoCallbackPage';
+import AdminPage from '@/pages/Admin/AdminPage';
 
 function App() {
   const { accessToken } = useAuthStore();
@@ -41,7 +42,7 @@ function App() {
         <Route path='/audiobook' element={<AudioBook />} />
         <Route path='/audiobook/:id' element={<AudioBookPlayPage />} />
         <Route path='/audiobook/create' element={<AudioBookCreatePage />} />
-
+        <Route path='/admin' element={<AdminPage />} />
         <Route path='*' element={<Navigate to='/' replace />} />
       </Routes>
     </BrowserRouter>

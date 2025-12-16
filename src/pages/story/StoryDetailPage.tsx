@@ -38,7 +38,11 @@ const StoryDetailPage: React.FC = () => {
     <div className='max-w-[480px] min-w-[360px] h-screen mx-auto bg-bg-purple-700 flex flex-col overflow-hidden'>
       {/* 동화 이미지 + 버튼들 */}
       <div className='relative w-full flex-shrink-0'>
-        <Image src={story.thumbnailUrl} alt={story.title} className='w-full aspect-square' />
+        <Image
+          src={story.thumbnailUrl || undefined}
+          alt={story.title}
+          className='w-full aspect-square'
+        />
 
         {/* 뒤로가기 버튼 - 왼쪽 위 */}
         <div className='absolute top-[18px] left-[20px]'>
