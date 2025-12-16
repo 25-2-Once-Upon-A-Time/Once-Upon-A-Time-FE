@@ -3,6 +3,7 @@ import { twMerge } from 'tailwind-merge';
 import Image from '@/components/ui/Image/Image';
 import dummyImage from '@/assets/images/dummy-image.svg';
 import type { AudioBookCardProps } from './AudioBookCard.types';
+import { formatTime } from '@/utils/time';
 
 const AudioBookCard: React.FC<AudioBookCardProps> = ({
   title,
@@ -45,7 +46,7 @@ const AudioBookCard: React.FC<AudioBookCardProps> = ({
 
           {/* 시간 뱃지 */}
           <div className='w-[63px] h-5 rounded-[10px] bg-bg-peach flex items-center justify-center'>
-            <span className='ng-10-n text-fg-primary'>{duration}</span>
+            <span className='ng-10-n text-fg-primary'>{formatTime(duration)}</span>
           </div>
         </div>
       </div>

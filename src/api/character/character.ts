@@ -4,9 +4,13 @@ import type { ApiResponse, ApiListResponse } from '@/types/common';
 
 // 캐릭터 목록 조회
 export const fetchCharacters = async (): Promise<CharacterSummary[]> => {
-  const { data } = await api.get<ApiListResponse<CharacterSummary>>('/api/v1/characters');
+  const { data } = await api.get<ApiListResponse<CharacterSummary> | { success: boolean; data: CharacterSummary[] }>('/api/v1/characters');
 
-  return data.data.items || []; // items만 반환, undefined 방지
+  if (Array.isArray(data.data)) {
+    return data.data;
+  }
+
+  return (data.data as any).items || [];
 };
 
 export const fetchCharacterDetail = async (characterId: number): Promise<CharacterDetail> => {

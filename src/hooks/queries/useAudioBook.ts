@@ -1,10 +1,11 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   fetchAudioBookList,
   fetchAudioBookPlaybackInfo,
   startAudioBookPlayback,
   updateAudioPlayback,
   finishAudioPlayback,
+  createAudioBook,
 } from '@/api/audiobook/audiobook';
 
 export const useAudioBooks = () => {
@@ -61,5 +62,19 @@ export const useFinishAudioPlayback = () => {
         finalPosition,
         status,
       }),
+  });
+};
+
+export const useCreateAudioBook = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (payload: { storyId: number; characterId: number; theme: string; vibe: string }) =>
+      createAudioBook(payload),
+
+    onSuccess: () => {
+      // ✅ 생성 후 오디오북 리스트 갱신
+      queryClient.invalidateQueries({ queryKey: ['audiobooks'] });
+    },
   });
 };

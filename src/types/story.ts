@@ -4,6 +4,8 @@ export interface StorySummary {
   title: string;
   thumbnailUrl: string;
   createdDate?: string;
+  theme?: string;
+  vibe?: string;
 }
 
 // 상세 조회 화면
