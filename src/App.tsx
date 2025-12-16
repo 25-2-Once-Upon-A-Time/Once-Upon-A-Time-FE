@@ -41,7 +41,7 @@ function App() {
         <Route path='/mypage' element={<MyPage />} />
         <Route path='/audiobook' element={<AudioBook />} />
         <Route path='/audiobook/:id' element={<AudioBookPlayPage />} />
-        <Route path='/audiobook/create' element={<AudioBookCreatePage />} />
+        <Route path='/audiobook/make' element={<AudioBookCreatePage />} />
         <Route path='/admin' element={<AdminPage />} />
         <Route path='*' element={<Navigate to='/' replace />} />
       </Routes>

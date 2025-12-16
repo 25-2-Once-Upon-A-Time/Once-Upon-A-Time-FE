@@ -45,7 +45,7 @@ const AudioBook: React.FC = () => {
 
       {/* 오디오북 생성 버튼 */}
       <div className='fixed bottom-[109px] left-1/2 -translate-x-1/2 z-50'>
-        <CreateAudioBookButton onClick={() => navigate('/audiobook/create')} />
+        <CreateAudioBookButton onClick={() => navigate('/audiobook/make')} />
       </div>
 
       <BottomNav className='shadow-shadow-purple' />

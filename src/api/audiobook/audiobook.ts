@@ -90,7 +90,7 @@ export const createAudioBook = async (
   payload: CreateAudioBookPayload,
 ): Promise<AudioBookCreateResponse> => {
   const { data } = await api.post<ApiResponse<AudioBookCreateResponse>>(
-    '/api/v1/audiobooks',
+    '/api/v1/audiobook/make',
     payload,
   );
 
