@@ -29,3 +29,5 @@ public/fonts/
 # env
 .env
 *.env.env
+.env*
+!*.example
