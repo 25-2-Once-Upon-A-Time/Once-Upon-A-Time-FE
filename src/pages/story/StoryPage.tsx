@@ -140,8 +140,8 @@ const StoryPage: React.FC = () => {
     <div className='w-full h-screen flex flex-col overflow-hidden'>
       <TopNav title='동화' showBack={false} />
 
-      {/* Search */}
-      <div className='fixed top-[72px] left-0 right-0 z-40 px-4'>
+      {/* Search - 배경색 추가 */}
+      <div className='fixed top-[56px] left-0 right-0 z-40 px-4 bg-bg-purple-50 pb-1'>
         <div className='max-w-[480px] mx-auto'>
           <SearchInput
             className='w-full'
