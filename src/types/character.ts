@@ -20,6 +20,6 @@ export interface CharacterDetail {
 
 export interface AudioSample {
   title: string;
-  duration: string; // "10 MIN"
+  duration: string;
   audioUrl: string;
 }

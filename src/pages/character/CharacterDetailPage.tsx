@@ -16,9 +16,6 @@ const CharacterDetailPage: React.FC = () => {
   const navigate = useNavigate();
   const { isVisible, message, showToast, hideToast } = useToast();
 
-  //  const [isLiked, setIsLiked] = useState(false);
-  //  const [likeCount, setLikeCount] = useState(0);
-
   // id 유효성 검사
   const numericId = Number(id);
   const isValidId = Number.isInteger(numericId) && numericId > 0;
@@ -65,11 +62,6 @@ const CharacterDetailPage: React.FC = () => {
   const character = data;
   const hasExtraAudios = character.audios.length > 0;
 
-  // const handleLikeChange = (liked: boolean) => {
-  //   setIsLiked(liked);
-  //   setLikeCount((prev) => (liked ? prev + 1 : Math.max(0, prev - 1)));
-  // };
-
   const handlePlayChange = (index: number) => (playing: boolean) => {
     setPlayingIndex(playing ? index : null);
   };
@@ -108,12 +100,6 @@ const CharacterDetailPage: React.FC = () => {
 
           {/* 캐릭터 설명 */}
           <p className='nbp-16-b text-fg-cream mb-6'>{character.description}</p>
-
-          {/* 좋아요 카운트
-                <div className='flex items-center gap-[9.94px] mb-10'>
-                  <img src={heartIcon} alt='좋아요' className='w-[18.26px] h-[16.14px]' />
-                  <span className='pre-14-m text-fg-disabled'>{likeCount}</span>
-                </div> */}
 
           {/* 음성 미리 듣기 */}
           <h2 className='nsr-20-eb text-fg-cream mb-[30px]'>음성 미리 듣기</h2>

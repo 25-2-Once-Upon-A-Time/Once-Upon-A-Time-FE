@@ -2,8 +2,6 @@ import { api } from '../api';
 import type { CharacterSummary, CharacterDetail } from '@/types/character';
 import type { ApiResponse, ApiListResponse } from '@/types/common';
 
-// const isMock = import.meta.env.VITE_API_MODE === 'MOCK';
-
 // 캐릭터 목록 조회
 export const fetchCharacters = async (): Promise<CharacterSummary[]> => {
   const { data } = await api.get<ApiListResponse<CharacterSummary>>('/api/v1/characters');
