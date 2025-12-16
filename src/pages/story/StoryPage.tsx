@@ -24,7 +24,7 @@ const StoryPage: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
 
   // API로 스토리 목록 가져오기
-  const { data, isLoading, isError, error } = useStories();
+  const { data, isLoading, isError } = useStories();
 
   // 디버깅 로그
   // console.log('📚 동화 목록 API 상태:');

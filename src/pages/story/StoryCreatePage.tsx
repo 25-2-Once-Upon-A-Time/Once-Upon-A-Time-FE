@@ -62,7 +62,6 @@ const StoryCreatePage: React.FC = () => {
   const [storyPrompt, setStoryPrompt] = useState('');
   const [storyTitle, setStoryTitle] = useState('');
 
-  const [generatedStoryId, setGeneratedStoryId] = useState<number | null>(null);
   const [generatedImage, setGeneratedImage] = useState<string | undefined>(undefined);
   const [isGeneratingThumbnail, setIsGeneratingThumbnail] = useState(false);
 
@@ -108,8 +107,6 @@ const StoryCreatePage: React.FC = () => {
           return;
         }
 
-        setGeneratedStoryId(data.storyId);
-
         // 썸네일 생성 시작
         setIsGeneratingThumbnail(true);
         // console.log('🖼️ 썸네일 생성 시작... storyId:', data.storyId);
@@ -133,7 +130,7 @@ const StoryCreatePage: React.FC = () => {
           setStep(5);
         }
       },
-      onError: (error: any) => {
+      onError: () => {
         // console.error('❌ 동화 생성 실패:', error);
         // console.error('Response:', error.response?.data);
         // console.error('Status:', error.response?.status);
