@@ -4,63 +4,53 @@ import TopNav from '@/components/ui/TopNav/TopNav';
 import ImageCard from '@/components/ui/ImageCard/ImageCard';
 import Button from '@/components/ui/Button/Button';
 import headphonesIcon from '@/assets/icons/headphones.svg';
-import { characters } from '@/constants/characters';
-import { storyList } from '@/TestDB/StoryData_Test';
 import LoadingModal from '@/components/ui/LoadingModal';
 import CircleSelect from '@/features/audiobook/CircleSelect/CircleSelect';
+import { useStories } from '@/hooks/queries/useStories';
+import { useCharacters } from '@/hooks/queries/useCharacters';
+import { useCreateAudioBook } from '@/hooks/queries/useAudioBook';
 
 const AudioBookCreatePage: React.FC = () => {
   const navigate = useNavigate();
   const [step, setStep] = useState<1 | 2 | 3>(1);
-  const [selectedCharacter, setSelectedCharacter] = useState<number | null>(null);
   const [selectedStoryId, setSelectedStoryId] = useState<number | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [selectedCharacterId, setSelectedCharacterId] = useState<number | null>(null);
+
+  // Queries
+  const { data: storyList = [], isLoading: isStoriesLoading } = useStories();
+  const { data: characterList = [], isLoading: isCharactersLoading } = useCharacters();
+  const createAudioBookMutation = useCreateAudioBook();
 
   const handleGoToList = () => {
-    if (!selectedStoryId || !selectedCharacter) {
+    if (!selectedStoryId || !selectedCharacterId) {
       setStep(!selectedStoryId ? 1 : 2);
       return;
     }
 
-    setIsLoading(true);
-    const newId = Date.now() + Math.floor(Math.random() * 1000);
-    setTimeout(() => {
-      setIsLoading(false);
-      const story = storyList.find((s) => s.id === selectedStoryId);
-      const char = characters.find((c) => c.id === selectedCharacter);
+    const selectedStory = storyList.find((s) => s.id === selectedStoryId);
 
-      let storyTags: string[] = [];
-      if (story) {
-        if (story.tags && Array.isArray(story.tags)) {
-          storyTags = story.tags;
-        } else {
-          const derived: string[] = [];
-          if (story.theme) derived.push(`#${story.theme}`);
-          if (story.mood) derived.push(`#${story.mood}`);
-          storyTags = derived;
-        }
-      }
-      const mergedTags = Array.from(new Set([...storyTags]));
-
-      const createdAudio = {
-        id: newId,
-        title: story?.title || '내가 만든 오디오북',
-        imageSrc: story?.imageSrc || '',
-        character: char?.title || '캐릭터',
-        tags: mergedTags,
-        time: '00:00:00',
-      };
-      try {
-        const stored = JSON.parse(localStorage.getItem('localAudiobooks') || '[]');
-        const newStored = Array.isArray(stored) ? [createdAudio, ...stored] : [createdAudio];
-        localStorage.setItem('localAudiobooks', JSON.stringify(newStored));
-      } catch (e) {
-        // ignore storage errors
-      }
-
-      navigate(`/audiobook/${newId}`, { state: { audiobook: createdAudio } });
-    }, 1500);
+    createAudioBookMutation.mutate(
+      {
+        storyId: selectedStoryId,
+        characterId: selectedCharacterId,
+        // 백엔드에서 유효한 Enum 값이나 라벨을 기대하므로 유효한 값으로 설정 ('기본' -> '모험', '편안한' -> '따뜻한')
+        theme: selectedStory?.theme || '모험',
+        vibe: selectedStory?.vibe || '따뜻한',
+      },
+      {
+        onSuccess: (data) => {
+          // 생성 완료 후 해당 오디오북 상세/재생 페이지로 이동
+          navigate(`/audiobook/${data.audiobookId}`, { replace: true });
+        },
+        onError: (error: any) => {
+          console.error('오디오북 생성 실패:', error);
+          const message = error.response?.data?.message || '오디오북 생성에 실패했습니다.';
+          alert(message);
+        },
+      },
+    );
   };
+
   // 단계 설정
   const STEP_CONFIG = {
     1: { progress: 0, text: '동화를 선택해주세요.' },
@@ -73,12 +63,16 @@ const AudioBookCreatePage: React.FC = () => {
   const selectedStory = selectedStoryId
     ? storyList.find((s) => s.id === selectedStoryId)
     : undefined;
-  const selectedChar = selectedCharacter
-    ? characters.find((c) => c.id === selectedCharacter)
+  const selectedChar = selectedCharacterId
+    ? characterList.find((c) => c.id === selectedCharacterId)
     : undefined;
 
+  if (isStoriesLoading || isCharactersLoading) {
+    return <div className='text-center mt-20'>불러오는 중...</div>;
+  }
+
   return (
-    <div className='max-w-[430px] min-w-[360px] min-h-screen flex flex-col mx-auto'>
+    <div className='max-w-[430px] min-w-[360px] min-h-screen flex flex-col mx-auto bg-bg-purple-50'>
       {/* TopNav 상단 고정 */}
       <TopNav title='오디오북 생성' showBack className='bg-bg-purple-50' />
 
@@ -101,8 +95,8 @@ const AudioBookCreatePage: React.FC = () => {
 
       {/* 1단계: 동화 선택 */}
       {step === 1 && (
-        <div className='grid grid-cols-2 grid-rows-3 gap-[18px] self-stretch px-[16px]'>
-          {storyList.slice(0, 6).map((story) => (
+        <div className='grid grid-cols-2 gap-[18px] self-stretch px-[16px] overflow-y-auto pb-10'>
+          {storyList.map((story) => (
             <button
               key={story.id}
               type='button'
@@ -111,7 +105,7 @@ const AudioBookCreatePage: React.FC = () => {
                 setStep(2);
               }}
             >
-              <ImageCard title={story.title} imageSrc={story.imageSrc} />
+              <ImageCard title={story.title} imageSrc={story.thumbnailUrl} />
             </button>
           ))}
         </div>
@@ -119,17 +113,17 @@ const AudioBookCreatePage: React.FC = () => {
 
       {/* 2단계: 캐릭터 선택 */}
       {step === 2 && (
-        <div className='grid grid-cols-2 grid-rows-3 gap-[18px] self-stretch px-[16px]'>
-          {characters.map((character) => (
+        <div className='grid grid-cols-2 gap-[18px] self-stretch px-[16px] overflow-y-auto pb-10'>
+          {characterList.map((character) => (
             <button
               key={character.id}
               type='button'
               onClick={() => {
-                setSelectedCharacter(character.id);
+                setSelectedCharacterId(character.id);
                 setStep(3);
               }}
             >
-              <ImageCard title={character.title} imageSrc={character.imageSrc} />
+              <ImageCard title={character.characterName} imageSrc={character.thumbnailUrl} />
             </button>
           ))}
         </div>
@@ -151,7 +145,7 @@ const AudioBookCreatePage: React.FC = () => {
           <div className='mx-auto mt-[60px] flex items-start justify-center gap-[50px] md:gap-[70px] mb-[80px]'>
             <CircleSelect
               title={selectedStory ? selectedStory.title : '동화'}
-              imageSrc={selectedStory?.imageSrc}
+              imageSrc={selectedStory?.thumbnailUrl}
               alt={selectedStory?.title}
               bgColor='var(--color-fg-peach)'
               circleSize='w-[72px] h-[72px] md:w-[90px] md:h-[90px]'
@@ -160,9 +154,9 @@ const AudioBookCreatePage: React.FC = () => {
             />
 
             <CircleSelect
-              title={selectedChar ? selectedChar.title : '캐릭터'}
-              imageSrc={selectedChar?.imageSrc}
-              alt={selectedChar?.title}
+              title={selectedChar ? selectedChar.characterName : '캐릭터'}
+              imageSrc={selectedChar?.thumbnailUrl}
+              alt={selectedChar?.characterName}
               bgColor='var(--color-fg-yellow)'
               circleSize='w-[72px] h-[72px] md:w-[90px] md:h-[90px]'
               imgSize='w-[43px] h-[43px] md:w-[32px] md:h-[32px]'
@@ -173,7 +167,12 @@ const AudioBookCreatePage: React.FC = () => {
           {/* 하단 고정 버튼들 */}
           <div className='mt-auto mb-[60px] flex flex-col items-center gap-3'>
             <div className='w-[320px]'>
-              <Button onClick={handleGoToList} variant='primary' fullWidth disabled={isLoading}>
+              <Button
+                onClick={handleGoToList}
+                variant='primary'
+                fullWidth
+                disabled={createAudioBookMutation.isPending}
+              >
                 <span className='pre-16-43-r'>오디오북 생성하기</span>
               </Button>
             </div>
@@ -191,10 +190,9 @@ const AudioBookCreatePage: React.FC = () => {
           </div>
         </div>
       )}
-
       {/* 로딩 모달 */}
       <LoadingModal
-        isOpen={isLoading}
+        isOpen={createAudioBookMutation.isPending}
         title='오디오북을 생성중입니다'
         subtitle='잠시만 기다려주세요'
         bottomText='나만의 오디오북을 만들고 있어요'
