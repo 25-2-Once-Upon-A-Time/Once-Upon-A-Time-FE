@@ -3,18 +3,22 @@ export interface StorySummary {
   id: number;
   title: string;
   thumbnailUrl: string;
+  createdDate?: string;
 }
 
 // 상세 조회 화면
 export interface StoryDetail {
   id: number;
   title: string;
-  thumbnailUrl: string;
-  tags: string[];
-  description: string;
+  thumbnailUrl: string | null;
   content: string;
-  theme: string;
-  vibe: string;
+  summary?: string;
+  keywords?: string[];
+  createdDate?: string;
+  theme?: string;
+  vibe?: string;
+  tags?: string[];
+  description?: string;
 }
 
 // 동화 생성 요청
@@ -23,4 +27,9 @@ export interface CreateStoryRequest {
   vibe: string;
   prompt: string;
   title: string;
+}
+
+// 동화 생성 응답
+export interface CreateStoryResponse {
+  storyId: number;
 }

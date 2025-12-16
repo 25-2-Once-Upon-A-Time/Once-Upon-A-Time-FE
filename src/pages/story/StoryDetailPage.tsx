@@ -15,10 +15,6 @@ const StoryDetailPage: React.FC = () => {
   // API로 상세 조회
   const { data: story, isLoading, isError } = useStoryDetail(storyId!);
 
-  if (!story) {
-    return <div>동화를 찾을 수 없습니다.</div>;
-  }
-
   // 🚀 로딩 처리
   if (isLoading) {
     return <div className='text-center mt-20 text-white'>동화를 불러오는 중...</div>;
@@ -26,9 +22,10 @@ const StoryDetailPage: React.FC = () => {
 
   // 🚀 서버 에러 처리
   if (isError) {
-    return <div className='text-center mt-20 text-white'>동화를 찾을 수 없습니다.</div>;
+    return <div className='text-center mt-20 text-white'>동화를 불러오는 데 실패했습니다.</div>;
   }
 
+  // 🚀 데이터 없음 처리
   if (!story) {
     return <div className='text-center mt-20 text-white'>동화를 찾을 수 없습니다.</div>;
   }
@@ -41,7 +38,11 @@ const StoryDetailPage: React.FC = () => {
     <div className='max-w-[480px] min-w-[360px] h-screen mx-auto bg-bg-purple-700 flex flex-col overflow-hidden'>
       {/* 동화 이미지 + 버튼들 */}
       <div className='relative w-full flex-shrink-0'>
-        <Image src={story.thumbnailUrl} alt={story.title} className='w-full aspect-square' />
+        <Image
+          src={story.thumbnailUrl || undefined}
+          alt={story.title}
+          className='w-full aspect-square'
+        />
 
         {/* 뒤로가기 버튼 - 왼쪽 위 */}
         <div className='absolute top-[18px] left-[20px]'>
@@ -60,17 +61,23 @@ const StoryDetailPage: React.FC = () => {
         <h1 className='nsr-24-eb text-white flex-shrink-0'>{story.title}</h1>
 
         {/* 한 줄 요약 */}
-        <p className='nbp-16-b text-gray-300 flex-shrink-0'>{story.description}</p>
+        <p className='nbp-16-b-relaxed text-gray-300 flex-shrink-0'>{story.summary}</p>
 
         {/* 테마 & 분위기 태그 */}
-        <div className='flex gap-2 flex-shrink-0'>
-          <span className='px-3 py-1 bg-white/20 text-white text-[12px] rounded-full nbp-16-b'>
-            {story.theme}
-          </span>
-          <span className='px-3 py-1 bg-white/20 text-white text-[12px] rounded-full nbp-16-b'>
-            {story.vibe}
-          </span>
-        </div>
+        {(story.theme || story.vibe) && (
+          <div className='flex gap-2 flex-shrink-0'>
+            {story.theme && (
+              <span className='px-3 py-1 bg-white/20 text-white text-[12px] rounded-full nbp-16-b'>
+                {story.theme}
+              </span>
+            )}
+            {story.vibe && (
+              <span className='px-3 py-1 bg-white/20 text-white text-[12px] rounded-full nbp-16-b'>
+                {story.vibe}
+              </span>
+            )}
+          </div>
+        )}
 
         {/* 동화 내용 */}
         <div
@@ -80,7 +87,7 @@ const StoryDetailPage: React.FC = () => {
             scrollbarWidth: 'none',
           }}
         >
-          <p className='nbp-16-b text-white'>{story.content}</p>
+          <p className='nbp-16-b-relaxed text-white'>{story.content}</p>
         </div>
       </div>
     </div>

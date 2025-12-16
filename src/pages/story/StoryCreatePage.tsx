@@ -3,26 +3,45 @@ import { useNavigate } from 'react-router-dom';
 import ImageCard from '@/components/ui/ImageCard/ImageCard';
 import Button from '@/components/ui/Button/Button';
 import Image from '@/components/ui/Image/Image';
+import LoadingModal from '@/components/ui/LoadingModal';
 import backIcon from '@/assets/icons/back.svg';
+import { useCreateStory } from '@/hooks/queries/useStories';
+import { generateThumbnail } from '@/api/story/story';
+
+// 테마 이미지 import
+import courageImg from '@/assets/images/themes/용기.jpg';
+import friendshipImg from '@/assets/images/themes/우정.jpg';
+import familyImg from '@/assets/images/themes/가족애.jpg';
+import adventureImg from '@/assets/images/themes/모험.jpg';
+import cooperationImg from '@/assets/images/themes/협동.jpg';
+import diversityImg from '@/assets/images/themes/다양성.jpg';
+
+// 분위기 이미지 import
+import warmImg from '@/assets/images/moods/warm.jpg';
+import excitingImg from '@/assets/images/moods/exciting.jpg';
+import mysteriousImg from '@/assets/images/moods/mysterious.jpg';
+import funnyImg from '@/assets/images/moods/funny.jpg';
+import calmImg from '@/assets/images/moods/calm.jpg';
+import dreamyImg from '@/assets/images/moods/dreamy.jpg';
 
 // 테마 옵션
 const THEME_OPTIONS = [
-  { id: 'courage', label: '용기' },
-  { id: 'friendship', label: '우정' },
-  { id: 'family', label: '가족애' },
-  { id: 'adventure', label: '모험' },
-  { id: 'cooperation', label: '협동' },
-  { id: 'diversity', label: '다양성' },
+  { id: 'courage', label: '용기', imageSrc: courageImg },
+  { id: 'friendship', label: '우정', imageSrc: friendshipImg },
+  { id: 'family', label: '가족애', imageSrc: familyImg },
+  { id: 'adventure', label: '모험', imageSrc: adventureImg },
+  { id: 'cooperation', label: '협동', imageSrc: cooperationImg },
+  { id: 'diversity', label: '다양성', imageSrc: diversityImg },
 ];
 
 // 분위기 옵션
 const MOOD_OPTIONS = [
-  { id: 'warm', label: '따뜻한' },
-  { id: 'exciting', label: '신나는' },
-  { id: 'mysterious', label: '신비로운' },
-  { id: 'funny', label: '유쾌한' },
-  { id: 'calm', label: '잔잔한' },
-  { id: 'dreamy', label: '몽환적인' },
+  { id: 'warm', label: '따뜻한', imageSrc: warmImg },
+  { id: 'exciting', label: '신나는', imageSrc: excitingImg },
+  { id: 'mysterious', label: '신비로운', imageSrc: mysteriousImg },
+  { id: 'funny', label: '유쾌한', imageSrc: funnyImg },
+  { id: 'calm', label: '잔잔한', imageSrc: calmImg },
+  { id: 'dreamy', label: '몽환적인', imageSrc: dreamyImg },
 ];
 
 // 단계 설정
@@ -42,7 +61,14 @@ const StoryCreatePage: React.FC = () => {
   const [selectedMood, setSelectedMood] = useState<string | null>(null);
   const [storyPrompt, setStoryPrompt] = useState('');
   const [storyTitle, setStoryTitle] = useState('');
-  const [generatedImage, setGeneratedImage] = useState<string | undefined>();
+
+  const [generatedImage, setGeneratedImage] = useState<string | undefined>(undefined);
+  const [isGeneratingThumbnail, setIsGeneratingThumbnail] = useState(false);
+
+  // React Query Mutation
+  const createStoryMutation = useCreateStory();
+
+  const isLoading = createStoryMutation.isPending || isGeneratingThumbnail;
 
   const currentStep = STEP_CONFIG[step];
 
@@ -51,24 +77,83 @@ const StoryCreatePage: React.FC = () => {
     if (step === 1 || step === 5) {
       navigate('/story');
     } else {
-      setStep((prev) => (prev - 1) as any);
+      setStep((p) => (p - 1) as any);
     }
   };
 
-  // mock 생성 완료 처리
-  const handleCreate = () => {
-    setGeneratedImage('https://via.placeholder.com/600x600');
-    setStep(5);
+  const handleCreate = async () => {
+    if (!selectedTheme || !selectedMood) return;
+
+    const requestData = {
+      theme: getThemeLabel(selectedTheme),
+      vibe: getMoodLabel(selectedMood),
+      prompt: storyPrompt,
+      title: storyTitle,
+    };
+
+    // console.log('🔍 동화 생성 요청 데이터:', requestData);
+
+    createStoryMutation.mutate(requestData, {
+      onSuccess: async (data) => {
+        // console.log('✅ 동화 생성 성공:', data);
+        // console.log('✅ data 타입:', typeof data);
+        // console.log('✅ data.storyId:', data?.storyId);
+
+        // 방어 코드: data나 storyId가 없는 경우 처리
+        if (!data || !data.storyId) {
+          // console.error('⚠️ storyId가 없습니다. 전체 data:', data);
+          alert('동화가 생성되었지만 ID를 받지 못했습니다. 목록 페이지로 이동합니다.');
+          navigate('/story');
+          return;
+        }
+
+        // 썸네일 생성 시작
+        setIsGeneratingThumbnail(true);
+        // console.log('🖼️ 썸네일 생성 시작... storyId:', data.storyId);
+
+        try {
+          const thumbnailResult = await generateThumbnail(data.storyId);
+          // console.log('✅ 썸네일 생성 성공:', thumbnailResult);
+
+          // 썸네일 URL 설정
+          if (thumbnailResult?.data?.thumbnailUrl) {
+            setGeneratedImage(thumbnailResult.data.thumbnailUrl);
+          } else if (thumbnailResult?.thumbnailUrl) {
+            setGeneratedImage(thumbnailResult.thumbnailUrl);
+          }
+        } catch (thumbnailError) {
+          // console.error('❌ 썸네일 생성 실패:', thumbnailError);
+          // 썸네일 실패해도 Step 5로 이동
+        } finally {
+          setIsGeneratingThumbnail(false);
+          // Step 5로 이동
+          setStep(5);
+        }
+      },
+      onError: () => {
+        // console.error('❌ 동화 생성 실패:', error);
+        // console.error('Response:', error.response?.data);
+        // console.error('Status:', error.response?.status);
+        alert('동화를 생성하는 중 문제가 발생했습니다.');
+      },
+    });
   };
 
-  const getThemeLabel = (id: string) => THEME_OPTIONS.find((t) => t.id === id)?.label ?? '';
+  // 테마/분위기 라벨 가져오기
+  const getThemeLabel = (id: string) => {
+    const theme = THEME_OPTIONS.find((t) => t.id === id);
+    return theme?.label || '';
+  };
 
-  const getMoodLabel = (id: string) => MOOD_OPTIONS.find((m) => m.id === id)?.label ?? '';
+  const getMoodLabel = (id: string) => {
+    const mood = MOOD_OPTIONS.find((m) => m.id === id);
+    return mood?.label || '';
+  };
 
   return (
     <div className='w-full min-h-screen flex flex-col'>
       {/* 상단 고정 영역 */}
-      <div className='fixed top-0 left-0 right-0 z-40 bg-white'>
+      <div className='fixed top-0 left-0 right-0 z-40'>
         <div className='max-w-[480px] mx-auto'>
           {/* 헤더 */}
           <div className='h-[56px] flex items-center justify-center relative'>
@@ -90,18 +175,13 @@ const StoryCreatePage: React.FC = () => {
 
           {/* 단계 설명 */}
           <div className='px-4 pb-4'>
-            <p className='nbp-16-b'>{`${step}단계: ${currentStep.text}`}</p>
-            {step !== 5 && (
-              <p className='text-sm text-fg-gray mt-2'>
-                현재 동화 생성 기능은 준비 중이며, 화면 흐름만 미리 확인할 수 있습니다.
-              </p>
-            )}
+            <p className='nbp-16-b text-left'>{`${step}단계: ${currentStep.text}`}</p>
           </div>
         </div>
       </div>
 
       {/* 본문 */}
-      <div className='flex-1 w-full pt-[160px] px-4 pb-20 overflow-y-auto'>
+      <div className='flex-1 w-full pt-[140px] px-4 pb-20 overflow-y-auto'>
         {/* 1단계: 테마 선택 */}
         {step === 1 && (
           <div className='grid grid-cols-2 gap-4'>
@@ -113,7 +193,11 @@ const StoryCreatePage: React.FC = () => {
                   setStep(2);
                 }}
               >
-                <ImageCard title={t.label} className='w-full' />
+                <ImageCard
+                  title={t.label}
+                  imageSrc={t.imageSrc} // ← 이미지 전달
+                  className='w-full'
+                />
               </div>
             ))}
           </div>
@@ -130,7 +214,11 @@ const StoryCreatePage: React.FC = () => {
                   setStep(3);
                 }}
               >
-                <ImageCard title={m.label} className='w-full' />
+                <ImageCard
+                  title={m.label}
+                  imageSrc={m.imageSrc} // ← 이미지 전달
+                  className='w-full'
+                />
               </div>
             ))}
           </div>
@@ -143,10 +231,10 @@ const StoryCreatePage: React.FC = () => {
               value={storyPrompt}
               onChange={(e) => setStoryPrompt(e.target.value)}
               placeholder='ex) 친구와 음식을 나누어먹는 이야기'
-              className='w-full h-[300px] p-4 border-2 border-border-purple rounded-[16px] resize-none'
+              className='w-full h-[300px] p-4 border-2 border-border-purple rounded-[16px] ng-16-r placeholder:text-fg-gray focus:outline-none resize-none'
             />
             {storyPrompt && (
-              <Button fullWidth onClick={() => setStep(4)}>
+              <Button variant='primary' fullWidth onClick={() => setStep(4)}>
                 다음
               </Button>
             )}
@@ -160,10 +248,10 @@ const StoryCreatePage: React.FC = () => {
               value={storyTitle}
               onChange={(e) => setStoryTitle(e.target.value)}
               placeholder='ex) 나누어먹으면 맛있어요'
-              className='w-full h-[300px] p-4 border-2 border-border-purple rounded-[16px] resize-none'
+              className='w-full h-[300px] p-4 border-2 border-border-purple rounded-[16px] ng-16-r placeholder:text-fg-gray focus:outline-none resize-none'
             />
             {storyTitle && (
-              <Button fullWidth onClick={handleCreate}>
+              <Button variant='primary' fullWidth onClick={handleCreate}>
                 동화 생성
               </Button>
             )}
@@ -173,25 +261,39 @@ const StoryCreatePage: React.FC = () => {
         {/* 5단계: 생성 완료 */}
         {step === 5 && (
           <div className='flex flex-col items-center space-y-6'>
+            {/* 생성된 이미지 */}
             <Image
               src={generatedImage}
               alt={storyTitle}
               className='w-full aspect-square rounded-[16px]'
             />
 
+            {/* 동화 제목 */}
             <h2 className='nsr-20-eb text-center'>{storyTitle}</h2>
 
+            {/* 테마 & 분위기 태그 */}
             <div className='flex gap-2'>
-              <span>#{getThemeLabel(selectedTheme || '')}</span>
-              <span>#{getMoodLabel(selectedMood || '')}</span>
+              <span className='ng-16-r text-fg-primary'>#{getThemeLabel(selectedTheme || '')}</span>
+              <span className='ng-16-r text-fg-primary'>#{getMoodLabel(selectedMood || '')}</span>
             </div>
 
-            <Button fullWidth onClick={() => navigate('/story')}>
+            {/* 동화 목록으로 이동 버튼 */}
+            <Button variant='primary' fullWidth onClick={() => navigate('/story')}>
               동화 목록으로 이동
             </Button>
           </div>
         )}
       </div>
+
+      {/* 로딩 모달 */}
+      <LoadingModal
+        isOpen={isLoading}
+        title={isGeneratingThumbnail ? '썸네일을 생성중입니다' : '동화를 생성중입니다'}
+        subtitle='잠시만 기다려주세요'
+        bottomText={
+          isGeneratingThumbnail ? '멋진 이미지를 만들고 있어요' : '특별한 이야기를 만들고 있어요'
+        }
+      />
     </div>
   );
 };

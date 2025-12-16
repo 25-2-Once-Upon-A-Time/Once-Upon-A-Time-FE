@@ -286,18 +286,20 @@ const InfoSetupPage: React.FC = () => {
         </div>
       </div>
 
-      <div className='fixed bottom-0 w-full px-7 pb-8 pt-4 bg-bg-purple-50'>
-        <Button
-          variant='primary'
-          fullWidth
-          onClick={handleSubmit}
-          disabled={!isFormComplete || isSubmitting}
-          className={
-            !isFormComplete || isSubmitting ? 'bg-bg-purple-600 hover:bg-bg-purple-600' : ''
-          }
-        >
-          {isSubmitting ? '처리 중...' : '완료'}
-        </Button>
+      <div className='fixed bottom-0 left-0 right-0 w-full px-7 pb-8 pt-4 bg-bg-purple-50'>
+        <div className='max-w-[480px] mx-auto'>
+          <Button
+            variant='primary'
+            fullWidth
+            onClick={handleSubmit}
+            disabled={!isFormComplete || isSubmitting}
+            className={
+              !isFormComplete || isSubmitting ? 'bg-bg-purple-600 hover:bg-bg-purple-600' : ''
+            }
+          >
+            {isSubmitting ? '처리 중...' : '완료'}
+          </Button>
+        </div>
       </div>
 
       {showUnderageModal && (
