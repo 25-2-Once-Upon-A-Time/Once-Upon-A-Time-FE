@@ -4,11 +4,15 @@ import { twMerge } from 'tailwind-merge';
 import backIcon from '@/assets/icons/chevron-left.svg';
 import type { TopNavProps } from './TopNav.types';
 
-const TopNav: React.FC<TopNavProps> = ({ title, showBack = false, className }) => {
+const TopNav: React.FC<TopNavProps> = ({ title, showBack = false, className, onBackClick }) => {
   const navigate = useNavigate();
 
   const handleBack = () => {
-    navigate(-1);
+    if (onBackClick) {
+      onBackClick();
+    } else {
+      navigate(-1);
+    }
   };
 
   return (

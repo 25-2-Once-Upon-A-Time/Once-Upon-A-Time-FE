@@ -29,22 +29,45 @@ const AudioBookCreatePage: React.FC = () => {
 
     const selectedStory = storyList.find((s) => s.id === selectedStoryId);
 
+    console.log('🎬 Creating audiobook with:', {
+      storyId: selectedStoryId,
+      characterId: selectedCharacterId,
+      theme: selectedStory?.theme || '모험',
+      vibe: selectedStory?.vibe || '따뜻한',
+    });
+
     createAudioBookMutation.mutate(
       {
         storyId: selectedStoryId,
         characterId: selectedCharacterId,
-        // 백엔드에서 유효한 Enum 값이나 라벨을 기대하므로 유효한 값으로 설정 ('기본' -> '모험', '편안한' -> '따뜻한')
         theme: selectedStory?.theme || '모험',
         vibe: selectedStory?.vibe || '따뜻한',
       },
       {
         onSuccess: (data) => {
-          // 생성 완료 후 해당 오디오북 상세/재생 페이지로 이동
-          const targetId = data.audiobookId || (data as any).id;
+          console.log('✅ Create audiobook success, received data:', data);
+          console.log('✅ Full data object:', JSON.stringify(data, null, 2));
+
+          // ID 추출 시도 (audioBookId, audiobookId, id 모두 체크)
+          const targetId = data.audiobookId || (data as any).audioBookId || (data as any).id;
+
+          console.log('✅ Extracted targetId:', targetId);
+          console.log('✅ Type of targetId:', typeof targetId);
+
+          if (!targetId) {
+            console.error('❌ No audiobookId found in response!');
+            console.error('❌ Response data:', data);
+            alert('오디오북 ID를 찾을 수 없습니다. 목록 페이지로 이동합니다.');
+            navigate('/audiobook', { replace: true });
+            return;
+          }
+
+          console.log('✅ Navigating to:', `/audiobook/${targetId}/playback`);
           navigate(`/audiobook/${targetId}/playback`, { replace: true });
         },
         onError: (error: any) => {
-          console.error('오디오북 생성 실패:', error);
+          console.error('❌ 오디오북 생성 실패:', error);
+          console.error('❌ Error response:', error.response?.data);
           const message = error.response?.data?.message || '오디오북 생성에 실패했습니다.';
           alert(message);
         },
@@ -75,7 +98,12 @@ const AudioBookCreatePage: React.FC = () => {
   return (
     <div className='max-w-[430px] min-w-[360px] min-h-screen flex flex-col mx-auto bg-bg-purple-50'>
       {/* TopNav 상단 고정 */}
-      <TopNav title='오디오북 생성' showBack className='bg-bg-purple-50' />
+      <TopNav
+        title='오디오북 생성'
+        showBack
+        onBackClick={() => navigate('/audiobook')}
+        className='bg-bg-purple-50'
+      />
 
       {/* 프로그래스바 */}
       <div className='px-4 mt-[72px]'>
