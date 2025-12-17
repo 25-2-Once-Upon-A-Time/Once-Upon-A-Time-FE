@@ -235,11 +235,6 @@ const AudioBookPlayPage: React.FC = () => {
   }, [audiobookId, navigate, finishPlaybackMutation]);
 
   /* ---------------------------------------
-   * 진행률 계산
-   * ------------------------------------- */
-  const progressRate = totalTime > 0 ? (currentTime / totalTime) * 100 : 0;
-
-  /* ---------------------------------------
    * Render
    * ------------------------------------- */
   if (isInfoLoading) {
