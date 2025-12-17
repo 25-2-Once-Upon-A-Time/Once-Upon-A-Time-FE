@@ -15,6 +15,17 @@ import AudioBookCreatePage from '@/pages/audiobook/AudioBookCreatePage';
 import KakaoCallbackPage from '@/pages/login/KakaoCallbackPage';
 import AdminPage from '@/pages/Admin/AdminPage';
 
+// 인증이 필요한 라우트를 감싸는 컴포넌트
+function ProtectedRoute({ children }: { children: React.ReactNode }) {
+  const { accessToken } = useAuthStore();
+
+  if (!accessToken) {
+    return <Navigate to='/login' replace />;
+  }
+
+  return <>{children}</>;
+}
+
 function App() {
   const { accessToken } = useAuthStore();
 
@@ -29,20 +40,94 @@ function App() {
           }
         />
 
-        <Route path='/story' element={<StoryPage />} />
-        <Route path='/story/:id' element={<StoryDetailPage />} />
-        <Route path='/story/create' element={<StoryCreatePage />} />
-        <Route path='/character' element={<CharacterListPage />} />
-        <Route path='/character/:id' element={<CharacterDetailPage />} />
+        {/* 보호된 라우트 */}
+        <Route
+          path='/story'
+          element={
+            <ProtectedRoute>
+              <StoryPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/story/:id'
+          element={
+            <ProtectedRoute>
+              <StoryDetailPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/story/create'
+          element={
+            <ProtectedRoute>
+              <StoryCreatePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/character'
+          element={
+            <ProtectedRoute>
+              <CharacterListPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/character/:id'
+          element={
+            <ProtectedRoute>
+              <CharacterDetailPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/mypage'
+          element={
+            <ProtectedRoute>
+              <MyPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/audiobook'
+          element={
+            <ProtectedRoute>
+              <AudioBook />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/audiobook/make'
+          element={
+            <ProtectedRoute>
+              <AudioBookCreatePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/audiobook/:id/playback'
+          element={
+            <ProtectedRoute>
+              <AudioBookPlayPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/admin'
+          element={
+            <ProtectedRoute>
+              <AdminPage />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* 공개 라우트 */}
         <Route path='/login' element={<LoginPage />} />
         <Route path='/kakao/callback' element={<KakaoCallbackPage />} />
         <Route path='/info-setup' element={<InfoSetupPage />} />
         <Route path='/parental-consent' element={<ParentalConsentPage />} />
-        <Route path='/mypage' element={<MyPage />} />
-        <Route path='/audiobook' element={<AudioBook />} />
-        <Route path='/audiobook/make' element={<AudioBookCreatePage />} />
-        <Route path='/audiobook/:id/playback' element={<AudioBookPlayPage />} />
-        <Route path='/admin' element={<AdminPage />} />
+
         <Route path='*' element={<Navigate to='/' replace />} />
       </Routes>
     </BrowserRouter>
